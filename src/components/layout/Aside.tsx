@@ -1,16 +1,18 @@
+'use client';
+
 import Link from 'next/link';
 import route from '@/constant/route';
 import { FilePlus, FileText, LayoutList, Search, Settings } from 'lucide-react';
+import { useSelectedLayoutSegment } from 'next/navigation';
 
 const links = [
-	{ title: '문서 작성하기', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
-	{ title: '문서 발행목록', to: route.SERVICE.STATEMENTS, icon: <LayoutList size={18} /> },
-	{ title: '엑셀 가져오기', to: route.SERVICE.GET_DATA_FROM_EXCEL, icon: <FileText size={18} /> },
+	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
+	{ title: 'Documents', to: route.SERVICE.DOCUMENTS, icon: <LayoutList size={18} /> },
 ] as const;
 
-// TODO: find out current path(url)
-
 const Aside = () => {
+	const segment = useSelectedLayoutSegment();
+
 	return (
 		<div className="relative">
 			<aside className="fixed left-0 hidden py-2 h-full w-14 flex-col max-h-screen overflow-y-auto overflow-x-hidden bg-muted border-muted border-r md:sticky md:flex lg:w-56 lg:p-3">
@@ -28,7 +30,7 @@ const Aside = () => {
 							<Search size={18} className="text-gray-800" />
 						</button>
 					</header>
-					<Link href={route.HOME} className="inline-flex justify-center item-center h-[36px] text-center lg:hidden">
+					<Link href={route.SERVICE.ROOT} className="inline-flex justify-center item-center h-[36px] text-center lg:hidden">
 						<h1 className="text-xl font-bold">AX</h1>
 					</Link>
 					<nav className="flex flex-col flex-1 gap-2 mt-2 md:px-2 lg:mt-4 lg:px-0">
@@ -36,7 +38,9 @@ const Aside = () => {
 							<Link
 								href={to}
 								key={to}
-								className="flex justify-center items-center gap-0 py-1.5 px-2 text-gray-800 font-medium rounded-md hover:bg-gray-200 transition-colors lg:gap-2 lg:justify-start">
+								className={`flex justify-center items-center gap-0 py-1.5 px-2 ${
+									to === route.SERVICE.ROOT + segment ? 'bg-gray-200' : 'bg-muted'
+								} text-gray-800 font-medium rounded-md hover:bg-gray-200 transition-colors lg:gap-2 lg:justify-start`}>
 								{icon}
 								<span className="hidden lg:inline">{title}</span>
 							</Link>
