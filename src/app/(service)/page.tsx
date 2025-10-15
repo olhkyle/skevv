@@ -1,9 +1,9 @@
 import { Button } from '@/components';
-import { createClient } from '@/utils/supabase/server';
+// import { createClient } from '@/utils/supabase/server';
 
 export default async function HomePage() {
-	const supabase = await createClient();
-	const { data } = await supabase.from('documents').select('*');
+	// const supabase = await createClient();
+	// const { data } = await supabase.from('documents').select('*');
 	// console.log(data);
 
 	return (
