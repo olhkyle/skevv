@@ -2,7 +2,7 @@
 
 import { Button, Input } from '@/components/ui';
 import { RotateCcw } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 
 export default function FileDropZone() {
