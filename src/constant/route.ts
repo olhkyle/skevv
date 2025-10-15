@@ -9,8 +9,7 @@ const route = {
 	SERVICE: {
 		ROOT: '/',
 		WRITE: '/new',
-		STATEMENTS: '/statements',
-		GET_DATA_FROM_EXCEL: '/from-excel',
+		DOCUMENTS: '/documents',
 		SETTINGS: {
 			ROOT: '/settings',
 			MYACCOUNT_PROFILE: '/settings/myaccount/profile',
