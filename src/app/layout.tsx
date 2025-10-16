@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: 'ACPX',
+	title: 'SKEVV',
 	description: 'A lightweight pdf executor',
 };
 
