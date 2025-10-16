@@ -2,20 +2,22 @@
 
 import Link from 'next/link';
 import route from '@/constant/route';
-import { FilePlus, FileText, LayoutList, Search, Settings } from 'lucide-react';
+import { FilePlus, LayoutList, Search, Settings } from 'lucide-react';
 import { useSelectedLayoutSegment } from 'next/navigation';
+import { useState } from 'react';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
 	{ title: 'Documents', to: route.SERVICE.DOCUMENTS, icon: <LayoutList size={18} /> },
 ] as const;
 
-const Aside = () => {
+export default function Aside() {
 	const segment = useSelectedLayoutSegment();
 
 	return (
 		<div className="relative">
-			<aside className="fixed left-0 hidden py-2 h-full w-14 flex-col max-h-screen overflow-y-auto overflow-x-hidden bg-muted border-muted border-r md:sticky md:flex lg:w-56 lg:p-3">
+			<aside
+				className={`fixed flex-col left-0 hidden py-2 h-full w-14 max-h-screen overflow-y-auto overflow-x-hidden bg-muted border-muted border-r md:sticky md:flex lg:w-56 lg:p-3`}>
 				<div className="flex h-full flex-col justify-between">
 					<header className="hidden justify-between items-center gap-2 lg:flex">
 						<button className="flex items-center gap-2 py-1.5 px-2">
@@ -27,11 +29,11 @@ const Aside = () => {
 						<button
 							type="button"
 							className="flex justify-center items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors lg:px-2">
-							<Search size={18} className="text-gray-800" />
+							<Search size={20} className="text-gray-800" />
 						</button>
 					</header>
 					<Link href={route.SERVICE.ROOT} className="inline-flex justify-center item-center h-[36px] text-center lg:hidden">
-						<h1 className="text-xl font-bold">AX</h1>
+						<h1 className="text-xl font-bold">SKV</h1>
 					</Link>
 					<nav className="flex flex-col flex-1 gap-2 mt-2 md:px-2 lg:mt-4 lg:px-0">
 						{links.map(({ title, to, icon }) => (
@@ -57,13 +59,11 @@ const Aside = () => {
 					<small className="text-default mx-3 mb-2 mt-1 hidden text-[0.5rem] opacity-50 lg:block">
 						© 2025{' '}
 						<Link href={route.HOME} className="hover:underline" target="_blank">
-							ACONTAX, Inc.
+							SKEVV
 						</Link>
 					</small>
 				</div>
 			</aside>
 		</div>
 	);
-};
-
-export default Aside;
+}
