@@ -2,6 +2,7 @@
 
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useState } from 'react';
+import { Loader } from 'lucide-react';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -13,15 +14,14 @@ export default function PdfPreview({ file }: { file: File }) {
 	}
 
 	return (
-		<div className="border p-2 rounded-lg">
+		<div className="border border-gray-200 p-2 rounded-lg">
 			<Document
-				// renderMode="canvas"
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
-				loading={<p>Loading...</p>}
-				error={<p>Error happened to get a file</p>}>
+				loading={<Loader />}
+				error={<p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>}>
 				{Array.from({ length: numPages }, (_, index) => (
-					<Page key={index + 1} pageNumber={index + 1} width={400} renderTextLayer={false} />
+					<Page key={index + 1} pageNumber={index + 1} width={400} renderTextLayer={false} className="p-2 border-[1px] borer-gray-200" />
 				))}
 			</Document>
 		</div>
