@@ -83,11 +83,14 @@ export default function FileDropZone() {
 					<div className="flex flex-col gap-2 col-span-full max-w-full p-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
 						<div className="flex flex-col gap-2">
-							{files?.map(({ id, file }) => (
-								<Suspense fallback={<Loader />}>
+							<Suspense
+								fallback={Array.from({ length: files.length }, (_, idx) => (
+									<Loader key={idx} />
+								))}>
+								{files?.map(({ id, file }) => (
 									<PdfPreview key={id} file={file} />
-								</Suspense>
-							))}
+								))}
+							</Suspense>
 						</div>
 					</div>
 				</div>
