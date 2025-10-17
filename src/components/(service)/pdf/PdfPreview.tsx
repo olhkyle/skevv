@@ -9,7 +9,7 @@ export default function PdfPreview({ file }: { file: File }) {
 	const [numPages, setNumPages] = useState<number>(0);
 
 	if (!file) {
-		return <p>유효하지 않은 PDF 파일</p>;
+		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
 	}
 
 	return (
@@ -18,10 +18,10 @@ export default function PdfPreview({ file }: { file: File }) {
 				// renderMode="canvas"
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
-				loading={<p>로딩 중...</p>}
-				error={<p>PDF를 불러올 수 없습니다.</p>}>
+				loading={<p>Loading...</p>}
+				error={<p>Error happened to get a file</p>}>
 				{Array.from({ length: numPages }, (_, index) => (
-					<Page key={index + 1} pageNumber={index + 1} width={200} renderTextLayer={false} />
+					<Page key={index + 1} pageNumber={index + 1} width={400} renderTextLayer={false} />
 				))}
 			</Document>
 		</div>

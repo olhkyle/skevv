@@ -13,6 +13,7 @@ const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), {
 type FileItem = {
 	id: string;
 	file: FileWithPath;
+	imageSrc: string | null;
 };
 
 export default function FileDropZone() {
@@ -22,14 +23,10 @@ export default function FileDropZone() {
 		const fileList = acceptedFiles.map(file => ({
 			id: `${file.name}-${Date.now()}`,
 			file,
+			imageSrc: URL.createObjectURL(file),
 		}));
 
 		setFiles(fileList);
-		// acceptedFiles.map(file =>
-		// 	Object.assign(file, {
-		// 		preview: URL.createObjectURL(file),
-		// 	}),
-		// ),
 	};
 
 	const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
@@ -55,7 +52,7 @@ export default function FileDropZone() {
 						<Input type="file" id="file-dropzone" className="hidden" {...getInputProps()} />
 						<label
 							htmlFor="file-dropzone"
-							className="flex justify-center items-center gap-2 px-36 min-h-[80dvh] w-full text-base text-white font-bold cursor-pointer lg:text-lg">
+							className="flex justify-center items-center gap-2 p-4 min-h-[80dvh] w-full text-base text-white font-bold cursor-pointer lg:text-lg lg:p-36">
 							<FileUp size={27} />
 							<span>{isDragActive ? 'Put your files, here😊' : 'Drag and Drop Your PDFs'} </span>
 						</label>
@@ -66,23 +63,32 @@ export default function FileDropZone() {
 					</MotionBlock>
 				</div>
 			) : (
-				<div className="grid grid-cols-5 gap-2">
-					<div className="col-span-1 p-4 border-[1px] border-gray-100 rounded-2xl">
+				<div className="grid grid-rows-2 gap-2 md:grid-cols-5">
+					<div className="flex flex-col gap-2 col-span-full row-span-1 p-4 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex justify-between items-center">
 							<h3 className="text-md font-bold">Uploaded PDFs</h3>
 							<Button type="button" variant="secondary" onClick={handleReset}>
 								<RotateCcw size={21} />
 							</Button>
 						</div>
-						<ul>
+						<ul className="flex flex-col gap-2">
 							{files?.map(({ id, file }) => (
 								<li key={id}>
-									<span>{file.name}</span>
+									<div className="px-4 py-2 bg-secondary rounded-lg border-muted">{file.name}</div>
 								</li>
 							))}
 						</ul>
 					</div>
-					<div className="col-span-4 p-4 border-[1px] border-gray-100 rounded-2xl">All Pdf Previews</div>
+					<div className="col-span-full p-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
+						<h3 className="text-md font-bold">All PDF Preview</h3>
+						<ul className="flex flex-col gap-2">
+							{files?.map(({ id, file }) => (
+								<li key={id}>
+									<PdfPreview file={file} />
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
 			)}
 		</>
