@@ -11,10 +11,8 @@ export default function RootLayout({
 			<div className="flex flex-1">
 				<ReactQueryProvider>
 					<Aside />
-					<Main>
-						<Nav />
-						{children}
-					</Main>
+					<Nav />
+					<Main>{children}</Main>
 				</ReactQueryProvider>
 			</div>
 		</div>

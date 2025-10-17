@@ -4,7 +4,7 @@ import Link from 'next/link';
 import route from '@/constant/route';
 import { FilePlus, LayoutList, Search, Settings } from 'lucide-react';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { useState } from 'react';
+import { Button } from '../ui';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
@@ -26,14 +26,12 @@ export default function Aside() {
 							</div>
 							<div className="font-bold">Kyle Kwon</div>
 						</button>
-						<button
-							type="button"
-							className="flex justify-center items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors lg:px-2">
-							<Search size={20} className="text-gray-800" />
-						</button>
+						<Button type="button" variant="neutral">
+							<Search size={21} className="text-gray-700" />
+						</Button>
 					</header>
 					<Link href={route.SERVICE.ROOT} className="inline-flex justify-center item-center h-[36px] text-center lg:hidden">
-						<h1 className="text-xl font-bold">SKV</h1>
+						<h1 className="text-xl font-bold">SVV</h1>
 					</Link>
 					<nav className="flex flex-col flex-1 gap-2 mt-2 md:px-2 lg:mt-4 lg:px-0">
 						{links.map(({ title, to, icon }) => (

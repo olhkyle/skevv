@@ -1,7 +1,15 @@
+import { Menu } from 'lucide-react';
+import { Button } from '../ui';
+
 export default function Nav() {
 	return (
-		<nav className="bg-muted border-subtle sticky top-0 z-40 flex w-full items-center justify-between border-b bg-opacity-50 px-4 py-1.5 backdrop-blur-lg sm:p-4 md:hidden">
-			ACPX
+		<nav className="fixed top-4 left-[50%] flex min-h-[60px] p-4 w-[calc(100dvw-32px)] items-center justify-between border-[1px]  border-gray-200 bg-white rounded-full backdrop-blur-lg z-40 translate-x-[-50%] md:hidden">
+			<div className="flex justify-between items-center flex-1">
+				<h1 className="text-xl font-black">SKEW</h1>
+				<Button type="button" variant="secondary">
+					<Menu />
+				</Button>
+			</div>
 		</nav>
 	);
 }
