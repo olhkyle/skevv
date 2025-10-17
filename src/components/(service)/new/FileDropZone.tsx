@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { CirclePlus, FileUp, RotateCcw } from 'lucide-react';
+import { CirclePlus, FileUp, Loader, RotateCcw } from 'lucide-react';
 import { Suspense, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { MotionBlock, Button, Input } from '@/components';
@@ -68,7 +68,7 @@ export default function FileDropZone() {
 					<div className="flex flex-col gap-2 col-span-full row-span-1 p-4 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex justify-between items-center">
 							<h3 className="text-md font-bold">Uploaded PDFs</h3>
-							<Button type="button" variant="secondary" onClick={handleReset}>
+							<Button type="button" onClick={handleReset}>
 								<RotateCcw size={21} />
 							</Button>
 						</div>
@@ -80,15 +80,15 @@ export default function FileDropZone() {
 							))}
 						</ul>
 					</div>
-					<div className="col-span-full p-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
+					<div className="flex flex-col gap-2 col-span-full max-w-full p-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
-						<ul className="flex flex-col gap-2">
+						<div className="flex flex-col gap-2">
 							{files?.map(({ id, file }) => (
-								<li key={id}>
-									<PdfPreview file={file} />
-								</li>
+								<Suspense fallback={<Loader />}>
+									<PdfPreview key={id} file={file} />
+								</Suspense>
 							))}
-						</ul>
+						</div>
 					</div>
 				</div>
 			)}
