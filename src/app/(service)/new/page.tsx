@@ -2,8 +2,8 @@ import { FileDropZone } from '@/components/(service)/new';
 
 export default async function NewDocPage() {
 	return (
-		<div className="max-w-full">
+		<section className="max-w-full p-4">
 			<FileDropZone />
-		</div>
+		</section>
 	);
 }
