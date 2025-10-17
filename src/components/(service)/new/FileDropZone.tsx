@@ -19,6 +19,7 @@ type FileItem = {
 export default function FileDropZone() {
 	const [files, setFiles] = useState<FileItem[]>([]);
 
+	//TODO: Additional Validation for file thumbnail
 	const onDrop = (acceptedFiles: FileWithPath[]) => {
 		const fileList = acceptedFiles.map(file => ({
 			id: `${file.name}-${Date.now()}`,
