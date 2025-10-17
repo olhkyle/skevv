@@ -64,7 +64,7 @@ export default function FileDropZone() {
 					</MotionBlock>
 				</div>
 			) : (
-				<div className="grid grid-rows-2 gap-2 md:grid-cols-5">
+				<div className="grid grid-rows-1 gap-2 md:grid-cols-5">
 					<div className="flex flex-col gap-2 col-span-full row-span-1 p-4 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex justify-between items-center">
 							<h3 className="text-md font-bold">Uploaded PDFs</h3>
@@ -82,7 +82,7 @@ export default function FileDropZone() {
 					</div>
 					<div className="flex flex-col gap-2 col-span-full max-w-full p-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
-						<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-2 h-[90dvh] overflow-y-scroll">
 							<Suspense
 								fallback={Array.from({ length: files.length }, (_, idx) => (
 									<Loader key={idx} />
