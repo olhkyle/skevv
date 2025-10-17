@@ -87,8 +87,8 @@ export default function FileDropZone() {
 								fallback={Array.from({ length: files.length }, (_, idx) => (
 									<Loader key={idx} />
 								))}>
-								{files?.map(({ id, file }) => (
-									<PdfPreview key={id} file={file} />
+								{files?.map(({ id, file }, idx) => (
+									<PdfPreview key={id} file={file} fileCount={idx} />
 								))}
 							</Suspense>
 						</div>
