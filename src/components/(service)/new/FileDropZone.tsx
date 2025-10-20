@@ -93,10 +93,12 @@ export default function FileDropZone() {
 								))}
 							</ul>
 						</div>
-						<Button type="button" onClick={handleMergeFiles} className="sticky bottom-0 left-[50%] w-full">
-							{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
-							Merge All Files
-						</Button>
+						{files.length !== 0 && (
+							<Button type="button" onClick={handleMergeFiles} className="sticky bottom-0 left-[50%] w-full">
+								{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
+								Merge All Files
+							</Button>
+						)}
 					</div>
 					<div className="flex flex-col gap-2 col-span-full max-w-full py-2 px-4 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
