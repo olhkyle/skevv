@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { CirclePlus, Download, FileUp, Loader, RotateCcw } from 'lucide-react';
+import { CirclePlus, Download, FileUp, Loader, RotateCcw, X } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
@@ -88,13 +88,18 @@ export default function FileDropZone() {
 							<ul className="flex flex-col gap-2">
 								{files?.map(({ id, file }) => (
 									<li key={id}>
-										<div className="px-4 py-2 bg-secondary rounded-lg border-muted">{file.name}</div>
+										<div className="flex justify-between items-center px-4 py-2 bg-secondary rounded-lg border-muted">
+											<span>{file.name}</span>
+											<Button type="button" variant="neutral" onClick={() => setFiles(files.filter(file => file.id !== id))}>
+												<X size={18} />
+											</Button>
+										</div>
 									</li>
 								))}
 							</ul>
 						</div>
 						{files.length !== 0 && (
-							<Button type="button" onClick={handleMergeFiles} className="w-full">
+							<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
 								{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
 								Merge All Files
 							</Button>
