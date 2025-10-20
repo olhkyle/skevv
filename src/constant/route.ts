@@ -13,6 +13,7 @@ const route = {
 		SETTINGS: {
 			ROOT: '/settings',
 			MYACCOUNT_PROFILE: '/settings/myaccount/profile',
+			SUBSCRIPTION: '/settings/myaccount/subscription',
 		},
 		NOT_FOUND: '/*',
 	},

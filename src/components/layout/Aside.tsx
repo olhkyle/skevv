@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import route from '@/constant/route';
-import { FilePlus, LayoutList, Search, Settings } from 'lucide-react';
 import { useSelectedLayoutSegment } from 'next/navigation';
+import { FilePlus, LayoutList, Search } from 'lucide-react';
+import route from '@/constant/route';
 import { Button } from '../ui';
+import { UserProfile } from '.';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
@@ -17,50 +18,39 @@ export default function Aside() {
 	return (
 		<div className="relative">
 			<aside
-				className={`fixed flex-col left-0 hidden py-2 h-full w-14 max-h-screen overflow-y-auto overflow-x-hidden bg-muted border-muted border-r md:sticky md:flex lg:w-56 lg:p-3`}>
-				<div className="flex h-full flex-col justify-between">
-					<header className="hidden justify-between items-center gap-2 lg:flex">
-						<button className="flex items-center gap-2 py-1.5 px-2">
-							<div className="flex justify-center items-center w-4 h-4 rounded-[9999px] bg-gray-900">
-								{/* <img src="#" alt="not yet" className="block w-full h-full" /> */}
-							</div>
-							<div className="font-bold">Kyle Kwon</div>
-						</button>
-						<Button type="button" variant="neutral">
-							<Search size={21} className="text-gray-700" />
+				className={`fixed flex-col left-0 hidden py-2 h-full w-14 max-h-screen overflow-y-auto overflow-x-hidden border-muted border-r md:sticky md:flex lg:w-56 lg:p-3`}>
+				<div className="flex h-full flex-col justify-between gap-2 lg:gap-4">
+					<header className="flex justify-between items-center min-h-[36px]">
+						<h1 className="inline-flex justify-center item-center py-1.5 px-2">
+							<Link href={route.SERVICE.ROOT} className="text-sm font-black text-center lg:text-lg">
+								SKVV
+							</Link>
+						</h1>
+						<Button type="button" variant="neutral" size="icon-sm">
+							<Search size={18} className="text-gray-900" />
 						</Button>
 					</header>
-					<Link href={route.SERVICE.ROOT} className="inline-flex justify-center item-center h-[36px] text-center lg:hidden">
-						<h1 className="text-xl font-bold">SVV</h1>
-					</Link>
-					<nav className="flex flex-col flex-1 gap-2 mt-2 md:px-2 lg:mt-4 lg:px-0">
+					<nav className="flex flex-col flex-1 gap-2 md:px-2 lg:px-0">
 						{links.map(({ title, to, icon }) => (
 							<Link
 								href={to}
 								key={to}
-								className={`flex justify-center items-center gap-0 py-1.5 px-2 ${
-									to === route.SERVICE.ROOT + segment ? 'bg-gray-200' : 'bg-muted'
-								} text-gray-800 font-medium rounded-md hover:bg-gray-200 transition-colors lg:gap-2 lg:justify-start`}>
+								className={`flex justify-center items-center gap-0 py-1.5 px-2 min-h-[36px] ${
+									to === route.SERVICE.ROOT + segment ? 'bg-muted' : 'bg-white'
+								} text-gray-800 font-medium rounded-md hover:bg-muted active:bg-gray-200 transition-colors lg:gap-2 lg:justify-start`}>
 								{icon}
 								<span className="hidden lg:inline">{title}</span>
 							</Link>
 						))}
 					</nav>
 				</div>
-				<div>
-					<Link
-						href={route.SERVICE.SETTINGS.MYACCOUNT_PROFILE}
-						className="flex justify-center items-center gap-0 py-1.5 px-2 text-gray-800 font-medium rounded-md hover:bg-gray-200 transition-colors lg:gap-2 lg:justify-start">
-						<Settings size={18} className="text-gray-900" />
-						<span className="hidden lg:inline">Settings</span>
+				<UserProfile />
+				<small className="text-default mx-3 mb-2 mt-1 hidden text-[0.5rem] opacity-50 lg:block">
+					© 2025{' '}
+					<Link href={route.HOME} className="hover:underline" target="_blank">
+						SKEVV
 					</Link>
-					<small className="text-default mx-3 mb-2 mt-1 hidden text-[0.5rem] opacity-50 lg:block">
-						© 2025{' '}
-						<Link href={route.HOME} className="hover:underline" target="_blank">
-							SKEVV
-						</Link>
-					</small>
-				</div>
+				</small>
 			</aside>
 		</div>
 	);
