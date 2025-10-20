@@ -76,8 +76,8 @@ export default function FileDropZone() {
 					</MotionBlock>
 				</div>
 			) : (
-				<div className="grid grid-rows-1 gap-2 h-[calc(100dvh-32px)] md:grid-cols-5">
-					<div className="relative flex flex-col justify-between gap-2 col-span-full row-span-1 py-2 px-4 h-full border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
+				<div className="grid grid-rows-1 gap-2 md:grid-cols-5">
+					<div className="flex flex-col justify-between gap-4 col-span-full row-span-1 py-2 px-4 h-full border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex flex-col gap-2">
 							<div className="flex justify-between items-center">
 								<h3 className="text-md font-bold">Uploaded PDFs</h3>
@@ -94,7 +94,7 @@ export default function FileDropZone() {
 							</ul>
 						</div>
 						{files.length !== 0 && (
-							<Button type="button" onClick={handleMergeFiles} className="sticky bottom-0 left-[50%] w-full">
+							<Button type="button" onClick={handleMergeFiles} className="w-full">
 								{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
 								Merge All Files
 							</Button>
