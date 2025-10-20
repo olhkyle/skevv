@@ -4,7 +4,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Loader } from 'lucide-react';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function PdfPreview({ file, fileCount }: { file: File; fileCount: number }) {
 	const [numPages, setNumPages] = useState<number>(0);

@@ -1,2 +1,2 @@
 export * from './new';
-// export * from './pdf';
+export * from './pdf';
