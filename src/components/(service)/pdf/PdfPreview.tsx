@@ -12,7 +12,15 @@ function DocumentErrorMessage() {
 	return <p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({ file, fileCount, pageCount = 0 }: { file: File; fileCount: number; pageCount?: number }) {
+export default function PdfPreview({
+	file,
+	pageCount = 0,
+	startPageNumber = 1,
+}: {
+	file: File;
+	pageCount?: number;
+	startPageNumber?: number;
+}) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(pageCount);
 	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9);
@@ -58,7 +66,7 @@ export default function PdfPreview({ file, fileCount, pageCount = 0 }: { file: F
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
 						<span className="absolute top-0 right-0 flex justify-center items-center w-[16px] h-[16px] bg-gray-300 text-sm text-gray-500 rounded-full z-10">
-							{fileCount * numPages + (index + 1)}
+							{startPageNumber + 1}
 						</span>
 						<Page
 							pageNumber={index + 1}
