@@ -9,7 +9,7 @@ import screenSize from '@/constant/screenSize';
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function PdfPreview({ file, fileCount }: { file: File; fileCount: number }) {
-	const isMobile = useMediaQuery(screenSize.MAX_XS);
+	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(0);
 	const [containerWidth, setContainerWidth] = useState<number>(
 		typeof window !== 'undefined' ? window.innerWidth * 0.9 : isMobile ? 320 : 600,
@@ -39,7 +39,7 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
-	}, [isMobile]);
+	}, [isMobile, notMobile]);
 
 	if (!file) {
 		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
