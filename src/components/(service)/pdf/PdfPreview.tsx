@@ -8,6 +8,10 @@ import screenSize from '@/constant/screenSize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+function DocumentErrorMessage() {
+	return <p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>;
+}
+
 export default function PdfPreview({ file, fileCount }: { file: File; fileCount: number }) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(0);
@@ -51,11 +55,11 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={<Loader />}
-				error={<p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>}
+				error={DocumentErrorMessage}
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute -top-8 -left-8 flex justify-center items-center px-4 py-2 bg-gray-600 text-white rounded-full z-10">
+						<span className="absolute top-0 left-0 flex justify-center items-center px-4 py-2 bg-gray-300 text-gray-500 rounded-full z-10">
 							{fileCount * numPages + (index + 1)}
 						</span>
 						<Page
