@@ -23,7 +23,7 @@ export default function PdfPreview({
 }) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(pageCount);
-	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9);
+	const [containerWidth, setContainerWidth] = useState<number>(0);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	/**
@@ -33,39 +33,55 @@ export default function PdfPreview({
 		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
 		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
 	 */
+	const handleResize = () => {
+		if (containerRef.current) {
+			const style = getComputedStyle(containerRef.current);
+			const paddingLeft = parseFloat(style.paddingLeft) || 0;
+			const paddingRight = parseFloat(style.paddingRight) || 0;
+			const borderWidth = parseFloat(style.borderWidth);
+			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
+
+			const minWidth = isMobile ? 320 : 480;
+
+			setContainerWidth(Math.max(width, minWidth));
+		}
+
+		setContainerWidth(isMobile ? 320 : window.innerWidth * 0.9);
+	};
+
 	useLayoutEffect(() => {
-		const handleResize = () => {
-			if (containerRef.current) {
-				const style = getComputedStyle(containerRef.current);
-				const paddingLeft = parseFloat(style.paddingLeft) || 0;
-				const paddingRight = parseFloat(style.paddingRight) || 0;
-				const borderWidth = parseFloat(style.borderWidth);
-				const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
-
-				setContainerWidth(width);
-			}
-		};
-
 		handleResize();
 		window.addEventListener('resize', handleResize);
+
 		return () => window.removeEventListener('resize', handleResize);
 	}, [isMobile, notMobile]);
+
+	useLayoutEffect(() => {
+		handleResize();
+	}, [isMobile, notMobile, handleResize]);
 
 	if (!file) {
 		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
 	}
 
 	return (
-		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] md:max-w-[640px]">
+		<div
+			ref={containerRef}
+			className="w-full rounded-lg overflow-hidden"
+			style={{ minWidth: isMobile ? '320px' : '480px', maxWidth: '100%' }}>
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
-				loading={<Loader />}
+				loading={
+					<div className="flex justify-center items-center w-full h-[120px] bg-gray-100">
+						<Loader size={24} />
+					</div>
+				}
 				error={DocumentErrorMessage}
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute top-0 right-0 flex justify-center items-center w-[18px] h-[18px] bg-gray-300 text-sm text-gray-600 rounded-full z-10">
+						<span className="absolute top-2 right-2 flex justify-center items-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 							{startPageNumber + index}
 						</span>
 						<Page
@@ -73,7 +89,7 @@ export default function PdfPreview({
 							width={containerWidth}
 							renderTextLayer={false}
 							renderAnnotationLayer={false}
-							className="border-[1px] borer-gray-200"
+							className="w-full border-[1px] borer-gray-200"
 						/>
 					</div>
 				))}

@@ -26,10 +26,8 @@ export default function FileDropZone() {
 		try {
 			const asyncFiles = await getCountedPages(fileList);
 			setFiles(asyncFiles ?? files);
-
-			console.log(asyncFiles);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -115,21 +113,14 @@ export default function FileDropZone() {
 					<div className="flex flex-col gap-2 col-span-full p-3 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
 						<div className="flex flex-col gap-2 h-[90dvh] overflow-y-scroll">
-							<Suspense
-								fallback={
-									<div className="flex justify-center items-center w-full h-full bg-gray-100">
-										<Loader size={24} />
-									</div>
-								}>
-								{files?.map(({ id, file, pageCount }, idx) => (
-									<PdfPreview
-										key={id}
-										file={file}
-										pageCount={pageCount}
-										startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
-									/>
-								))}
-							</Suspense>
+							{files?.map(({ id, file, pageCount }, idx) => (
+								<PdfPreview
+									key={id}
+									file={file}
+									pageCount={pageCount}
+									startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
+								/>
+							))}
 						</div>
 					</div>
 				</div>
