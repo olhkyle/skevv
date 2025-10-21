@@ -15,9 +15,7 @@ function DocumentErrorMessage() {
 export default function PdfPreview({ file, fileCount }: { file: File; fileCount: number }) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(0);
-	const [containerWidth, setContainerWidth] = useState<number>(
-		typeof window !== 'undefined' ? window.innerWidth * 0.9 : isMobile ? 320 : 600,
-	);
+	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	/**
