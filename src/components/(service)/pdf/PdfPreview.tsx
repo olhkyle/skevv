@@ -23,7 +23,7 @@ export default function PdfPreview({
 }) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = useState<number>(pageCount);
-	const [containerWidth, setContainerWidth] = useState<number>(0);
+	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	/**
@@ -33,42 +33,30 @@ export default function PdfPreview({
 		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
 		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
 	 */
-	const handleResize = () => {
-		if (containerRef.current) {
-			const style = getComputedStyle(containerRef.current);
-			const paddingLeft = parseFloat(style.paddingLeft) || 0;
-			const paddingRight = parseFloat(style.paddingRight) || 0;
-			const borderWidth = parseFloat(style.borderWidth);
-			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
-
-			const minWidth = isMobile ? 320 : 480;
-
-			setContainerWidth(Math.max(width, minWidth));
-		}
-
-		setContainerWidth(isMobile ? 320 : window.innerWidth * 0.9);
-	};
-
 	useLayoutEffect(() => {
+		const handleResize = () => {
+			if (containerRef.current) {
+				const style = getComputedStyle(containerRef.current);
+				const paddingLeft = parseFloat(style.paddingLeft) || 0;
+				const paddingRight = parseFloat(style.paddingRight) || 0;
+				const borderWidth = parseFloat(style.borderWidth);
+				const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
+
+				setContainerWidth(width);
+			}
+		};
+
 		handleResize();
 		window.addEventListener('resize', handleResize);
-
 		return () => window.removeEventListener('resize', handleResize);
 	}, [isMobile, notMobile]);
-
-	useLayoutEffect(() => {
-		handleResize();
-	}, [isMobile, notMobile, handleResize]);
 
 	if (!file) {
 		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
 	}
 
 	return (
-		<div
-			ref={containerRef}
-			className="w-full rounded-lg overflow-hidden"
-			style={{ minWidth: isMobile ? '320px' : '480px', maxWidth: '100%' }}>
+		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-full">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
