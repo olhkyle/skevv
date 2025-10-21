@@ -29,7 +29,9 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 				const style = getComputedStyle(containerRef.current);
 				const paddingLeft = parseFloat(style.paddingLeft) || 0;
 				const paddingRight = parseFloat(style.paddingRight) || 0;
-				const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight);
+				const borderWidth = parseFloat(style.borderWidth);
+				const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
+
 				setContainerWidth(width);
 			}
 		};
@@ -37,7 +39,7 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
-	}, []);
+	}, [isMobile]);
 
 	if (!file) {
 		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
