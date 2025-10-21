@@ -3,12 +3,17 @@
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Loader } from 'lucide-react';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import screenSize from '@/constant/screenSize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function PdfPreview({ file, fileCount }: { file: File; fileCount: number }) {
+	const isMobile = useMediaQuery(screenSize.MAX_XS);
 	const [numPages, setNumPages] = useState<number>(0);
-	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth * 0.9 : 800);
+	const [containerWidth, setContainerWidth] = useState<number>(
+		typeof window !== 'undefined' ? window.innerWidth * 0.9 : isMobile ? 320 : 600,
+	);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	/**
@@ -39,7 +44,7 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 	}
 
 	return (
-		<div ref={containerRef} className="w-full p-2 rounded-lg min-w-[320px] sm:min-w-[480px] md:min-w-[640px]">
+		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] md:min-w-[640px]">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
@@ -48,7 +53,9 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute top-4 left-4 px-4 py-2 bg-black text-white rounded-full z-10">{fileCount * (index + 1)}</span>
+						<span className="absolute top-4 left-4 flex justify-center items-center p-4 bg-gray-600 text-white rounded-full z-10">
+							{fileCount * numPages + (index + 1)}
+						</span>
 						<Page
 							pageNumber={index + 1}
 							width={containerWidth}
