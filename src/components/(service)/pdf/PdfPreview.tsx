@@ -65,7 +65,7 @@ export default function PdfPreview({
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute top-0 right-0 flex justify-center items-center w-[16px] h-[16px] bg-gray-300 text-sm text-gray-500 rounded-full z-10">
+						<span className="absolute top-0 right-0 flex justify-center items-center w-[18px] h-[18px] bg-gray-300 text-sm text-gray-600 rounded-full z-10">
 							{startPageNumber + 1}
 						</span>
 						<Page
