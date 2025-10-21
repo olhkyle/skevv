@@ -23,7 +23,7 @@ const getCountedPages = async (files: FileItem[]) => {
 
 		return files.map((file, idx) => ({ ...file, pageCount: counts[idx] }));
 	} catch (error) {
-		console.error('Something happened wrong to get page count');
+		console.error(error, 'Something happened wrong to get page count');
 	}
 };
 

@@ -112,8 +112,8 @@ export default function FileDropZone() {
 						<div className="flex flex-col gap-2 h-[90dvh] overflow-y-scroll">
 							<Suspense
 								fallback={Array.from({ length: files.length }, (_, idx) => (
-									<div className="flex justify-center items-center min-h-24 w-full bg-gray-100">
-										<Loader key={idx} />
+									<div key={idx} className="flex justify-center items-center min-h-24 w-full bg-gray-100">
+										<Loader />
 									</div>
 								))}>
 								{files?.map(({ id, file }, idx) => (
