@@ -16,16 +16,21 @@ export default function FileDropZone() {
 	const { Loading, isLoading, startTransition } = useLoading();
 
 	//TODO: Additional Validation for file thumbnail
-	const onDrop = (acceptedFiles: FileWithPath[]) => {
+	const onDrop = async (acceptedFiles: FileWithPath[]) => {
 		const fileList = acceptedFiles.map(file => ({
 			id: `${file.name}-${Date.now()}`,
 			file,
 			imageSrc: URL.createObjectURL(file),
 		}));
 
-		getCountedPages(fileList);
+		try {
+			const asyncFiles = await getCountedPages(fileList);
+			setFiles(asyncFiles ?? files);
 
-		setFiles(fileList);
+			console.log(asyncFiles);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
