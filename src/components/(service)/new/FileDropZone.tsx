@@ -76,7 +76,7 @@ export default function FileDropZone() {
 					</MotionBlock>
 				</div>
 			) : (
-				<div className="grid grid-rows-1 gap-3 md:grid-cols-5 max-w-[100dvw-32px] lg:max-w-none">
+				<div className="grid grid-rows-1 gap-3 md:grid-cols-5 max-w-[100%-24px] lg:max-w-none">
 					<div className="flex flex-col justify-between gap-4 col-span-full row-span-1 p-3 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex flex-col gap-2">
 							<div className="flex justify-between items-center">
@@ -88,9 +88,9 @@ export default function FileDropZone() {
 							<ul className="flex flex-col gap-2">
 								{files?.map(({ id, file }) => (
 									<li key={id}>
-										<div className="flex justify-between items-center px-4 py-2 bg-secondary rounded-lg border-muted">
+										<div className="flex justify-between items-center px-3 py-2 bg-secondary rounded-lg border-muted">
 											<span>{file.name}</span>
-											<Button type="button" variant="neutral" onClick={() => setFiles(files.filter(file => file.id !== id))}>
+											<Button type="button" size="icon-sm" variant="neutral" onClick={() => setFiles(files.filter(file => file.id !== id))}>
 												<X size={18} />
 											</Button>
 										</div>
@@ -112,9 +112,9 @@ export default function FileDropZone() {
 								fallback={Array.from({ length: files.length }, (_, idx) => (
 									<Loader key={idx} />
 								))}>
-								{files?.map(({ id, file }, idx) => (
+								{/* {files?.map(({ id, file }, idx) => (
 									<PdfPreview key={id} file={file} fileCount={idx} />
-								))}
+								))} */}
 							</Suspense>
 						</div>
 					</div>
