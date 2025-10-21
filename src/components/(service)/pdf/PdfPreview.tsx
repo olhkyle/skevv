@@ -46,7 +46,7 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 	}
 
 	return (
-		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] md:min-w-[640px] lg:min-w-[768px]">
+		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px]">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
