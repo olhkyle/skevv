@@ -55,7 +55,7 @@ export default function PdfPreview({ file, fileCount }: { file: File; fileCount:
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute top-4 left-4 flex justify-center items-center p-4 bg-gray-600 text-white rounded-full z-10">
+						<span className="absolute -top-8 -left-8 flex justify-center items-center px-4 py-2 bg-gray-600 text-white rounded-full z-10">
 							{fileCount * numPages + (index + 1)}
 						</span>
 						<Page
