@@ -40,7 +40,7 @@ export default function FileDropZone() {
 	});
 
 	const handleReset = () => setFiles([]);
-	console.log(files);
+
 	const handleMergeFiles = async () => {
 		if (files.length === 0) {
 			return;
@@ -121,8 +121,8 @@ export default function FileDropZone() {
 										<Loader />
 									</div>
 								))}>
-								{files?.map(({ id, file }, idx) => (
-									<PdfPreview key={id} file={file} fileCount={idx} />
+								{files?.map(({ id, file, pageCount }, idx) => (
+									<PdfPreview key={id} file={file} fileCount={idx} pageCount={pageCount} />
 								))}
 							</Suspense>
 						</div>
