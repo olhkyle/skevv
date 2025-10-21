@@ -33,19 +33,20 @@ export default function PdfPreview({
 		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
 		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
 	 */
+
+	const handleResize = () => {
+		if (containerRef.current) {
+			const style = getComputedStyle(containerRef.current);
+			const paddingLeft = parseFloat(style.paddingLeft) || 0;
+			const paddingRight = parseFloat(style.paddingRight) || 0;
+			const borderWidth = parseFloat(style.borderWidth);
+			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
+
+			setContainerWidth(width);
+		}
+	};
+
 	useLayoutEffect(() => {
-		const handleResize = () => {
-			if (containerRef.current) {
-				const style = getComputedStyle(containerRef.current);
-				const paddingLeft = parseFloat(style.paddingLeft) || 0;
-				const paddingRight = parseFloat(style.paddingRight) || 0;
-				const borderWidth = parseFloat(style.borderWidth);
-				const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
-
-				setContainerWidth(width);
-			}
-		};
-
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);

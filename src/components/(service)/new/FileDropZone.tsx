@@ -1,8 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { CirclePlus, Download, FileUp, Loader, RotateCcw, X } from 'lucide-react';
-import { Suspense, useEffect, useState } from 'react';
+import { CirclePlus, Download, FileUp, RotateCcw, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 import { FileItem, getCountedPages, mergeFiles } from '..';
@@ -82,7 +82,7 @@ export default function FileDropZone() {
 				</div>
 			) : (
 				<div className="grid grid-rows-1 gap-3 md:grid-cols-5 max-w-[100%-24px] lg:max-w-none">
-					<div className="flex flex-col justify-between gap-4 col-span-full row-span-1 p-3 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
+					<div className="flex flex-col justify-between gap-4 col-span-full p-3 border-[1px] border-gray-100 rounded-2xl lg:col-span-2">
 						<div className="flex flex-col gap-2">
 							<div className="flex justify-between items-center">
 								<h3 className="text-md font-bold">Uploaded PDFs</h3>
@@ -110,7 +110,7 @@ export default function FileDropZone() {
 							</Button>
 						)}
 					</div>
-					<div className="flex flex-col gap-2 col-span-full p-3 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
+					<div className="flex flex-col gap-2 col-span-full p-3 border-[1px] border-gray-100 rounded-2xl lg:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
 						<div className="flex flex-col gap-2 h-[90dvh] overflow-y-scroll">
 							{files?.map(({ id, file, pageCount }, idx) => (
