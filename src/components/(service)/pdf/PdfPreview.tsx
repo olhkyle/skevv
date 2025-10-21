@@ -66,7 +66,7 @@ export default function PdfPreview({
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
 						<span className="absolute top-0 right-0 flex justify-center items-center w-[18px] h-[18px] bg-gray-300 text-sm text-gray-600 rounded-full z-10">
-							{startPageNumber + 1}
+							{startPageNumber + index}
 						</span>
 						<Page
 							pageNumber={index + 1}
