@@ -5,7 +5,7 @@ import { CirclePlus, Download, FileUp, Loader, RotateCcw, X } from 'lucide-react
 import { Suspense, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
-import { FileItem, mergeFiles } from '..';
+import { FileItem, getCountedPages, mergeFiles } from '..';
 import { MotionBlock, Button, Input } from '@/components';
 import { useLoading } from '@/hooks';
 
@@ -23,6 +23,8 @@ export default function FileDropZone() {
 			imageSrc: URL.createObjectURL(file),
 		}));
 
+		getCountedPages(fileList);
+
 		setFiles(fileList);
 	};
 
@@ -33,7 +35,7 @@ export default function FileDropZone() {
 	});
 
 	const handleReset = () => setFiles([]);
-
+	console.log(files);
 	const handleMergeFiles = async () => {
 		if (files.length === 0) {
 			return;
@@ -105,16 +107,18 @@ export default function FileDropZone() {
 							</Button>
 						)}
 					</div>
-					<div className="flex flex-col gap-2 col-span-full max-w-full p-3 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
+					<div className="flex flex-col gap-2 col-span-full p-3 border-[1px] border-gray-100 rounded-2xl md:col-span-3">
 						<h3 className="text-md font-bold">All PDF Preview</h3>
 						<div className="flex flex-col gap-2 h-[90dvh] overflow-y-scroll">
 							<Suspense
 								fallback={Array.from({ length: files.length }, (_, idx) => (
-									<Loader key={idx} />
+									<div className="flex justify-center items-center min-h-24 w-full bg-gray-100">
+										<Loader key={idx} />
+									</div>
 								))}>
-								{files?.map(({ id, file }, idx) => (
+								{/* {files?.map(({ id, file }, idx) => (
 									<PdfPreview key={id} file={file} fileCount={idx} />
-								))}
+								))} */}
 							</Suspense>
 						</div>
 					</div>

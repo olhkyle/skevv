@@ -5,9 +5,27 @@ type FileItem = {
 	id: string;
 	file: FileWithPath;
 	imageSrc: string | null;
+	pageCount?: number;
 };
 
 const DEFAULT_FILE_NAME = 'new';
+
+const getCountedPages = async (files: FileItem[]) => {
+	let counts: number[] = [];
+
+	try {
+		for (const item of files) {
+			const arrayBuffer = await item.file.arrayBuffer();
+			const pdf = await PDFDocument.load(arrayBuffer);
+			const pageCount = pdf.getPageCount();
+			counts = [...counts, pageCount];
+		}
+
+		return files.map((file, idx) => ({ ...file, pageCount: counts[idx] }));
+	} catch (error) {
+		console.error('Something happened wrong to get page count');
+	}
+};
 
 // double try - catch
 // 1. inner : local specific error
@@ -70,4 +88,4 @@ const mergeFiles = async (files: FileItem[]) => {
 };
 
 export type { FileItem };
-export { mergeFiles };
+export { getCountedPages, mergeFiles };
