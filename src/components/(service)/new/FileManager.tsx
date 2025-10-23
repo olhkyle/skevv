@@ -37,9 +37,5 @@ export default function FileManager() {
 		return () => files.forEach(file => URL.revokeObjectURL(file.imageSrc!));
 	}, [files]);
 
-	return (
-		<div className={`flex flex-col ${isFilesExist && 'h-[calc(100dvh-24px)]'}`}>
-			{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditList files={files} setFiles={setFiles} />}
-		</div>
-	);
+	return <div>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditList files={files} setFiles={setFiles} />}</div>;
 }

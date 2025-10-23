@@ -2,10 +2,11 @@
 
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui';
-import { Download, RotateCcw, X } from 'lucide-react';
+import { Download, RotateCcw, ScreenShareIcon, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { FileItem, mergeFiles } from '../pdf';
 import { useLoading } from '@/hooks';
+import { ServiceNav } from '@/components/layout';
 
 interface FileEditListProps {
 	files: FileItem[];
@@ -35,50 +36,61 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 	};
 
 	return (
-		<div className="grid grid-rows-1 gap-3 h-full md:grid-cols-6 md:max-w-[calc(100%-24px)] lg:max-w-none">
-			<div className="relative col-span-full p-3 border-[1px] border-muted rounded-2xl lg:col-span-2 lg:row-span-full">
-				<div className="flex flex-col gap-2 h-full">
-					<div className="flex justify-between items-center">
-						<h3 className="text-md font-bold">Uploaded PDFs</h3>
-						<Button type="button" size="icon-sm" onClick={handleReset}>
-							<RotateCcw />
-						</Button>
-					</div>
-					<ul className="flex flex-col gap-2 pb-[65px] overflow-y-scroll scrollbar-thin">
-						{files?.map(({ id, file }) => (
-							<li key={id}>
-								<div className="flex justify-between items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border-[1px] border-muted">
+		<div className="flex flex-col gap-3 w-full">
+			<ServiceNav />
+			<div className="grid grid-rows-1 gap-3 md:grid-cols-6 md:max-w-full md:h-[calc(100dvh-2*var(--global-layout-padding)-var(--service-nav-height)-var(--global-layout-padding))]">
+				<div className="relative col-span-full p-3 border-[1px] border-muted rounded-2xl md:col-span-2">
+					<div className="flex flex-col gap-2 h-full">
+						<div className="flex justify-between items-center">
+							<h3 className="text-md font-bold">Uploaded PDFs</h3>
+							<Button type="button" size="icon-sm" onClick={handleReset}>
+								<RotateCcw />
+							</Button>
+						</div>
+						<ul className="flex flex-col gap-2 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
+							{files?.map(({ id, file }) => (
+								<li
+									key={id}
+									className="flex justify-between items-center gap-2 px-3 py-2 w-full bg-gray-50 rounded-lg border-[1px] border-muted">
 									<span className="inline-block overflow-hidden text-ellipsis">{file.name}</span>
 									<Button type="button" size="icon-sm" variant="ghost" onClick={() => setFiles(files.filter(file => file.id !== id))}>
 										<X />
 									</Button>
-								</div>
-							</li>
-						))}
-					</ul>
+								</li>
+							))}
+						</ul>
+					</div>
+					<div className="absolute left-0 bottom-0 p-3 w-full bg-gray-100 rounded-b-xl border-t-[1px] border-muted">
+						{files.length !== 0 && (
+							<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
+								{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
+								Merge All Files
+							</Button>
+						)}
+					</div>
 				</div>
-				<div className="absolute left-0 bottom-0 p-3 w-full bg-gray-100 rounded-b-xl border-t-[1px] border-muted">
-					{files.length !== 0 && (
+				<div className="hidden flex-col gap-2 col-span-full p-3 border-[1px] border-muted rounded-2xl sm:flex md:col-span-4">
+					<div className="flex items-center min-h-[32px]">
+						<h3 className="text-md font-bold">Preview</h3>
+					</div>
+					<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 						<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
 							{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
 							Merge All Files
 						</Button>
-					)}
-				</div>
-			</div>
-			<div className="flex flex-col gap-2 col-span-full p-3 h-full border-[1px] border-muted rounded-2xl lg:col-span-4">
-				<div className="flex items-center min-h-[32px]">
-					<h3 className="text-md font-bold">Preview</h3>
-				</div>
-				<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin">
-					{files?.map(({ id, file, pageCount }, idx) => (
+						<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
+							{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
+							Merge All Files
+						</Button>
+						{/* {files?.map(({ id, file, pageCount }, idx) => (
 						<PdfPreview
 							key={id}
 							file={file}
 							pageCount={pageCount}
 							startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
 						/>
-					))}
+					))} */}
+					</div>
 				</div>
 			</div>
 		</div>
