@@ -51,10 +51,7 @@ export default function PdfPreview({
 	React.useLayoutEffect(() => {
 		handleResize();
 
-		window.addEventListener('resize', () => {
-			console.log(window.scrollY);
-			handleResize();
-		});
+		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	}, [isMobile, notMobile]);
 
@@ -63,7 +60,7 @@ export default function PdfPreview({
 	}
 
 	return (
-		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-full">
+		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] md:max-w-[640px] max-w-full">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
