@@ -17,7 +17,7 @@ export default function FileDropZone({ dropzone: { getRootProps, getInputProps, 
 				<Input type="file" id="file-dropzone" className="hidden" {...getInputProps()} />
 				<label
 					htmlFor="file-dropzone"
-					className="flex justify-center items-center gap-2 p-4 min-h-[80dvh] w-full text-base text-white font-bold cursor-pointer lg:p-36 lg:text-lg ">
+					className="flex justify-center items-center gap-2 p-4 min-h-[85dvh] w-full text-base text-white font-bold cursor-pointer lg:p-36 lg:text-lg ">
 					<FileUp size={27} />
 					<span>{isDragActive ? 'Put your files, here😊' : 'Drag and Drop Your PDFs'} </span>
 				</label>
