@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import React from 'react';
 import { useIsMountedRef } from '.';
 import { Loader } from 'lucide-react';
 
 export default function useLoading() {
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = React.useState<boolean>(false);
 	const ref = useIsMountedRef();
-	const abortControllerRef = useRef<AbortController | null>(null);
+	const abortControllerRef = React.useRef<AbortController | null>(null);
 
 	//  "In TypeScript's generic functions, when using async and the generic type <T> together, the generic type's position might be recognized as a JSX tag, so you write it as <T,>
 	const startTransition = async <T,>(promise: Promise<T>): Promise<T> => {

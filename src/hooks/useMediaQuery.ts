@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 
 export default function useMediaQuery(query: string) {
-	const [matches, setMatches] = useState(() => {
+	const [matches, setMatches] = React.useState(() => {
 		if (typeof window !== 'undefined') {
 			return window.matchMedia(query).matches;
 		}
@@ -9,7 +9,7 @@ export default function useMediaQuery(query: string) {
 		return false;
 	});
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (typeof window === 'undefined') {
 			return undefined;
 		}
