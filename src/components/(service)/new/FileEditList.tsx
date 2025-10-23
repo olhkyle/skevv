@@ -70,7 +70,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 				<div className="flex items-center min-h-[32px]">
 					<h3 className="text-md font-bold">Preview</h3>
 				</div>
-				<div className="flex flex-col gap-2 mt-3 overflow-y-scroll scrollbar-thin">
+				<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin">
 					{files?.map(({ id, file, pageCount }, idx) => (
 						<PdfPreview
 							key={id}
