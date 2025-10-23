@@ -74,22 +74,14 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 						<h3 className="text-md font-bold">Preview</h3>
 					</div>
 					<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
-						<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
-							{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
-							Merge All Files
-						</Button>
-						<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
-							{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
-							Merge All Files
-						</Button>
-						{/* {files?.map(({ id, file, pageCount }, idx) => (
-						<PdfPreview
-							key={id}
-							file={file}
-							pageCount={pageCount}
-							startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
-						/>
-					))} */}
+						{files?.map(({ id, file, pageCount }, idx) => (
+							<PdfPreview
+								key={id}
+								file={file}
+								pageCount={pageCount}
+								startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
+							/>
+						))}
 					</div>
 				</div>
 			</div>
