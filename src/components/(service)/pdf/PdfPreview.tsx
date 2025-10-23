@@ -1,7 +1,7 @@
 'use client';
 
+import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { useLayoutEffect, useRef, useState } from 'react';
 import { Loader } from 'lucide-react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import screenSize from '@/constant/screenSize';
@@ -22,9 +22,11 @@ export default function PdfPreview({
 	startPageNumber?: number;
 }) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
-	const [numPages, setNumPages] = useState<number>(pageCount);
-	const [containerWidth, setContainerWidth] = useState<number>(typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9);
-	const containerRef = useRef<HTMLDivElement>(null);
+	const [numPages, setNumPages] = React.useState<number>(pageCount);
+	const [containerWidth, setContainerWidth] = React.useState<number>(
+		typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
+	);
+	const containerRef = React.useRef<HTMLDivElement>(null);
 
 	/**
 	 * ⚡️ change width depends on parent width
@@ -46,9 +48,13 @@ export default function PdfPreview({
 		}
 	};
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		handleResize();
-		window.addEventListener('resize', handleResize);
+
+		window.addEventListener('resize', () => {
+			console.log(window.scrollY);
+			handleResize();
+		});
 		return () => window.removeEventListener('resize', handleResize);
 	}, [isMobile, notMobile]);
 
