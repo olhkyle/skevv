@@ -21,7 +21,7 @@ export default function LoginForm() {
 
 	return (
 		<div className="flex flex-col gap-4 mt-8 p-4 bg-white rounded-lg">
-			<Button type="button" size="lg" variant="secondary">
+			<Button type="button" size="lg" variant="neutral">
 				Google Login
 			</Button>
 

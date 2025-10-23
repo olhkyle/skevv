@@ -23,10 +23,10 @@ export default function Aside() {
 					<header className="flex justify-between items-center min-h-[36px]">
 						<h1 className="inline-flex justify-center item-center py-1.5 px-2">
 							<Link href={route.SERVICE.ROOT} className="text-sm font-black text-center lg:text-lg">
-								SKVV
+								SKEVV
 							</Link>
 						</h1>
-						<Button type="button" variant="neutral" size="icon-sm">
+						<Button type="button" variant="ghost" size="icon-sm">
 							<Search size={18} className="text-gray-900" />
 						</Button>
 					</header>

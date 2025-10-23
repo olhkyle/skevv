@@ -3,5 +3,5 @@ export default function Main({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <main className="relative flex-1 bg-white mt-[80px] md:mt-0">{children}</main>;
+	return <main className="relative flex-1 bg-white pt-[72px] md:pt-0">{children}</main>;
 }
