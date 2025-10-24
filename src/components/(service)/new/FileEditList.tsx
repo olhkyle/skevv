@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui';
-import { Download, RotateCcw, ScreenShareIcon, X } from 'lucide-react';
+import { Download, RotateCcw, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { FileItem, mergeFiles } from '../pdf';
 import { useLoading } from '@/hooks';

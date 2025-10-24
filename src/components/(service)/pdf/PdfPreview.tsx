@@ -8,19 +8,17 @@ import screenSize from '@/constant/screenSize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+interface PdfPreviewProps {
+	file: File;
+	pageCount?: number;
+	startPageNumber?: number;
+}
+
 function DocumentErrorMessage() {
 	return <p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({
-	file,
-	pageCount = 0,
-	startPageNumber = 1,
-}: {
-	file: File;
-	pageCount?: number;
-	startPageNumber?: number;
-}) {
+export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1 }: PdfPreviewProps) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [numPages, setNumPages] = React.useState<number>(pageCount);
 	const [containerWidth, setContainerWidth] = React.useState<number>(
@@ -60,7 +58,7 @@ export default function PdfPreview({
 	}
 
 	return (
-		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] sm:max-w-[640px] max-w-full">
+		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-[calc(100%-2*var(--global-layout-padding))]">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
