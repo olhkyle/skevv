@@ -27,14 +27,11 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 			const paddingRight = parseFloat(style.paddingRight) || 0;
 			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight);
 
-			setContainerWidth(prevWidth => {
-				if (Math.abs(prevWidth - width) > 0.5) return width;
-				return prevWidth;
-			});
+			setContainerWidth(width);
 		}
 	};
 
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		if (!containerRef.current) return;
 
 		handleResize();
