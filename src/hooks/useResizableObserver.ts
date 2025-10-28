@@ -21,12 +21,13 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 
 	const handleResize = () => {
 		if (containerRef.current) {
-			const style = getComputedStyle(containerRef.current);
 			const width = containerRef.current.getBoundingClientRect().width;
+			const style = getComputedStyle(containerRef.current);
 			const paddingLeft = parseFloat(style.paddingLeft) || 0;
 			const paddingRight = parseFloat(style.paddingRight) || 0;
 			const scrollbarWidth = 6;
-			const currentWidth = width - scrollbarWidth;
+			const borderWidth = 1;
+			const currentWidth = width - (paddingLeft + paddingRight) - scrollbarWidth - 2 * borderWidth;
 
 			setContainerWidth(currentWidth);
 		}

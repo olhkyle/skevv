@@ -46,7 +46,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 							width={containerWidth}
 							renderTextLayer={false}
 							renderAnnotationLayer={false}
-							className="w-full border-[1px] borer-gray-200"
+							className="flex justify-center items-center w-full border-[1px] borer-gray-200"
 						/>
 					</div>
 				))}
