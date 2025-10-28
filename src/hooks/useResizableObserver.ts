@@ -36,18 +36,18 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 
 		handleResize();
 
-		const observer = new ResizeObserver(() => {
-			handleResize();
-		});
+		// const observer = new ResizeObserver(() => {
+		// 	handleResize();
+		// });
 
-		observer.observe(containerRef.current);
+		// observer.observe(containerRef.current);
 		// window.addEventListener('resize', handleResize);
 
 		return () => {
-			observer.disconnect();
-			// window.removeEventListener('resize', handleResize);
+			// observer.disconnect();
+			window.removeEventListener('resize', handleResize);
 		};
-	}, []);
+	}, [...effectTriggers]);
 
 	return { containerRef, containerWidth };
 }
