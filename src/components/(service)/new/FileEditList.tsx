@@ -1,12 +1,13 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Button } from '@/components/ui';
+import React from 'react';
 import { Download, RotateCcw, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { Button, ServiceNav } from '@/components';
+import { useLoading, useMediaQuery, useResizableObserver } from '@/hooks';
 import { FileItem, mergeFiles } from '../pdf';
-import { useLoading } from '@/hooks';
-import { ServiceNav } from '@/components/layout';
+import screenSize from '@/constant/screenSize';
 
 interface FileEditListProps {
 	files: FileItem[];
@@ -17,6 +18,13 @@ const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
 export default function FileEditList({ files, setFiles }: FileEditListProps) {
 	const { Loading, isLoading, startTransition } = useLoading();
+	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
+
+	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
+		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
+		effectTriggers: [isMobile, notMobile],
+	});
+
 	const handleReset = () => setFiles([]);
 
 	const handleMergeFiles = async () => {
@@ -73,13 +81,14 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 					<div className="flex items-center min-h-[32px]">
 						<h3 className="text-md font-bold">Preview</h3>
 					</div>
-					<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
+					<div ref={containerRef} className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 						{files?.map(({ id, file, pageCount }, idx) => (
 							<PdfPreview
 								key={id}
 								file={file}
 								pageCount={pageCount}
 								startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
+								containerWidth={containerWidth}
 							/>
 						))}
 					</div>

@@ -3,8 +3,6 @@
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Loader } from 'lucide-react';
-import useMediaQuery from '@/hooks/useMediaQuery';
-import screenSize from '@/constant/screenSize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -12,64 +10,22 @@ interface PdfPreviewProps {
 	file: File;
 	pageCount?: number;
 	startPageNumber?: number;
+	containerWidth: number;
 }
 
 function DocumentErrorMessage() {
 	return <p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1 }: PdfPreviewProps) {
-	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
+export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const [numPages, setNumPages] = React.useState<number>(pageCount);
-	const [containerWidth, setContainerWidth] = React.useState<number>(
-		typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
-	);
-	const containerRef = React.useRef<HTMLDivElement>(null);
-
-	/**
-	 * ⚡️ change width depends on parent width
-	 * offsetWidth - content + padding + border	px (number)	정수
-		 clientWidth - content + padding	px (number)	정수
-		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
-		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
-	 */
-
-	const handleResize = () => {
-		if (containerRef.current) {
-			const style = getComputedStyle(containerRef.current);
-			const paddingLeft = parseFloat(style.paddingLeft) || 0;
-			const paddingRight = parseFloat(style.paddingRight) || 0;
-			const borderWidth = parseFloat(style.borderWidth) || 0;
-			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
-
-			setContainerWidth(width);
-		}
-	};
-
-	React.useLayoutEffect(() => {
-		if (!containerRef.current) return;
-
-		handleResize();
-
-		const observer = new ResizeObserver(() => {
-			handleResize();
-		});
-
-		observer.observe(containerRef.current);
-		window.addEventListener('resize', handleResize);
-
-		return () => {
-			observer.disconnect();
-			window.removeEventListener('resize', handleResize);
-		};
-	}, [isMobile, notMobile]);
 
 	if (!file) {
-		return <p className="p-4 bg-muted rounded-full">Invalid File</p>;
+		return <p className="p-4 w-full bg-muted rounded-full">Invalid File</p>;
 	}
 
 	return (
-		<div ref={containerRef} className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-[calc(100%-2*var(--global-layout-padding))]">
+		<div className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-[calc(100%-2*var(--global-layout-padding))]">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
