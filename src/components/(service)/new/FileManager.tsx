@@ -37,5 +37,5 @@ export default function FileManager() {
 		return () => files.forEach(file => URL.revokeObjectURL(file.imageSrc!));
 	}, [files]);
 
-	return <div>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditList files={files} setFiles={setFiles} />}</div>;
+	return <>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditList files={files} setFiles={setFiles} />}</>;
 }
