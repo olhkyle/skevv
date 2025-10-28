@@ -39,7 +39,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1 }:
 			const style = getComputedStyle(containerRef.current);
 			const paddingLeft = parseFloat(style.paddingLeft) || 0;
 			const paddingRight = parseFloat(style.paddingRight) || 0;
-			const borderWidth = parseFloat(style.borderWidth);
+			const borderWidth = parseFloat(style.borderWidth) || 0;
 			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight) - borderWidth * 2;
 
 			setContainerWidth(width);
@@ -47,10 +47,21 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1 }:
 	};
 
 	React.useLayoutEffect(() => {
+		if (!containerRef.current) return;
+
 		handleResize();
 
+		const observer = new ResizeObserver(() => {
+			handleResize();
+		});
+
+		observer.observe(containerRef.current);
 		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+
+		return () => {
+			observer.disconnect();
+			window.removeEventListener('resize', handleResize);
+		};
 	}, [isMobile, notMobile]);
 
 	if (!file) {
