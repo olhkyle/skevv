@@ -81,16 +81,18 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 					<div className="flex items-center min-h-[32px]">
 						<h3 className="text-md font-bold">Preview</h3>
 					</div>
-					<div ref={containerRef} className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
-						{files?.map(({ id, file, pageCount }, idx) => (
-							<PdfPreview
-								key={id}
-								file={file}
-								pageCount={pageCount}
-								startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
-								containerWidth={containerWidth}
-							/>
-						))}
+					<div ref={containerRef} className="md:flex-1 md:min-h-0">
+						<div className="flex flex-col gap-2 overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
+							{files?.map(({ id, file, pageCount }, idx) => (
+								<PdfPreview
+									key={id}
+									file={file}
+									pageCount={pageCount}
+									startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
+									containerWidth={containerWidth}
+								/>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
