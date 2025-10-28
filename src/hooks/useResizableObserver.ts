@@ -24,7 +24,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 
 		// 1px 오차
 		setContainerWidth(prevWidth => {
-			if (Math.abs(prevWidth - roundedWidth) >= 1) return roundedWidth;
+			if (Math.abs(prevWidth - roundedWidth) >= 5) return roundedWidth;
 
 			return prevWidth;
 		});
