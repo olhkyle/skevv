@@ -26,7 +26,10 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 			const paddingRight = parseFloat(style.paddingRight) || 0;
 			const width = containerRef.current.offsetWidth - (paddingLeft + paddingRight);
 
-			setContainerWidth(width);
+			setContainerWidth(prevWidth => {
+				if (Math.abs(prevWidth - width) > 0.5) return width; // 0.5px 오차 허용
+				return prevWidth;
+			});
 		}
 	};
 
