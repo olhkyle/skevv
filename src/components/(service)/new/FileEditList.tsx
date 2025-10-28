@@ -22,7 +22,6 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
-		effectTriggers: [isMobile, notMobile],
 	});
 
 	const handleReset = () => setFiles([]);

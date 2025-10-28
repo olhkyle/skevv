@@ -14,7 +14,7 @@ interface PdfPreviewProps {
 }
 
 function DocumentErrorMessage() {
-	return <p className="p-4 bg-gray-200 text-gray-600 rounded-full">Error happened to get a file</p>;
+	return <p className="p-4 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
 export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
@@ -30,7 +30,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={
-					<div className="flex justify-center items-center w-full h-[120px] bg-gray-100">
+					<div className="flex justify-center items-center w-full h-[150px] bg-gray-100">
 						<Loader size={24} />
 					</div>
 				}

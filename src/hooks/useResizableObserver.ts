@@ -2,10 +2,9 @@ import React from 'react';
 
 interface UseResizableObserverProps {
 	initialWidth?: number;
-	effectTriggers: (number | string | boolean)[];
 }
 
-export default function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
+export default function useResizableObserver<T extends HTMLElement>({ initialWidth = 0 }: UseResizableObserverProps) {
 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
 
 	const containerRef = React.useRef<T>(null);
@@ -31,7 +30,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 		}
 	};
 
-	React.useLayoutEffect(() => {
+	React.useEffect(() => {
 		if (!containerRef.current) return;
 
 		handleResize();
@@ -47,7 +46,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 			observer.disconnect();
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [...effectTriggers]);
+	}, []);
 
 	return { containerRef, containerWidth };
 }
