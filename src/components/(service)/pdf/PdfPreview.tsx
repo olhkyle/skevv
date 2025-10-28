@@ -25,7 +25,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 	}
 
 	return (
-		<div className="w-full rounded-lg min-w-[320px] sm:min-w-[480px] max-w-[calc(100%-2*var(--global-layout-padding))]">
+		<div className="w-full rounded-lg">
 			<Document
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
