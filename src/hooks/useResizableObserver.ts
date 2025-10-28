@@ -34,7 +34,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 
-		handleResize();
+		// handleResize();
 
 		const observer = new ResizeObserver(() => {
 			handleResize();
