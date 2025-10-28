@@ -25,7 +25,8 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 			const width = containerRef.current.getBoundingClientRect().width;
 			const paddingLeft = parseFloat(style.paddingLeft) || 0;
 			const paddingRight = parseFloat(style.paddingRight) || 0;
-			const currentWidth = width - (paddingLeft + paddingRight);
+			const scrollbarWidth = 6;
+			const currentWidth = width - scrollbarWidth;
 
 			setContainerWidth(currentWidth);
 		}
@@ -36,15 +37,9 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 
 		handleResize();
 
-		// const observer = new ResizeObserver(() => {
-		// 	handleResize();
-		// });
-
-		// observer.observe(containerRef.current);
-		// window.addEventListener('resize', handleResize);
+		window.addEventListener('resize', handleResize);
 
 		return () => {
-			// observer.disconnect();
 			window.removeEventListener('resize', handleResize);
 		};
 	}, [...effectTriggers]);
