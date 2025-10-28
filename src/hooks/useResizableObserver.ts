@@ -56,7 +56,10 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 		const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
 			const [entry] = entries;
 
-			const width = entry.contentRect?.width ?? containerRef.current!.offsetWidth - (paddingLeft + paddingRight);
+			const width =
+				entry.borderBoxSize?.[0]?.inlineSize ??
+				entry.contentRect?.width ??
+				containerRef.current!.offsetWidth - (paddingLeft + paddingRight);
 
 			setWidthSafely(width);
 		});
