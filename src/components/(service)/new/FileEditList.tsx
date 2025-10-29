@@ -25,6 +25,9 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 		effectTriggers: [isMobile, notMobile],
 	});
 
+	const FIXED_HEIGHT_ON_MIN_MD =
+		'md:h-[calc(100dvh-2*var(--global-layout-padding)-var(--service-nav-height)-var(--global-layout-padding))]';
+
 	const handleReset = () => setFiles([]);
 
 	const handleMergeFiles = async () => {
@@ -46,7 +49,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 	return (
 		<div className="flex flex-col gap-3 w-full">
 			<ServiceNav />
-			<div className="grid grid-rows-1 gap-3 md:grid-cols-6 md:max-w-full md:h-[calc(100dvh-2*var(--global-layout-padding)-var(--service-nav-height)-var(--global-layout-padding))]">
+			<div className={`grid grid-rows-1 gap-3 md:grid-cols-6 md:max-w-full ${FIXED_HEIGHT_ON_MIN_MD}`}>
 				<div className="relative col-span-full p-3 border-[1px] border-muted rounded-2xl md:col-span-2">
 					<div className="flex flex-col gap-2 h-full">
 						<div className="flex justify-between items-center">

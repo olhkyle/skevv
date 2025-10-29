@@ -10,16 +10,18 @@ interface FileDropZoneProps {
 
 export default function FileDropZone({ dropzone: { getRootProps, getInputProps, isDragActive, open } }: FileDropZoneProps) {
 	return (
-		<div className="relative">
+		<div className="relative w-full h-full">
 			<MotionBlock
 				{...getRootProps()}
-				className="bg-radial-[at_50%_75%] from-sky-200 via-blue-400 to-indigo-300 to-90% rounded-2xl outline-2 outline-dotted outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4">
+				className={`h-full bg-radial-[at_50%_75%] ${
+					isDragActive ? 'from-sky-300 via-blue-500 to-indigo-400' : 'from-sky-200 via-blue-400 to-indigo-300'
+				} to-90% rounded-2xl outline-2 outline-dotted outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4`}>
 				<Input type="file" id="file-dropzone" className="hidden" {...getInputProps()} />
 				<label
 					htmlFor="file-dropzone"
-					className="flex justify-center items-center gap-2 p-4 min-h-[85dvh] w-full text-base text-white font-bold cursor-pointer lg:p-36 lg:text-lg ">
+					className="flex justify-center items-center gap-2 p-4 w-full h-full text-base text-white font-bold cursor-pointer lg:p-36 lg:text-lg ">
 					<FileUp size={27} />
-					<span>{isDragActive ? 'Put your files, here😊' : 'Drag and Drop Your PDFs'} </span>
+					<span>{isDragActive ? 'Put your files, here 😊' : 'Drag and Drop Your PDFs'} </span>
 				</label>
 			</MotionBlock>
 			<Button type="button" onClick={open} className="absolute bottom-8 left-[50%] -translate-x-[50%] z-10">
