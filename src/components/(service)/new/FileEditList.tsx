@@ -4,10 +4,9 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import { RotateCcw, X } from 'lucide-react';
 import { Button, FileMergeConfirmContext, ServiceNav } from '@/components';
-import { useMediaQuery, useResizableObserver } from '@/hooks';
-import { type FileList } from '../pdf';
+import { useMediaQuery, useResizableObserver, useKeyboardTrigger } from '@/hooks';
+import { getTotalPageCount, type FileList } from '../pdf';
 import screenSize from '@/constant/screenSize';
-import useKeyboardTrigger from '@/hooks/useKeyboardTrigger';
 
 interface FileEditListProps {
 	files: FileList;
