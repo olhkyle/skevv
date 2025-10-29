@@ -91,7 +91,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 								key={id}
 								file={file}
 								pageCount={pageCount}
-								startPageNumber={files.slice(0, idx).reduce((sum, f) => sum + (f.pageCount ?? 0), 1)}
+								startPageNumber={files.slice(0, idx).reduce((sum, file) => sum + (file?.pageCount ?? 0), 1)}
 								containerWidth={containerWidth}
 							/>
 						))}
