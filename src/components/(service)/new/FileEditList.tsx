@@ -2,27 +2,36 @@
 
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { Download, RotateCcw, X } from 'lucide-react';
-import { toast } from 'sonner';
-import { Button, ServiceNav } from '@/components';
-import { useLoading, useMediaQuery, useResizableObserver } from '@/hooks';
-import { FileItem, mergeFiles } from '../pdf';
+import { RotateCcw, X } from 'lucide-react';
+import { Button, FileMergeConfirmContext, ServiceNav } from '@/components';
+import { useMediaQuery, useResizableObserver } from '@/hooks';
+import { type FileList } from '../pdf';
 import screenSize from '@/constant/screenSize';
+import useKeyboardTrigger from '@/hooks/useKeyboardTrigger';
 
 interface FileEditListProps {
-	files: FileItem[];
-	setFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
+	files: FileList;
+	setFiles: React.Dispatch<React.SetStateAction<FileList>>;
 }
 
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
 export default function FileEditList({ files, setFiles }: FileEditListProps) {
-	const { Loading, isLoading, startTransition } = useLoading();
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
+	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
 		effectTriggers: [isMobile, notMobile],
+	});
+
+	useKeyboardTrigger({
+		handler: (e: KeyboardEvent) => {
+			if (e.ctrlKey && e.key.toLowerCase() === 'm') {
+				e.preventDefault();
+				setIsConfirmContextOpen(true);
+			}
+		},
 	});
 
 	const FIXED_HEIGHT_ON_MIN_MD =
@@ -30,25 +39,10 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 
 	const handleReset = () => setFiles([]);
 
-	const handleMergeFiles = async () => {
-		if (files?.length === 0) {
-			return;
-		}
-
-		try {
-			const { success, message } = await startTransition(mergeFiles(files));
-			if (success) {
-				toast.success(message);
-			}
-		} catch (error) {
-			const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '파일 저장 중 오류가 발생했습니다.';
-			toast.error(message);
-		}
-	};
-
 	return (
 		<div className="flex flex-col gap-3 w-full">
 			<ServiceNav />
+
 			<div className={`grid grid-rows-1 gap-3 md:grid-cols-6 md:max-w-full ${FIXED_HEIGHT_ON_MIN_MD}`}>
 				<div className="relative col-span-full p-3 border-[1px] border-muted rounded-2xl md:col-span-2">
 					<div className="flex flex-col gap-2 h-full">
@@ -73,10 +67,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 					</div>
 					<div className="absolute left-0 bottom-0 p-3 w-full bg-gray-100 rounded-b-xl border-t-[1px] border-muted">
 						{files.length !== 0 && (
-							<Button type="button" size="icon-lg" onClick={handleMergeFiles} className="w-full">
-								{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
-								Merge All Files
-							</Button>
+							<FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />
 						)}
 					</div>
 				</div>
@@ -91,7 +82,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 								key={id}
 								file={file}
 								pageCount={pageCount}
-								startPageNumber={files.slice(0, idx).reduce((sum, file) => sum + (file?.pageCount ?? 0), 1)}
+								startPageNumber={getTotalPageCount(files.slice(0, idx))}
 								containerWidth={containerWidth}
 							/>
 						))}

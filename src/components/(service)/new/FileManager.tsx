@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
-import { FileDropZone, FileEditList, FileItem, getCountedPages } from '..';
+import { type FileList, FileDropZone, FileEditList, getCountedPages } from '..';
 
 export default function FileManager() {
-	const [files, setFiles] = React.useState<FileItem[]>([]);
+	const [files, setFiles] = React.useState<FileList>([]);
 	const isFilesExist = files.length !== 0;
 
 	//TODO: Additional Validation for file thumbnail

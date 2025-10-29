@@ -8,9 +8,15 @@ type FileItem = {
 	pageCount?: number;
 };
 
+type FileList = FileItem[];
+
 const DEFAULT_FILE_NAME = 'new';
 
-const getCountedPages = async (files: FileItem[]) => {
+const getTotalPageCount = (files: FileList) => {
+	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 1);
+};
+
+const getCountedPages = async (files: FileList) => {
 	let counts: number[] = [];
 
 	try {
@@ -33,7 +39,7 @@ const getCountedPages = async (files: FileItem[]) => {
 // double try - catch
 // 1. inner : local specific error
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
-const mergeFiles = async (files: FileItem[]) => {
+const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFileName: string }) => {
 	try {
 		const mergedPdf = await PDFDocument.create();
 
@@ -50,9 +56,10 @@ const mergeFiles = async (files: FileItem[]) => {
 
 		// 파일 저장 대화상자 열기
 		if ('showSaveFilePicker' in window) {
+			console.log('here');
 			try {
 				const fileHandle = await window.showSaveFilePicker!({
-					suggestedName: `${DEFAULT_FILE_NAME}.pdf`,
+					suggestedName: `${mergedFileName}.pdf`,
 					types: [
 						{
 							description: 'PDF files',
@@ -77,7 +84,7 @@ const mergeFiles = async (files: FileItem[]) => {
 			const url = URL.createObjectURL(blob);
 			const a = document.createElement('a');
 			a.href = url;
-			a.download = `${DEFAULT_FILE_NAME}.pdf`;
+			a.download = `${mergedFileName}.pdf`;
 			a.click();
 			URL.revokeObjectURL(url);
 
@@ -90,5 +97,5 @@ const mergeFiles = async (files: FileItem[]) => {
 	}
 };
 
-export type { FileItem };
-export { getCountedPages, mergeFiles };
+export type { FileItem, FileList };
+export { getTotalPageCount, getCountedPages, mergeFiles };

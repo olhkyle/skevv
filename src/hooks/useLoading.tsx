@@ -1,6 +1,8 @@
 import React from 'react';
 import { useIsMountedRef } from '.';
-import { Loader } from 'lucide-react';
+import { Loader, LucideProps } from 'lucide-react';
+
+export type LucideReactIconLoadingElement = React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
 
 export default function useLoading() {
 	const [loading, setLoading] = React.useState<boolean>(false);
