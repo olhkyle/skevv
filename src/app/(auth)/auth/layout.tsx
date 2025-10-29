@@ -24,7 +24,7 @@ export default async function AuthLayout({
 		<div className="min-h-screen bg-gray-50">
 			<div className="flex flex-col flex-1 justify-center mx-auto p-4 max-w-[500px]">
 				<h1 className="mt-8 mb-auto text-4xl font-black text-center">
-					<Link href={route.SERVICE.ROOT}>ACPX</Link>
+					<Link href={route.SERVICE.ROOT}>SKEVV</Link>
 				</h1>
 				<p className="mt-8 text-lg text-gray-600 font-medium text-center">Welcome!</p>
 				<section>{children}</section>
