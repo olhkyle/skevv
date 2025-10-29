@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '../ui';
-import { ArrowLeft, ArrowRight, ScreenShareIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, SaveIcon, ScreenShareIcon } from 'lucide-react';
 
 export default function ServiceNav() {
 	return (
@@ -14,10 +14,16 @@ export default function ServiceNav() {
 					<ArrowRight size={21} />
 				</Button>
 			</div>
-			<Button type="button" variant="secondary" size="icon-lg" className="w-32">
-				<ScreenShareIcon />
-				Preview
-			</Button>
+			<div className="flex items-center gap-2">
+				<Button type="button" variant="outline" size="icon-lg" className="w-32">
+					<SaveIcon />
+					Save Draft
+				</Button>
+				<Button type="button" variant="secondary" size="icon-lg" className="w-32">
+					<ScreenShareIcon />
+					Preview
+				</Button>
+			</div>
 		</nav>
 	);
 }
