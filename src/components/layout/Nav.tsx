@@ -6,6 +6,7 @@ import { ArrowRightIcon, Menu, X } from 'lucide-react';
 import { Button } from '../ui';
 import route from '@/constant/route';
 import { MotionBlock } from '../common';
+import UserProfile from './UserProfile';
 
 export default function Nav() {
 	const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
@@ -13,9 +14,9 @@ export default function Nav() {
 
 	return (
 		<>
-			<nav id="layout-nav" className={`fixed flex justify-center w-full pt-3 px-3 bg-white backdrop-blur-lg z-40 md:hidden`}>
-				<div className="flex justify-between items-center flex-1 w-full px-4 py-3 min-h-[var(--global-layout-nav-height)] h-[var(--layout-nav-height)] border-[1px] border-muted rounded-full">
-					<h1 className="text-xl font-black" onClick={toggle}>
+			<nav id="layout-nav" className={`fixed flex justify-center w-full pt-3 px-3 ${isSideNavOpen ? 'bg-white' : ''} z-40 md:hidden`}>
+				<div className="flex justify-between items-center flex-1 w-full px-4 py-3 min-h-[var(--global-layout-nav-height)] h-[var(--layout-nav-height)] border-[1px] border-muted rounded-full bg-white backdrop-blur-lg">
+					<h1 className="text-xl font-black" onClick={() => setIsSideNavOpen(false)}>
 						<Link href={route.SERVICE.ROOT}>SKEVV</Link>
 					</h1>
 					<Button type="button" size="icon-md" variant="outline" onClick={toggle}>
@@ -45,13 +46,17 @@ export default function Nav() {
 						<ArrowRightIcon size={20} />
 					</Link>
 				</MotionBlock>
+				<div className="flex items-center min-h-[60px]">
+					<UserProfile inSideNav={true} />
+				</div>
 			</div>
 			<div
 				id="layout-overlay"
 				onClick={toggle}
 				className={`fixed top-0 ${isSideNavOpen ? 'left-0' : 'slide-out-to-bottom-full'} right-0 bottom-0 h-full bg-muted ${
 					isSideNavOpen ? 'opacity-80' : 'opacity-0'
-				} z-10 transition-all duration-300 ease-[cubic-bezier(0.22, 1, 0.36, 1)]`}></div>
+				} z-10 transition-all duration-300 ease-[cubic-bezier(0.22, 1, 0.36, 1)] cursor-pointer md:hidden`}
+			/>
 		</>
 	);
 }

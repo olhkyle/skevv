@@ -1,22 +1,28 @@
 import Link from 'next/link';
-import { ChevronUp, LogOut, Settings, Sparkle, User } from 'lucide-react';
+import { ChevronDown, ChevronUp, LogOut, Settings, Sparkle, User } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui';
 import route from '@/constant/route';
 
-export default function UserProfile() {
+interface UserProfileProps {
+	inSideNav: boolean;
+}
+
+export default function UserProfile({ inSideNav = false }: UserProfileProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
-				className="flex justify-center items-center mx-1.5 py-3 px-2 rounded-lg hover:bg-muted transition-colors cursor-pointer lg:gap-2 lg:justify-between lg:mx-0"
+				className={`flex ${
+					inSideNav ? 'justify-between' : 'justify-center'
+				} items-center mx-1.5 py-3 px-2 w-full rounded-lg hover:bg-muted transition-colors cursor-pointer lg:gap-2 lg:justify-between lg:mx-0`}
 				aria-label="Open Profile Menu">
 				<div className="flex items-center gap-2">
 					<div className="flex justify-center items-center w-4 h-4 rounded-[9999px] bg-gray-900">
 						{/* <img src="#" alt="not yet" className="block w-full h-full" /> */}
 					</div>
-					<span className="hidden font-bold lg:inline">Kyle Kwon</span>
+					<span className={`${inSideNav ? 'inline-block' : 'hidden'} font-bold lg:inline`}>Kyle Kwon</span>
 				</div>
-				<span className="hidden lg:inline">
-					<ChevronUp size={18} className="text-gray-900" />
+				<span className={`${inSideNav ? 'inline-block' : 'hidden'} lg:inline`}>
+					{inSideNav ? <ChevronDown size={18} className="text-gray-900" /> : <ChevronUp size={18} className="text-gray-900" />}
 				</span>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
