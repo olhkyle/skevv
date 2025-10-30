@@ -19,22 +19,10 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
-	const [containerWidth, setContainerWidth] = React.useState<number>(0);
-	const [containerRef, setContainerRef] = React.useState<HTMLElement | null>(null);
-
-	// const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-	// 	initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
-	// 	effectTriggers: [isMobile, notMobile],
-	// });
-
-	const onResize = React.useCallback<ResizeObserverCallback>(entries => {
-		const [entry] = entries;
-
-		if (entry) {
-			setContainerWidth(entry.contentRect.width);
-		}
-	}, []);
-	useResizableObserver(containerRef, {}, onResize);
+	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
+		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
+		effectTriggers: [isMobile, notMobile],
+	});
 
 	useKeyboardTrigger({
 		handler: (e: KeyboardEvent) => {
@@ -82,23 +70,23 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 						)}
 					</div>
 				</div>
-				<div className="hidden flex-col gap-2 col-span-full p-3 border-[1px] border-muted rounded-2xl sm:flex md:col-span-4">
+				<div
+					ref={containerRef}
+					className="hidden flex-col gap-2 col-span-full p-3 border-[1px] border-muted rounded-2xl sm:flex md:col-span-4">
 					<div className="flex items-center min-h-[32px]">
 						<h3 className="text-md font-bold">Preview</h3>
 					</div>
 
 					<div className="flex flex-col gap-2 w-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
-						<div ref={setContainerRef}>
-							{files?.map(({ id, file, pageCount }, idx) => (
-								<PdfPreview
-									key={id}
-									file={file}
-									pageCount={pageCount}
-									startPageNumber={getTotalPageCount(files.slice(0, idx))}
-									containerWidth={containerWidth ? Math.min(containerWidth, 800) : 800}
-								/>
-							))}
-						</div>
+						{files?.map(({ id, file, pageCount }, idx) => (
+							<PdfPreview
+								key={id}
+								file={file}
+								pageCount={pageCount}
+								startPageNumber={getTotalPageCount(files.slice(0, idx))}
+								containerWidth={containerWidth}
+							/>
+						))}
 					</div>
 				</div>
 			</div>

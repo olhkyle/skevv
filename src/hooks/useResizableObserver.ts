@@ -5,65 +5,49 @@ interface UseResizableObserverProps {
 	effectTriggers: (number | string | boolean)[];
 }
 
-// export default function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
-// 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
-// 	const containerRef = React.useRef<T>(null);
+export default function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
+	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
+	const containerRef = React.useRef<T>(null);
 
-// 	/**
-// 	 * ⚡️ Change width depends on parent width
-// 	 * box-sizing: border-box -> width: content + padding + border
-// 	 *
-// 	 * offsetWidth - content + padding + border	px (number)	정수
-// 		 clientWidth - content + padding	px (number)	정수
-// 		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
-// 		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
-// 	 */
+	/**
+	 * ⚡️ Change width depends on parent width
+	 * box-sizing: border-box -> width: content + padding + border
+	 * 
+	 * offsetWidth - content + padding + border	px (number)	정수
+		 clientWidth - content + padding	px (number)	정수
+		 scrollWidth - content + padding + 스크롤 영역 포함	px (number)	정수
+		 getComputedStyle(element).width - CSS상 width (box-sizing 영향 있음) "500px" (문자열) 소수점 가능
+	 */
 
-// 	const handleResize = () => {
-// 		if (containerRef.current) {
-// 			const width = containerRef.current.getBoundingClientRect().width;
-// 			const style = getComputedStyle(containerRef.current);
-// 			const paddingLeft = parseFloat(style.paddingLeft) || 0;
-// 			const paddingRight = parseFloat(style.paddingRight) || 0;
-// 			const scrollbarWidth = 6;
-// 			const borderWidth = 1;
-// 			const currentWidth = width - (paddingLeft + paddingRight) - scrollbarWidth - 2 * borderWidth;
+	const handleResize = () => {
+		const target = containerRef.current;
+		if (target) {
+			// $element.getBoundingClientRect().width = padding + content width + border
+			const width = target.getBoundingClientRect().width;
 
-// 			setContainerWidth(currentWidth);
-// 		}
-// 	};
+			const targetStyle = getComputedStyle(target);
+			const paddingLeft = parseFloat(targetStyle.paddingLeft) || 0;
+			const paddingRight = parseFloat(targetStyle.paddingRight) || 0;
+			const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
+			const scrollbarWidth = 6;
 
-// 	React.useEffect(() => {
-// 		if (!containerRef.current) return;
+			const currentWidth = width - (paddingLeft + paddingRight) - scrollbarWidth - 2 * borderWidth;
 
-// 		handleResize();
-
-// 		window.addEventListener('resize', handleResize);
-
-// 		return () => {
-// 			window.removeEventListener('resize', handleResize);
-// 		};
-// 	}, [...effectTriggers]);
-
-// 	return { containerRef, containerWidth };
-// }
-
-export default function useResizableObserver(
-	element: Element | null,
-	options: ResizeObserverOptions | undefined,
-	observerCallback: ResizeObserverCallback,
-): void {
-	React.useEffect(() => {
-		if (!element || !('ResizeObserver' in window)) {
-			return undefined;
+			setContainerWidth(currentWidth);
 		}
+	};
 
-		const observer = new ResizeObserver(observerCallback);
+	React.useEffect(() => {
+		if (!containerRef.current) return;
 
-		observer.observe(element, options);
+		handleResize();
+
+		window.addEventListener('resize', handleResize);
 
 		return () => {
-			observer.disconnect();
+			window.removeEventListener('resize', handleResize);
 		};
-	}, [element, options, observerCallback]);
+	}, [...effectTriggers]);
+
+	return { containerRef, containerWidth };
 }
