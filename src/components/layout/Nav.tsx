@@ -15,7 +15,7 @@ export default function Nav() {
 		<>
 			<nav id="layout-nav" className={`fixed flex justify-center w-full pt-3 px-3 bg-white backdrop-blur-lg z-40 md:hidden`}>
 				<div className="flex justify-between items-center flex-1 w-full px-4 py-3 min-h-[var(--global-layout-nav-height)] h-[var(--layout-nav-height)] border-[1px] border-muted rounded-full">
-					<h1 className="text-xl font-black">
+					<h1 className="text-xl font-black" onClick={toggle}>
 						<Link href={route.SERVICE.ROOT}>SKEVV</Link>
 					</h1>
 					<Button type="button" size="icon-md" variant="outline" onClick={toggle}>
