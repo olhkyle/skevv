@@ -95,7 +95,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 									file={file}
 									pageCount={pageCount}
 									startPageNumber={getTotalPageCount(files.slice(0, idx))}
-									containerWidth={containerWidth}
+									containerWidth={containerWidth ? Math.min(containerWidth, 800) : 800}
 								/>
 							))}
 						</div>
