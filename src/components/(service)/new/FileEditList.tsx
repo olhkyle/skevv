@@ -16,12 +16,16 @@ interface FileEditListProps {
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
 export default function FileEditList({ files, setFiles }: FileEditListProps) {
-	const [isMobile, notMobile] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MIN_XS)];
+	const [isTablet, isMobile, notMobile] = [
+		useMediaQuery(screenSize.MAX_SM),
+		useMediaQuery(screenSize.MAX_XS),
+		useMediaQuery(screenSize.MIN_XS),
+	];
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.9,
-		effectTriggers: [isMobile, notMobile],
+		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
+		effectTriggers: [isTablet, isMobile, notMobile],
 	});
 
 	useKeyboardTrigger({
@@ -77,6 +81,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 
 					<div className="flex flex-col gap-2 w-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 						<div ref={containerRef}>
+							<h3 className="text-md font-bold">Preview</h3>
 							{files?.map(({ id, file, pageCount }, idx) => (
 								<PdfPreview
 									key={id}
