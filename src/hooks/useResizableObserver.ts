@@ -23,7 +23,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 		const target = containerRef.current;
 		if (target) {
 			// $element.getBoundingClientRect().width = padding + content width + border
-			const width = target.getBoundingClientRect().width;
+			const { width } = target.getBoundingClientRect();
 
 			const targetStyle = getComputedStyle(target);
 			const paddingLeft = parseFloat(targetStyle.paddingLeft) || 0;
