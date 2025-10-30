@@ -24,7 +24,7 @@ export default function FileDropZone({ dropzone: { getRootProps, getInputProps, 
 					<span>{isDragActive ? 'Put your files, here 😊' : 'Drag and Drop Your PDFs'} </span>
 				</label>
 			</MotionBlock>
-			<Button type="button" onClick={open} className="absolute bottom-8 left-[50%] -translate-x-[50%] z-10">
+			<Button type="button" onClick={open} className="absolute bottom-8 left-[50%] -translate-x-[50%] z-5">
 				<CirclePlus strokeWidth={2.5} /> Select your files
 			</Button>
 		</div>
