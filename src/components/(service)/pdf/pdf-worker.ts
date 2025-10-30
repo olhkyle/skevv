@@ -10,9 +10,11 @@ type FileItem = {
 
 type FileList = FileItem[];
 
-const DEFAULT_FILE_NAME = 'new';
-
 const getTotalPageCount = (files: FileList) => {
+	if (files.length === 1) {
+		return files[0].pageCount;
+	}
+
 	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 1);
 };
 
@@ -36,7 +38,7 @@ const getCountedPages = async (files: FileList) => {
 	}
 };
 
-// double try - catch
+// ⚡️ Double try - catch
 // 1. inner : local specific error
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
 const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFileName: string }) => {
