@@ -16,11 +16,11 @@ export default function ServiceNav() {
 			</div>
 			<div className="flex items-center gap-2">
 				<Button type="button" variant="outline" size="icon-lg" className="w-32">
-					<SaveIcon />
+					<SaveIcon size={21} />
 					Save Draft
 				</Button>
 				<Button type="button" variant="secondary" size="icon-lg" className="w-32">
-					<ScreenShareIcon />
+					<ScreenShareIcon size={21} />
 					Preview
 				</Button>
 			</div>
