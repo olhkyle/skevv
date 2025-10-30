@@ -62,7 +62,7 @@ function FileMergeConfirmBody({ files, isMobile, close }: FileMergeConfirmBody) 
 export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: FileMergeConfirmContextProps) {
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Confirm Merge';
-	const description = `Check your all PDFs status here. Click save when you're done.`;
+	const description = `Check your all PDFs status here. Click merge when you're done.`;
 	const onClose = () => setIsOpen(false);
 
 	return (
