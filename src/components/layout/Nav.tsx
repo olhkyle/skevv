@@ -46,8 +46,10 @@ export default function Nav() {
 						<ArrowRightIcon size={20} />
 					</Link>
 				</MotionBlock>
-				<div className="flex items-center min-h-[60px]">
+				<div className="flex justify-between items-center min-h-[60px]">
 					<UserProfile inSideNav={true} />
+					{/**TODO: LANG Option */}
+					<div className="p-2 border-[1px] border-muted rounded-full">ENG</div>
 				</div>
 			</div>
 			<div
