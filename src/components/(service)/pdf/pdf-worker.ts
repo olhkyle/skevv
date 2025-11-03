@@ -11,11 +11,11 @@ type FileItem = {
 type FileList = FileItem[];
 
 const getTotalPageCount = (files: FileList) => {
-	if (files.length === 1) {
-		return files[0].pageCount;
+	if (files.length === 0) {
+		return 0;
 	}
 
-	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 1);
+	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 0);
 };
 
 const getCountedPages = async (files: FileList) => {
@@ -58,7 +58,6 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 
 		// 파일 저장 대화상자 열기
 		if ('showSaveFilePicker' in window) {
-			console.log('here');
 			try {
 				const fileHandle = await window.showSaveFilePicker!({
 					suggestedName: `${mergedFileName}.pdf`,

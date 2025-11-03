@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
-import { type FileList, FileDropZone, FileEditList, getCountedPages } from '..';
+import { type FileList, FileDropZone, FileEditableList, getCountedPages } from '..';
 
 export default function FileManager() {
 	const [files, setFiles] = React.useState<FileList>([]);
@@ -37,5 +37,5 @@ export default function FileManager() {
 		return () => files.forEach(file => URL.revokeObjectURL(file.imageSrc!));
 	}, [files]);
 
-	return <>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditList files={files} setFiles={setFiles} />}</>;
+	return <>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditableList files={files} setFiles={setFiles} />}</>;
 }

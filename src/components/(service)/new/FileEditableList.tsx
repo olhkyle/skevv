@@ -15,7 +15,7 @@ interface FileEditListProps {
 
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
-export default function FileEditList({ files, setFiles }: FileEditListProps) {
+export default function FileEditableList({ files, setFiles }: FileEditListProps) {
 	const [isTablet, isMobile, notMobile] = [
 		useMediaQuery(screenSize.MAX_SM),
 		useMediaQuery(screenSize.MAX_XS),
@@ -86,7 +86,7 @@ export default function FileEditList({ files, setFiles }: FileEditListProps) {
 									key={id}
 									file={file}
 									pageCount={pageCount}
-									startPageNumber={getTotalPageCount(files.slice(0, idx))}
+									startPageNumber={getTotalPageCount(files.slice(0, idx)) + 1}
 									containerWidth={containerWidth}
 								/>
 							))}
