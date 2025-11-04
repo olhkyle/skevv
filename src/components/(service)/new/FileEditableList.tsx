@@ -82,7 +82,7 @@ export default function FileEditableList({ files, setFiles }: FileEditListProps)
 
 					<div className="flex flex-col gap-2 w-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 						<div ref={containerRef}>
-							{files?.map(({ id, file, pageCount }, idx) => (
+							{/* {files?.map(({ id, file, pageCount }, idx) => (
 								<PdfPreview
 									key={id}
 									file={file}
@@ -90,7 +90,7 @@ export default function FileEditableList({ files, setFiles }: FileEditListProps)
 									startPageNumber={getTotalPageCount(files.slice(0, idx)) + 1}
 									containerWidth={containerWidth}
 								/>
-							))}
+							))} */}
 						</div>
 					</div>
 				</div>
