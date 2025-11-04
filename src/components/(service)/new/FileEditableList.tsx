@@ -16,11 +16,12 @@ interface FileEditListProps {
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
 export default function FileEditableList({ files, setFiles }: FileEditListProps) {
-	const [isTablet, isMobile, notMobile] = [
-		useMediaQuery(screenSize.MAX_SM),
+	const [isMobile, notMobile, isTablet] = [
 		useMediaQuery(screenSize.MAX_XS),
 		useMediaQuery(screenSize.MIN_XS),
+		useMediaQuery(screenSize.MAX_SM),
 	];
+
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
