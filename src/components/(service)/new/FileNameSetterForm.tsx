@@ -20,7 +20,7 @@ import {
 } from '@/components/ui';
 import { useLoading, useMediaQuery } from '@/hooks';
 import screenSize from '@/constant/screenSize';
-import { FileList, mergeFiles } from '../pdf';
+import { ASYNC_PDF_MESSAGE, FileList, mergeFiles } from '../pdf';
 
 interface FileNameSetterFormProps {
 	files: FileList;
@@ -39,22 +39,20 @@ export default function FileNameSetterForm({ files, close }: FileNameSetterFormP
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 
 	const onSubmit = async () => {
-		if (files?.length === 0) {
-			return;
-		}
+		if (files?.length === 0) return;
 
 		try {
 			const mergedFileName = form.getValues('fileName');
 			const { success, message } = await startTransition(mergeFiles({ files, mergedFileName }));
+			console.log(success, message);
 
 			if (success) {
 				toast.success(message);
+				close();
 			}
 		} catch (error) {
-			const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '파일 저장 중 오류가 발생했습니다.';
+			const message = error instanceof Error ? error.message : ASYNC_PDF_MESSAGE.MERGE.ERROR.CANCEL_FILE_SAVE;
 			toast.error(message);
-		} finally {
-			close();
 		}
 	};
 

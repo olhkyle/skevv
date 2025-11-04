@@ -10,6 +10,19 @@ type FileItem = {
 
 type FileList = FileItem[];
 
+// TODO: multi-language options
+const ASYNC_PDF_MESSAGE = {
+	MERGE: {
+		SUCCESS: {
+			SAVE_FILE: '파일이 성공적으로 저장되었습니다.',
+		},
+		ERROR: {
+			CANCEL_FILE_SAVE: '파일 저장이 취소되었습니다.',
+			DURING_SAVE: '파일 저장 중 오류가 발생하였습니다.',
+		},
+	},
+} as const;
+
 const getTotalPageCount = (files: FileList) => {
 	if (files.length === 0) return 0;
 
@@ -31,7 +44,7 @@ const getCountedPages = async (files: FileList) => {
 	} catch (error) {
 		console.error('Something happened wrong to get page count');
 		if (error instanceof Error) {
-			throw new Error(error.message);
+			throw new Error(error.message, { cause: error });
 		}
 	}
 };
@@ -57,7 +70,7 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 		// 파일 저장 대화상자 열기
 		if ('showSaveFilePicker' in window) {
 			try {
-				const fileHandle = await window.showSaveFilePicker!({
+				const fileHandle = await window.showSaveFilePicker?.({
 					suggestedName: `${mergedFileName}.pdf`,
 					types: [
 						{
@@ -67,16 +80,15 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 					],
 				});
 
-				const writable = await fileHandle.createWritable();
-				await writable.write(blob);
-				await writable.close();
-				return { success: true, message: '파일이 성공적으로 저장되었습니다.' };
+				const writable = await fileHandle?.createWritable();
+				await writable?.write(blob);
+				await writable?.close();
+				return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
 			} catch (error) {
 				if (error instanceof DOMException && error.name === 'AbortError') {
-					throw new Error('파일 저장이 취소되었습니다.');
+					throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.CANCEL_FILE_SAVE, { cause: error });
 				}
-
-				throw error;
+				throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.DURING_SAVE, { cause: error });
 			}
 		} else {
 			// fallback download
@@ -87,14 +99,16 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 			a.click();
 			URL.revokeObjectURL(url);
 
-			return { success: true, message: '파일이 다운로드되었습니다.' };
+			return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
 		}
 	} catch (error) {
-		console.log('Saving File Process is canceled', error instanceof Error ? error.message : 'unknown error');
-
-		return { success: false, message: error instanceof Error ? error.message : '파일 저장 중 오류가 발생했습니다.' };
+		if (error instanceof Error) {
+			throw error;
+		} else {
+			throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.DURING_SAVE);
+		}
 	}
 };
 
 export type { FileItem, FileList };
-export { getTotalPageCount, getCountedPages, mergeFiles };
+export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles };
