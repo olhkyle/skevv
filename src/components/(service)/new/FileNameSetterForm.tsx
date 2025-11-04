@@ -73,18 +73,18 @@ export default function FileNameSetterForm({ files, close }: FileNameSetterFormP
 					)}
 				/>
 				{isMobile ? (
-					<DrawerFooter className="flex-row justify-between gap-2 mt-8 px-0">
+					<DrawerFooter className="grid grid-cols-2 gap-3 mt-8 px-0">
 						<DrawerClose asChild className="">
-							<Button type="button" variant="secondary" size="lg" className="sm:w-auto">
+							<Button type="button" variant="outline" size="lg" className="col-span-1">
 								Cancel
 							</Button>
 						</DrawerClose>
 						<FileMergeButton isLoading={isLoading} Loading={Loading} />
 					</DrawerFooter>
 				) : (
-					<DialogFooter className="gap-2 mt-8 sm:flex-row sm:justify-between">
-						<DialogClose asChild className="w-1/2">
-							<Button type="button" variant="secondary" size="lg" className="sm:w-auto">
+					<DialogFooter className="grid grid-cols-2 gap-3 mt-8">
+						<DialogClose asChild>
+							<Button type="button" variant="outline" size="lg" className="col-span-1">
 								Cancel
 							</Button>
 						</DialogClose>

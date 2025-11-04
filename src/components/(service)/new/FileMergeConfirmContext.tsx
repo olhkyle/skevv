@@ -17,11 +17,11 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 	FileNameSetterForm,
+	Kbd,
 } from '@/components';
 import screenSize from '@/constant/screenSize';
 import { useMediaQuery } from '@/hooks';
 import { type FileList, getTotalPageCount } from '../pdf';
-import { Kbd } from '@/components/ui/kbd';
 
 interface FileMergeConfirmContextProps {
 	files: FileList;

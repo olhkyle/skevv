@@ -4,5 +4,6 @@ export { default as FileManager } from './FileManager';
 export { default as FileMergeButton } from './FileMergeButton';
 export { default as FileMergeConfirmContext } from './FileMergeConfirmContext';
 export { default as FileNameSetterForm } from './FileNameSetterForm';
+export { default as FileResetConfirmContext } from './FileResetConfirmContext';
 
 export * from './schema';

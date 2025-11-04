@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { RotateCcw, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button, FileMergeConfirmContext, ServiceNav } from '@/components';
 import { useMediaQuery, useResizableObserver, useKeyboardTrigger } from '@/hooks';
 import { getTotalPageCount, type FileList } from '../pdf';
@@ -45,16 +45,13 @@ export default function FileEditableList({ files, setFiles }: FileEditListProps)
 
 	return (
 		<div className="flex flex-col gap-3 w-full">
-			<ServiceNav />
+			<ServiceNav resetFiles={handleReset} />
 
 			<div className={`grid grid-rows-1 gap-3 md:grid-cols-6 md:max-w-full ${FIXED_HEIGHT_ON_MIN_MD}`}>
 				<div className="relative col-span-full p-3 border-[1px] border-muted rounded-2xl md:col-span-2">
 					<div className="flex flex-col gap-2 h-full">
-						<div className="flex justify-between items-center">
+						<div className="flex items-center">
 							<h3 className="text-md font-bold">Uploaded PDFs</h3>
-							<Button type="button" size="icon-sm" onClick={handleReset}>
-								<RotateCcw />
-							</Button>
 						</div>
 						<ul className="flex flex-col gap-2 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 							{files?.map(({ id, file }) => (
@@ -82,7 +79,7 @@ export default function FileEditableList({ files, setFiles }: FileEditListProps)
 
 					<div className="flex flex-col gap-2 w-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
 						<div ref={containerRef}>
-							{/* {files?.map(({ id, file, pageCount }, idx) => (
+							{files?.map(({ id, file, pageCount }, idx) => (
 								<PdfPreview
 									key={id}
 									file={file}
@@ -90,7 +87,7 @@ export default function FileEditableList({ files, setFiles }: FileEditListProps)
 									startPageNumber={getTotalPageCount(files.slice(0, idx)) + 1}
 									containerWidth={containerWidth}
 								/>
-							))} */}
+							))}
 						</div>
 					</div>
 				</div>

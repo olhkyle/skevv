@@ -10,7 +10,7 @@ interface MergeButtonProps {
 
 export default function FileMergeButton({ isLoading, Loading }: MergeButtonProps) {
 	return (
-		<Button type="submit" size="icon-lg" className="flex-1">
+		<Button type="submit" size="icon-lg" className="col-span-1 w-full">
 			{isLoading ? <Loading className="animate-spin" /> : <Download size={18} />}
 			Merge
 		</Button>
