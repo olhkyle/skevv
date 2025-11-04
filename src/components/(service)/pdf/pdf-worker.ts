@@ -11,9 +11,7 @@ type FileItem = {
 type FileList = FileItem[];
 
 const getTotalPageCount = (files: FileList) => {
-	if (files.length === 0) {
-		return 0;
-	}
+	if (files.length === 0) return 0;
 
 	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 0);
 };
