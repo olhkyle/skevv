@@ -85,7 +85,7 @@ export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: Fi
 					<DialogTrigger asChild>
 						<TriggerButton isMobile={isMobile} />
 					</DialogTrigger>
-					<DialogContent className="sm:max-w-3/5 md:max-w-1/2">
+					<DialogContent className="max-w-[500px]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription>{description}</DialogDescription>
