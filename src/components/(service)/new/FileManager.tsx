@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
+import { toast } from 'sonner';
 import { type FileList, FileDropZone, FileEditableList, getCountedPages } from '..';
 
 export default function FileManager() {
@@ -10,17 +11,21 @@ export default function FileManager() {
 
 	//TODO: Additional Validation for file thumbnail
 	const onDrop = async (acceptedFiles: FileWithPath[]) => {
-		const fileList = acceptedFiles.map(file => ({
-			id: `${file.name}-${Date.now()}`,
-			file,
-			imageSrc: URL.createObjectURL(file),
-		}));
+		const willUpdateFiles = acceptedFiles
+			.map(file => ({
+				id: `${file.name}-${Date.now()}`,
+				file,
+			}))
+			.sort((prev, curr) => prev.file.name.localeCompare(curr.file.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+		const fileList = files?.length !== 0 ? [...files, ...willUpdateFiles] : willUpdateFiles;
 
 		try {
 			const asyncFiles = await getCountedPages(fileList);
 			setFiles(asyncFiles ?? files);
 		} catch (error) {
 			console.error(error);
+			toast.error('Error happened to add files');
 		}
 	};
 
@@ -32,10 +37,7 @@ export default function FileManager() {
 		onDrop,
 	});
 
-	React.useEffect(() => {
-		//Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-		return () => files.forEach(file => URL.revokeObjectURL(file.imageSrc!));
-	}, [files]);
-
-	return <>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditableList files={files} setFiles={setFiles} />}</>;
+	return (
+		<>{!isFilesExist ? <FileDropZone dropzone={dropzone} /> : <FileEditableList dropzone={dropzone} files={files} setFiles={setFiles} />}</>
+	);
 }
