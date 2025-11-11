@@ -4,7 +4,6 @@ import { FileWithPath } from 'react-dropzone';
 type FileItem = {
 	id: string;
 	file: FileWithPath;
-	imageSrc: string | null;
 	pageCount?: number;
 };
 
