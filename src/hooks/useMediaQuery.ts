@@ -5,7 +5,7 @@ import React from 'react';
  * - max_[SCREEN_SIZE] - is less than SCREEN_SIZE
  * - min_[SCREEN_SIZE] - is bigger than SCREEN_SIZE
  * 1. XS : 480px
- * 2. XM : 640px
+ * 2. SM : 640px
  * 3. MD : 768px
  * 4. LG : 1024px
  * 5. XL : 1280px
