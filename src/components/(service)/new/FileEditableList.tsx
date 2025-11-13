@@ -109,8 +109,8 @@ export default function FileEditableList({
 						<h3 className="text-md font-bold">Preview</h3>
 					</div>
 
-					<div className="flex flex-col gap-2 w-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0">
-						<div ref={containerRef}>
+					<div className="w-full overflow-y-scroll scrollbar-thin md:min-h-0">
+						<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
 							{files?.map(({ id, file, pageCount }, idx) => (
 								<PdfPreview
 									key={id}
