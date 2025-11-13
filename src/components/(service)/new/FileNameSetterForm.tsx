@@ -3,8 +3,10 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FileMergeButton, fileNameSchema, FileNameSchema } from '.';
 import {
+	FileMergeButton,
+	fileNameSchema,
+	FileNameSchema,
 	Button,
 	DialogClose,
 	DialogFooter,
@@ -17,9 +19,9 @@ import {
 	FormLabel,
 	FormMessage,
 	Input,
-} from '@/components/ui';
+} from '@/components';
 import { useLoading, useMediaQuery } from '@/hooks';
-import screenSize from '@/constant/screenSize';
+import { screenSize } from '@/constant';
 import { ASYNC_PDF_MESSAGE, FileList, mergeFiles } from '../pdf';
 
 interface FileNameSetterFormProps {

@@ -19,9 +19,9 @@ import {
 	FileNameSetterForm,
 	Kbd,
 } from '@/components';
-import screenSize from '@/constant/screenSize';
-import { useMediaQuery } from '@/hooks';
 import { type FileList, getTotalPageCount } from '../pdf';
+import { screenSize } from '@/constant';
+import { useMediaQuery } from '@/hooks';
 
 interface FileMergeConfirmContextProps {
 	files: FileList;

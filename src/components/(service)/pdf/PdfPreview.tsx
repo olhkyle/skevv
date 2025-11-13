@@ -30,7 +30,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={
-					<div className="flex justify-center items-center w-full h-[150px] bg-gray-100">
+					<div className="ui-flex-center w-full h-[150px] bg-gray-100">
 						<Loader size={24} />
 					</div>
 				}
@@ -38,7 +38,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 				className="flex flex-col gap-2">
 				{Array.from({ length: numPages }, (_, index) => (
 					<div key={index + 1} className="relative">
-						<span className="absolute top-2 right-2 flex justify-center items-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
+						<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 							{startPageNumber + index}
 						</span>
 						<Page
@@ -46,7 +46,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 							width={containerWidth}
 							renderTextLayer={false}
 							renderAnnotationLayer={false}
-							className="flex justify-center items-center w-full border-[1px] borer-gray-200"
+							className="ui-flex-center w-full border-[1px] borer-gray-200"
 						/>
 					</div>
 				))}

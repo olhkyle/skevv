@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import route from '@/constant/route';
+import { route } from '@/constant';
 
 export default async function AuthLayout({
 	children,

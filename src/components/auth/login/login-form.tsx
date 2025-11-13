@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Button, Input, loginSchema, type LoginSchema } from '@/components';
-import route from '@/constant/route';
+import { route } from '@/constant';
 
 export default function LoginForm() {
 	const form = useForm<LoginSchema>({
@@ -34,7 +34,7 @@ export default function LoginForm() {
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input type="email" placeholder="hello@actx.com" {...field} />
+									<Input type="email" placeholder="hello@skevv.app" {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

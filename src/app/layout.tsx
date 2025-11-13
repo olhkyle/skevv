@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
 	title: 'SKEVV',
-	description: 'A lightweight pdf executor',
+	description: 'A lightweight pdf editor',
 };
 
 export default function RootLayout({

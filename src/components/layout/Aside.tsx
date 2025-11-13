@@ -3,9 +3,8 @@
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { FilePlus, LayoutList, Search } from 'lucide-react';
-import route from '@/constant/route';
-import { Button } from '../ui';
-import { UserProfile } from '.';
+import { UserProfile, Button } from '@/components';
+import { route } from '@/constant';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
@@ -35,11 +34,14 @@ export default function Aside() {
 							<Link
 								href={to}
 								key={to}
-								className={`flex justify-center items-center gap-0 py-1.5 px-2 min-h-[36px] ${
+								className={`ui-flex-center gap-0 py-1.5 px-2 min-h-[36px] ${
 									to === route.SERVICE.ROOT + segment ? 'bg-muted' : 'bg-white'
-								} text-gray-800 font-medium rounded-md hover:bg-muted active:bg-gray-200 transition-colors lg:gap-2 lg:justify-start`}>
-								{icon}
-								<span className="hidden lg:inline">{title}</span>
+								} text-gray-800 font-medium rounded-md hover:bg-muted active:bg-gray-200 transition-colors lg:gap-2 lg:justify-between`}>
+								<div className="ui-flex-center gap-2">
+									{icon}
+									<span className="hidden lg:inline">{title}</span>
+								</div>
+								{to === route.SERVICE.ROOT + segment && <div className="hidden mr-2 w-1.5 h-1.5 rounded-full bg-black lg:inline-block" />}
 							</Link>
 						))}
 					</nav>

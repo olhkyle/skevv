@@ -3,10 +3,8 @@
 import Link from 'next/link';
 import React from 'react';
 import { ArrowRightIcon, Menu, X } from 'lucide-react';
-import { Button } from '../ui';
-import route from '@/constant/route';
-import { MotionBlock } from '../common';
-import UserProfile from './UserProfile';
+import { MotionBlock, Button, UserProfile } from '@/components';
+import { route } from '@/constant';
 
 export default function Nav() {
 	const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
