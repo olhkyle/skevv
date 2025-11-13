@@ -14,14 +14,14 @@ interface PdfPreviewProps {
 }
 
 function DocumentErrorMessage() {
-	return <p className="p-4 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
+	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
 export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const [numPages, setNumPages] = React.useState<number>(pageCount);
 
 	if (!file) {
-		return <p className="p-4 w-full bg-muted rounded-full">Invalid File</p>;
+		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
 
 	return (
@@ -30,7 +30,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 				file={file}
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={
-					<div className="ui-flex-center w-full h-[150px] bg-gray-100">
+					<div className="ui-flex-center w-full h-[150px] bg-gray-100 rounded-lg">
 						<Loader size={24} />
 					</div>
 				}
