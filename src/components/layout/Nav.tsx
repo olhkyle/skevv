@@ -26,7 +26,7 @@ export default function Nav() {
 			<div
 				id="layout-side-navigation"
 				className={`fixed top-[calc(var(--global-layout-padding)+var(--global-layout-nav-height))] left-0 right-0 flex flex-col ${
-					isSideNavOpen ? 'max-h-[100%]' : 'max-h-0'
+					isSideNavOpen ? 'max-h-full' : 'max-h-0'
 				} px-3 w-full bg-white z-20 overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.22, 1, 0.36, 1)] md:hidden`}>
 				<MotionBlock onClick={toggle} className="rounded-lg">
 					<Link
