@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 import { FileList, getTotalPageCount } from '../pdf';
+import { Button } from '@/components/ui';
+import { RotateCcw, RotateCw } from 'lucide-react';
 
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
@@ -24,8 +26,16 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 	});
 	return (
 		<div className="hidden flex-col gap-2 col-span-full p-3 border-[1px] border-muted rounded-2xl sm:flex md:col-span-4">
-			<div className="flex items-center min-h-[32px]">
+			<div className="flex justify-between items-center min-h-[32px]">
 				<h3 className="text-md font-bold">Preview</h3>
+				<div className="flex justify-between items-center gap-2">
+					<Button type="button" size="icon-sm" variant="ghost">
+						<RotateCcw />
+					</Button>
+					<Button type="button" size="icon-sm" variant="ghost">
+						<RotateCw />
+					</Button>
+				</div>
 			</div>
 
 			<div className="w-full overflow-y-scroll scrollbar-thin md:min-h-0">
