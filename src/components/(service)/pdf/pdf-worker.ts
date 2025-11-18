@@ -48,6 +48,43 @@ const getCountedPages = async (files: FileList) => {
 	}
 };
 
+const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: string; newBlob: Blob }) => {
+	if ('showSaveFilePicker' in window) {
+		try {
+			const fileHandle = await window.showSaveFilePicker?.({
+				suggestedName: `${mergedFileName}.pdf`,
+				types: [
+					{
+						description: 'PDF files',
+						accept: { 'application/pdf': ['.pdf'] },
+					},
+				],
+			});
+
+			const writable = await fileHandle?.createWritable();
+			await writable?.write(newBlob);
+			await writable?.close();
+
+			return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
+		} catch (error) {
+			if (error instanceof DOMException && error.name === 'AbortError') {
+				throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.CANCEL_FILE_SAVE, { cause: error });
+			}
+			throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.DURING_SAVE, { cause: error });
+		}
+	} else {
+		// fallback download
+		const url = URL.createObjectURL(newBlob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `${mergedFileName}.pdf`;
+		a.click();
+		URL.revokeObjectURL(url);
+
+		return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
+	}
+};
+
 // ⚡️ Double try - catch
 // 1. inner : local specific error
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
@@ -64,42 +101,9 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 
 		const mergedBytes = await mergedPdf.save();
 		// as BlotPart doesn't make problem, because UIntArray can be used as BlobPart
-		const blob = new Blob([mergedBytes as BlobPart], { type: 'application/pdf' });
+		const newBlob = new Blob([mergedBytes as BlobPart], { type: 'application/pdf' });
 
-		// 파일 저장 대화상자 열기
-		if ('showSaveFilePicker' in window) {
-			try {
-				const fileHandle = await window.showSaveFilePicker?.({
-					suggestedName: `${mergedFileName}.pdf`,
-					types: [
-						{
-							description: 'PDF files',
-							accept: { 'application/pdf': ['.pdf'] },
-						},
-					],
-				});
-
-				const writable = await fileHandle?.createWritable();
-				await writable?.write(blob);
-				await writable?.close();
-				return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
-			} catch (error) {
-				if (error instanceof DOMException && error.name === 'AbortError') {
-					throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.CANCEL_FILE_SAVE, { cause: error });
-				}
-				throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.DURING_SAVE, { cause: error });
-			}
-		} else {
-			// fallback download
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = `${mergedFileName}.pdf`;
-			a.click();
-			URL.revokeObjectURL(url);
-
-			return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
-		}
+		return await saveFileOnLocal({ mergedFileName, newBlob });
 	} catch (error) {
 		if (error instanceof Error) {
 			throw error;
