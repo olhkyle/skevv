@@ -35,12 +35,12 @@ interface FileMergeConfirmBody {
 	close: () => void;
 }
 
-function TriggerButton({ isMobile, ...props }: { isMobile: boolean }) {
+function TriggerButton({ pageCount, isMobile, ...props }: { pageCount: number; isMobile: boolean }) {
 	return (
 		<Button type="button" size="icon-lg" className={`inline-flex justify-center gap-4 w-full px-${isMobile ? 'auto' : '4'}`} {...props}>
 			<div className="flex items-center gap-2 overflow-hidden text-ellipsis ">
 				<Download size={18} />
-				Merge Files
+				Merge {pageCount} Pages
 			</div>
 			{!isMobile && <Kbd>Ctrl + M</Kbd>}
 		</Button>
@@ -63,6 +63,9 @@ export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: Fi
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Confirm Merge';
 	const description = `Check your all PDFs status here. Click merge when you're done.`;
+
+	const pageCount = getTotalPageCount(files);
+
 	const onClose = () => setIsOpen(false);
 
 	return (
@@ -70,7 +73,7 @@ export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: Fi
 			{isMobile ? (
 				<Drawer open={isOpen} onOpenChange={setIsOpen}>
 					<DrawerTrigger asChild>
-						<TriggerButton isMobile={isMobile} />
+						<TriggerButton pageCount={pageCount} isMobile={isMobile} />
 					</DrawerTrigger>
 					<DrawerContent>
 						<DrawerHeader className="p-3 text-left">
@@ -83,7 +86,7 @@ export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: Fi
 			) : (
 				<Dialog open={isOpen} onOpenChange={setIsOpen}>
 					<DialogTrigger asChild>
-						<TriggerButton isMobile={isMobile} />
+						<TriggerButton pageCount={pageCount} isMobile={isMobile} />
 					</DialogTrigger>
 					<DialogContent className="max-w-[500px]">
 						<DialogHeader>
