@@ -49,7 +49,7 @@ function TriggerButton({ pageCount, isMobile, ...props }: { pageCount: number; i
 
 function FileMergeConfirmBody({ files, isMobile, close }: FileMergeConfirmBody) {
 	return (
-		<div className={`flex flex-col gap-4 ${isMobile ? 'p-3' : ''}`}>
+		<div className={`flex flex-col gap-4 ${isMobile ? 'p-3' : ''} mb-3`}>
 			<div className="flex justify-between items-center">
 				<span className="font-medium text-sm">Total Pages</span>
 				<p className="py-1.5 px-3 bg-gray-100 font-medium rounded-lg">{getTotalPageCount(files)}</p>

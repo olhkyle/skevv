@@ -57,7 +57,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 	return (
 		<>
 			{isMobile ? (
-				<DrawerFooter className="grid grid-cols-2 gap-3 py-4 px-3">
+				<DrawerFooter className="grid grid-cols-2 gap-3 mb-3 py-4 px-3">
 					<Button type="button" variant="outline" size="lg" onClick={close} className="col-span-1">
 						Cancel
 					</Button>
@@ -68,7 +68,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 					</DrawerClose>
 				</DrawerFooter>
 			) : (
-				<DialogFooter className="grid grid-cols-2 gap-3">
+				<DialogFooter className="grid grid-cols-2 gap-3 mb-3">
 					<Button type="button" variant="outline" size="lg" onClick={close} className="col-span-1">
 						Cancel
 					</Button>
