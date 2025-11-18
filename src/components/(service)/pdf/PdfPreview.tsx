@@ -42,8 +42,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 							{startPageNumber + index}
 						</span>
 						<Page
-							scale={0.8}
-							devicePixelRatio={1}
+							devicePixelRatio={2.5}
 							pageNumber={index + 1}
 							width={containerWidth}
 							renderTextLayer={false}
