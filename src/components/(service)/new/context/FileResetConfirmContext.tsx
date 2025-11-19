@@ -7,6 +7,7 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -14,6 +15,7 @@ import {
 	Drawer,
 	DrawerClose,
 	DrawerContent,
+	DrawerDescription,
 	DrawerFooter,
 	DrawerHeader,
 	DrawerTitle,
@@ -23,8 +25,8 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui';
-import screenSize from '@/constant/screenSize';
 import { useMediaQuery } from '@/hooks';
+import screenSize from '@/constant/screenSize';
 
 interface FileResetConfirmContextProps {
 	isOpen: boolean;
@@ -57,7 +59,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 	return (
 		<>
 			{isMobile ? (
-				<DrawerFooter className="grid grid-cols-2 gap-3 mb-3 py-4 px-3">
+				<DrawerFooter className="grid grid-cols-2 gap-3 mb-3 py-4 px-3 sm:mb-0">
 					<Button type="button" variant="outline" size="lg" onClick={close} className="col-span-1">
 						Cancel
 					</Button>
@@ -68,7 +70,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 					</DrawerClose>
 				</DrawerFooter>
 			) : (
-				<DialogFooter className="grid grid-cols-2 gap-3 mb-3">
+				<DialogFooter className="grid grid-cols-2 gap-3 mb-3 sm:mb-0">
 					<Button type="button" variant="outline" size="lg" onClick={close} className="col-span-1">
 						Cancel
 					</Button>
@@ -86,6 +88,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles }: FileResetConfirmContextProps) {
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Reset Current Files';
+	const description = 'Do you really mind to reset files?';
 
 	const open = () => setIsOpen(true);
 	const close = () => setIsOpen(false);
@@ -100,6 +103,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DrawerContent>
 						<DrawerHeader className="p-3 text-left">
 							<DrawerTitle className="text-start text-lg">{title}</DrawerTitle>
+							<DrawerDescription>{description}</DrawerDescription>
 						</DrawerHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DrawerContent>
@@ -109,9 +113,10 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DialogTrigger asChild>
 						<TriggerButton open={open} />
 					</DialogTrigger>
-					<DialogContent className="w-[300px]" aria-describedby="File Reset Confirm Dialog Content">
+					<DialogContent className="w-[500px]" aria-describedby="File Reset Confirm Dialog Content">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
+							<DialogDescription>{description}</DialogDescription>
 						</DialogHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DialogContent>

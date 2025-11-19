@@ -1,13 +1,16 @@
 import { PDFDocument } from 'pdf-lib';
 import { FileWithPath } from 'react-dropzone';
 
-type FileItem = {
+interface RawFileItem {
 	id: string;
 	file: FileWithPath;
-	pageCount?: number;
-};
+}
 
-type FileList = FileItem[];
+interface ProcessedFileItem extends RawFileItem {
+	pageCount?: number;
+}
+
+type FileList = ProcessedFileItem[];
 
 // TODO: multi-language options
 const ASYNC_PDF_MESSAGE = {
@@ -113,5 +116,5 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 	}
 };
 
-export type { FileItem, FileList };
+export type { RawFileItem, ProcessedFileItem, FileList };
 export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles };

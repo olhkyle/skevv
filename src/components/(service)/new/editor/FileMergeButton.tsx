@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 import { Download, LucideProps } from 'lucide-react';
 
 interface MergeButtonProps {

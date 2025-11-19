@@ -3,7 +3,7 @@
 import { GripVertical, X } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { FileWithPath } from 'react-dropzone';
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
 
 interface SortableFileProps {
 	id: string;
@@ -26,10 +26,11 @@ export default function SortableFile({ id, file, deleteFile }: SortableFileProps
 		<div
 			ref={setNodeRef}
 			{...attributes}
+			{...listeners}
 			style={transformStyle}
-			className="flex justify-between items-center gap-2 px-3 py-2 w-full bg-gray-50 rounded-lg border-[1px] border-muted touch-none">
+			className="flex justify-between items-center gap-2 px-3 py-2 w-full bg-gray-50 rounded-lg border-[1px] border-muted touch-none sm:cursor-pointer">
 			<div className="flex items-center gap-2">
-				<Button {...listeners} type="button" size="icon-sm" variant="ghost">
+				<Button type="button" size="icon-sm" variant="ghost">
 					<GripVertical />
 				</Button>
 				<span className="inline-block overflow-hidden text-ellipsis">{file.name}</span>

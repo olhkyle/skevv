@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+	type FileList,
 	FileMergeButton,
 	fileNameSchema,
 	FileNameSchema,
@@ -19,21 +20,24 @@ import {
 	FormLabel,
 	FormMessage,
 	Input,
+	ASYNC_PDF_MESSAGE,
+	mergeFiles,
 } from '@/components';
 import { useLoading, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
-import { ASYNC_PDF_MESSAGE, FileList, mergeFiles } from '../pdf';
 
 interface FileNameSetterFormProps {
 	files: FileList;
 	close: () => void;
 }
 
+const DEFAULT_FILE_NAME = 'new';
+
 export default function FileNameSetterForm({ files, close }: FileNameSetterFormProps) {
 	const form = useForm<FileNameSchema>({
 		resolver: zodResolver(fileNameSchema),
 		defaultValues: {
-			fileName: 'new',
+			fileName: DEFAULT_FILE_NAME,
 		},
 	});
 
