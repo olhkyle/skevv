@@ -103,7 +103,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DrawerContent>
 						<DrawerHeader className="p-3 text-left">
 							<DrawerTitle className="text-start text-lg">{title}</DrawerTitle>
-							<DrawerDescription>{description}</DrawerDescription>
+							<DrawerDescription className="my-2 text-start">{description}</DrawerDescription>
 						</DrawerHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DrawerContent>
@@ -116,7 +116,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DialogContent className="w-[500px]" aria-describedby="File Reset Confirm Dialog Content">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
-							<DialogDescription>{description}</DialogDescription>
+							<DialogDescription className="my-2 text-start">{description}</DialogDescription>
 						</DialogHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DialogContent>
