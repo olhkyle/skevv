@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components';
 import { route } from '@/constant';
-import { ArrowUpRight } from 'lucide-react';
 // import { createClient } from '@/utils/supabase/server';
 
 export default async function HomePage() {
