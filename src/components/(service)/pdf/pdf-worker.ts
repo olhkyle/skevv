@@ -46,7 +46,7 @@ const getTotalPageCount = (files: FileList) => {
 };
 
 const getCountedPages = async (files: FileList) => {
-	let pageCounts: number[] = [];
+	const pageCounts: number[] = [];
 
 	const batchFiles = pipe(files, chunk(3), toArray);
 
