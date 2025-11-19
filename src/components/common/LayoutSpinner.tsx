@@ -1,5 +1,4 @@
-import { Loader } from 'lucide-react';
-import AnimateSpinner from './AnimateSpinner';
+import { AnimateSpinner } from '@/components';
 
 export default function LayoutSpinner() {
 	return (
