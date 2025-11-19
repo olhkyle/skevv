@@ -85,7 +85,7 @@ export default function FileNameSetterForm({ files, close }: FileNameSetterFormP
 								Cancel
 							</Button>
 						</DrawerClose>
-						<FileMergeButton isLoading={isLoading} Loading={Loading} />
+						<FileMergeButton isLoading={isLoading} Loading={<Loading />} />
 					</DrawerFooter>
 				) : (
 					<DialogFooter className="grid grid-cols-2 gap-3 mt-8">
@@ -94,7 +94,7 @@ export default function FileNameSetterForm({ files, close }: FileNameSetterFormP
 								Cancel
 							</Button>
 						</DialogClose>
-						<FileMergeButton isLoading={isLoading} Loading={Loading} />
+						<FileMergeButton isLoading={isLoading} Loading={<Loading />} />
 					</DialogFooter>
 				)}
 			</form>

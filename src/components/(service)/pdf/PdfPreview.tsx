@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Loader } from 'lucide-react';
+import { AnimateSpinner } from '@/components';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -31,7 +31,7 @@ export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, c
 				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={
 					<div className="ui-flex-center w-full h-[150px] bg-gray-100 rounded-lg">
-						<Loader size={24} />
+						<AnimateSpinner size={24} />
 					</div>
 				}
 				error={DocumentErrorMessage}

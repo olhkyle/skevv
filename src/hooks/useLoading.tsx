@@ -1,8 +1,8 @@
 import React from 'react';
 import { useIsMountedRef } from '.';
-import { Loader, LucideProps } from 'lucide-react';
+import { AnimateSpinner } from '@/components';
 
-export type LucideReactIconLoadingElement = React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
+export type AnimateLoader = React.JSX.Element;
 
 export default function useLoading() {
 	const [loading, setLoading] = React.useState<boolean>(false);
@@ -31,5 +31,5 @@ export default function useLoading() {
 		abortControllerRef.current?.abort();
 	};
 
-	return { Loading: Loader, isLoading: loading, startTransition, cancel };
+	return { Loading: AnimateSpinner, isLoading: loading, startTransition, cancel };
 }

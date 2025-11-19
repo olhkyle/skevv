@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Loader, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { DropzoneState } from 'react-dropzone';
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { type ProcessedFileItem, Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input } from '@/components';
+import { type ProcessedFileItem, Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner } from '@/components';
 import { useKeyboardTrigger } from '@/hooks';
 
 interface FileListPanelProps {
@@ -66,9 +66,8 @@ export default function FileListPanel({
 					</Button>
 				</div>
 
-				{/* 썸네일 + 순서 변경 */}
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-					<SortableContext items={files.map(file => file.id)} strategy={verticalListSortingStrategy}>
+					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
 							className="flex flex-col gap-2 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0"
 							{...getRootProps()}>
@@ -85,7 +84,7 @@ export default function FileListPanel({
 								<Input type="file" id={`file-dropzone-${fileInputId}`} className="hidden" {...getInputProps()} />
 								<label htmlFor={`file-dropzone-${fileInputId}`} className="ui-flex-center min-h-48 w-full h-full cursor-pointer ">
 									{isDragActive ? (
-										<Loader className="animate-spin" size={18} />
+										<AnimateSpinner />
 									) : (
 										<p className="ui-flex-center items-center gap-2">
 											<Plus className="text-gray-900" size={18} />
@@ -98,7 +97,7 @@ export default function FileListPanel({
 					</SortableContext>
 				</DndContext>
 			</div>
-			<div className="absolute left-0 bottom-0 p-3 w-full bg-gray-100 rounded-b-xl border-t-[1px] border-muted">
+			<div className="absolute left-0 bottom-0 p-3 w-full bg-gray-50 rounded-b-xl border-t-[1px] border-muted">
 				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />}
 			</div>
 		</div>

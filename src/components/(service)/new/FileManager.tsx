@@ -9,10 +9,10 @@ export default function FileManager() {
 
 	return (
 		<>
-			{!hasFiles ? (
-				<FileDropZone dropzone={dropzone} />
-			) : (
+			{hasFiles ? (
 				<FileEditor dropzone={dropzone} files={files} setFiles={setFiles} onReset={onReset} />
+			) : (
+				<FileDropZone dropzone={dropzone} />
 			)}
 		</>
 	);
