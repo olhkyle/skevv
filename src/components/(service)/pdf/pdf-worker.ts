@@ -1,5 +1,12 @@
+import PDF_HQ from '@/constant/pdf';
 import { PDFDocument } from 'pdf-lib';
 import { FileWithPath } from 'react-dropzone';
+import { pipe, chunk, toArray } from '@fxts/core';
+
+interface PageItem {
+	id: `${string}-page-${number}`;
+	order: number;
+}
 
 interface RawFileItem {
 	id: string;
@@ -8,12 +15,19 @@ interface RawFileItem {
 
 interface ProcessedFileItem extends RawFileItem {
 	pageCount?: number;
+	pages?: PageItem[];
 }
 
 type FileList = ProcessedFileItem[];
 
 // TODO: multi-language options
 const ASYNC_PDF_MESSAGE = {
+	LOAD: {
+		ERROR: 'PDF 로드 중 오류가 발생하였습니다.',
+	},
+	VIRTUALIZE: {
+		ERROR: '가상화 중 오류가 발생하였습니다.',
+	},
 	MERGE: {
 		SUCCESS: {
 			SAVE_FILE: '파일이 성공적으로 저장되었습니다.',
@@ -32,17 +46,29 @@ const getTotalPageCount = (files: FileList) => {
 };
 
 const getCountedPages = async (files: FileList) => {
-	let counts: number[] = [];
+	let pageCounts: number[] = [];
+
+	const batchFiles = pipe(files, chunk(3), toArray);
 
 	try {
-		for (const item of files) {
-			const arrayBuffer = await item.file.arrayBuffer();
-			const pdf = await PDFDocument.load(arrayBuffer);
-			const pageCount = pdf.getPageCount();
-			counts = [...counts, pageCount];
+		for (const batchFile of batchFiles) {
+			const counts = await Promise.all(
+				batchFile.map(async file => {
+					const arrayBuffer = await file.file.arrayBuffer();
+					const batchedPdf = await PDFDocument.load(arrayBuffer);
+
+					return batchedPdf.getPageCount();
+				}),
+			);
+
+			pageCounts.push(...counts);
 		}
 
-		return files.map((file, idx) => ({ ...file, pageCount: counts[idx] }));
+		return files.map((file, idx) => ({
+			...file,
+			pageCount: pageCounts[idx],
+			pages: Array.from({ length: pageCounts[idx] }, (_, idx) => ({ id: `${file.id}-page-${idx + 1}`, order: idx + 1 })),
+		}));
 	} catch (error) {
 		console.error('Something happened wrong to get page count');
 		if (error instanceof Error) {
@@ -59,7 +85,7 @@ const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: st
 				types: [
 					{
 						description: 'PDF files',
-						accept: { 'application/pdf': ['.pdf'] },
+						accept: { [PDF_HQ.KEY]: PDF_HQ.VALUE },
 					},
 				],
 			});
@@ -93,18 +119,29 @@ const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: st
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
 const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFileName: string }) => {
 	try {
-		const mergedPdf = await PDFDocument.create();
+		const createdPdf = await PDFDocument.create();
 
-		for (const item of files) {
-			const arrayBuffer = await item.file.arrayBuffer();
-			const pdf = await PDFDocument.load(arrayBuffer);
-			const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-			copiedPages.forEach(page => mergedPdf.addPage(page));
+		const batchFiles = pipe(files, chunk(3), toArray);
+
+		for (const batchFile of batchFiles) {
+			const loadedPdfs = await Promise.all(
+				batchFile.map(async file => {
+					const arrayBuffer = await file.file.arrayBuffer();
+					const batchedPdf = await PDFDocument.load(arrayBuffer);
+
+					return batchedPdf;
+				}),
+			);
+
+			for (const pdf of loadedPdfs) {
+				const virtualPages = await createdPdf.copyPages(pdf, pdf.getPageIndices());
+				virtualPages.forEach(page => createdPdf.addPage(page));
+			}
 		}
 
-		const mergedBytes = await mergedPdf.save();
+		const mergedBytes = await createdPdf.save();
 		// as BlotPart doesn't make problem, because UIntArray can be used as BlobPart
-		const newBlob = new Blob([mergedBytes as BlobPart], { type: 'application/pdf' });
+		const newBlob = new Blob([mergedBytes as BlobPart], { type: PDF_HQ.KEY });
 
 		return await saveFileOnLocal({ mergedFileName, newBlob });
 	} catch (error) {
@@ -116,5 +153,35 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 	}
 };
 
+const getVirtualPages = async ({ file, createdPdf }: { file: ProcessedFileItem; createdPdf: PDFDocument }) => {
+	try {
+		const arrayBuffer = await file.file.arrayBuffer();
+		const pdf = await PDFDocument.load(arrayBuffer);
+
+		const virtualPages = await createdPdf.copyPages(pdf, pdf.getPageIndices());
+		virtualPages.forEach(page => createdPdf.addPage(page));
+	} catch (error) {
+		if (error instanceof Error) {
+			throw error;
+		} else {
+			throw new Error(ASYNC_PDF_MESSAGE.VIRTUALIZE.ERROR);
+		}
+	}
+};
+
+const getVirtualFiles = async (file: ProcessedFileItem) => {
+	try {
+		const createdPdf = await PDFDocument.create();
+
+		await getVirtualPages({ file, createdPdf });
+		const mergedBytes = await createdPdf.save();
+		const newBlobFiles = new Blob([mergedBytes as BlobPart], { type: PDF_HQ.KEY });
+
+		return newBlobFiles;
+	} catch (e) {
+		console.error(e);
+	}
+};
+
 export type { RawFileItem, ProcessedFileItem, FileList };
-export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles };
+export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles, getVirtualFiles };

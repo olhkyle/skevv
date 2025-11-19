@@ -50,7 +50,6 @@ export default function FileNameSetterForm({ files, close }: FileNameSetterFormP
 		try {
 			const mergedFileName = form.getValues('fileName');
 			const { success, message } = await startTransition(mergeFiles({ files, mergedFileName }));
-			console.log(success, message);
 
 			if (success) {
 				toast.success(message);

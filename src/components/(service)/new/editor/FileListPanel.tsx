@@ -69,10 +69,10 @@ export default function FileListPanel({
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
-							className="flex flex-col gap-2 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0"
+							className="flex flex-col gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0"
 							{...getRootProps()}>
-							{files?.map(({ id, file }) => (
-								<SortableFile key={id} id={id} file={file} deleteFile={() => setFiles(files.filter(file => file.id !== id))} />
+							{files?.map(file => (
+								<SortableFile key={file.id} file={file} deleteFile={() => setFiles(files.filter(prevFile => prevFile.id !== file.id))} />
 							))}
 
 							{isDragAccept && <FileInsertSkeleton />}
