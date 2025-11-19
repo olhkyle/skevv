@@ -18,7 +18,7 @@ export default function useDropzoneFiles() {
 			}))
 			.sort((prev, curr) => prev.file.name.localeCompare(curr.file.name, undefined, { numeric: true, sensitivity: 'base' }));
 
-		const fileList = files?.length !== 0 ? [...files, ...willUpdateFiles] : willUpdateFiles;
+		const fileList = hasFiles ? [...files, ...willUpdateFiles] : willUpdateFiles;
 
 		try {
 			const asyncFiles = await getCountedPages(fileList);
