@@ -30,7 +30,7 @@ export default function SortableFile({ file, filePage, setFiles, toggleFilePages
 				ref={setNodeRef}
 				{...attributes}
 				style={transformStyle}
-				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-lg border-[1px] border-muted touch-none ${
+				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-lg border border-muted touch-none ${
 					isDragging ? 'opacity-80 border-dashed' : 'opacity-100'
 				} sm:cursor-pointer`}>
 				<div className="flex items-center gap-2">

@@ -57,7 +57,7 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 							// setCurrentPage(pageNumber);
 						}
 					}}
-					className="ui-flex-center w-full border-[1px] borer-gray-200"
+					className="ui-flex-center w-full border borer-gray-200"
 				/>
 			) : (
 				<AnimateSpinner />
