@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { Document, pdfjs } from 'react-pdf';
-import { PageItem, LazyPage, PdfPreviewSkeleton } from '@/components';
+import { PageItem, PdfPreviewSkeleton } from '@/components';
+import dynamic from 'next/dynamic';
 
+const LazyPage = dynamic(() => import('./LazyPage'), { ssr: false });
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfPreviewProps {
