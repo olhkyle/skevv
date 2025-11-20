@@ -116,7 +116,7 @@ export default function FileListPanel({
 					</SortableContext>
 				</DndContext>
 			</div>
-			<div className="sitc left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t-[1px] border-muted">
+			<div className="absolute left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t-[1px] border-muted">
 				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />}
 			</div>
 		</div>

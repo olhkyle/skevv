@@ -39,7 +39,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 				</div>
 			</div>
 
-			<div className="flex min-h-0 w-full overflow-y-scroll scrollbar-thin md:min-h-0">
+			<div className="flex-1 min-h-0 w-full overflow-y-scroll scrollbar-thin md:min-h-0">
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
 					<Suspense
 						fallback={
