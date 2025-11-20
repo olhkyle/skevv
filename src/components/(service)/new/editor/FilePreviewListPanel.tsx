@@ -43,7 +43,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
 					<Suspense
 						fallback={
-							<div className="ui-flex-center w-full h-full">
+							<div className="ui-flex-center w-full h-full bg-white">
 								<AnimateSpinner />
 							</div>
 						}>
