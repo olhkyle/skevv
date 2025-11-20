@@ -40,7 +40,7 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 				const oldIndex = file.pages.findIndex(page => page.id === active.id);
 				const newIndex = file.pages.findIndex(page => page.id === over.id);
 
-				const newPages = arrayMove(file.pages, oldIndex, newIndex);
+				const newPages = arrayMove([...file.pages], oldIndex, newIndex);
 
 				return {
 					...file,
