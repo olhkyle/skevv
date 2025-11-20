@@ -14,7 +14,7 @@ export default function FileEditor({ dropzone, files, setFiles, onReset }: FileE
 		<div className="flex flex-col gap-3 w-full h-full min-h-0 overflow-hidden sm:h-[calc(100dvh-2*var(--global-layout-padding))]">
 			<ServiceNav resetFiles={onReset} />
 
-			<div className={`flex gap-3 min-h-0 h-full md:grid-cols-6 md:max-w-full`}>
+			<div className={`grid grid-rows-1 flex gap-3 min-h-0 h-full md:grid-cols-6 md:max-w-full`}>
 				<FileListPanel dropzone={dropzone} files={files} setFiles={setFiles} />
 				<FilePreviewListPanel files={files} />
 			</div>
