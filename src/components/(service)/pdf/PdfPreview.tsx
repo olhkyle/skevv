@@ -19,12 +19,6 @@ function DocumentErrorMessage() {
 }
 
 export default function PdfPreview({ file, pageCount = 0, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
-	const [numPages, setNumPages] = React.useState<number>(pageCount);
-	console.log(file);
-	React.useEffect(() => {
-		setNumPages(pageCount);
-	}, [file, pageCount]);
-
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
@@ -33,7 +27,6 @@ export default function PdfPreview({ file, pageCount = 0, pages, startPageNumber
 		<div className="w-full rounded-lg">
 			<Document
 				file={file}
-				onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)}
 				loading={
 					<div className="ui-flex-center w-full h-[240px] bg-gray-100 rounded-lg">
 						<AnimateSpinner size={24} />
