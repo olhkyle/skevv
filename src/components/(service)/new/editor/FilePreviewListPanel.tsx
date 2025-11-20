@@ -1,11 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
 import { type ProcessedFileList, AnimateSpinner, Button, getTotalPageCount } from '@/components';
 import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
-import { Suspense } from 'react';
 
 const PdfPreview = dynamic(() => import('../../pdf/PdfPreview'), { ssr: false });
 
