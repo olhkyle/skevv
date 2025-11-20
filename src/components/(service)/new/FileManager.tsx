@@ -6,7 +6,7 @@ import { useDropzoneFiles } from '@/hooks';
 
 export default function FileManager() {
 	const { dropzone, files, hasFiles, setFiles, onReset } = useDropzoneFiles();
-	console.log(files);
+
 	return (
 		<>
 			{hasFiles ? (

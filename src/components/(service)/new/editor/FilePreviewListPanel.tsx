@@ -50,7 +50,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 						{files?.map(({ id, file, pages }, idx) => {
 							const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
 							const pagesHash = pages.map(p => p.id).join('-');
-							console.log(id, pagesHash);
+
 							return (
 								<PdfPreview
 									key={`${id}-${startPageNumber}-${pagesHash}`}
