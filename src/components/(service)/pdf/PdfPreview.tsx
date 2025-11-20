@@ -1,9 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { Document, pdfjs } from 'react-pdf';
 import { List, AutoSizer } from 'react-virtualized';
-import { LazyPage, PageItem, PdfPreviewSkeleton } from '@/components';
+import { PageItem, PdfPreviewSkeleton } from '@/components';
+
+const LazyPage = dynamic(() => import('./LazyPage'), { ssr: false });
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
