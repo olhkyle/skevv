@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { AnimateSpinner, PageItem } from '@/components';
+import { PageItem } from '@/components';
 import PdfPreviewSkeleton from './PdfPreviewSkeleton';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
