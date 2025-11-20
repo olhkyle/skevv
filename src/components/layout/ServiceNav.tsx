@@ -12,7 +12,7 @@ export default function ServiceNav({ resetFiles }: ServiceNavProps) {
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	return (
-		<nav className="sticky top-[calc(var(--global-layout-nav-height)+2*var(--global-layout-padding))] flex justify-between items-center p-1.5 bg-white z-10 sm:static">
+		<nav className="flex justify-between items-center p-1.5 bg-white z-10">
 			<FileResetConfirmContext isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} resetFiles={resetFiles} />
 			<div className="flex items-center gap-2">
 				<Button type="button" variant="outline" size="icon-lg" className="sm:w-32">
