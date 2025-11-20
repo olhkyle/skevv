@@ -27,7 +27,7 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 		}),
 	);
 
-	const sortedPages = [...file.pages].sort((a, b) => a.order - b.order);
+	const sortedPages = [...file.pages].sort((prev, curr) => prev.order - curr.order);
 
 	const handlePageDragEnd = (event: DragEndEvent, fileId: string) => {
 		const { active, over } = event;

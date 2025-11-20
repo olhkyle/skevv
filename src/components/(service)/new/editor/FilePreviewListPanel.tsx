@@ -49,6 +49,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 								key={`${id}-${startPageNumber}-${pagesHash}`}
 								file={file}
 								pageCount={pageCount}
+								pages={pages}
 								startPageNumber={startPageNumber}
 								containerWidth={containerWidth}
 							/>
