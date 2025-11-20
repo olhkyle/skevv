@@ -31,7 +31,7 @@ const mockData = [
 
 export default async function DocumentsPage() {
 	return (
-		<section className="p-3 bg-gray-50">
+		<section className="p-3 bg-light">
 			<Wip
 				message={
 					"This page is going to being used as the page where check the temporarily saved ones and show the file works' list who sign up the service"

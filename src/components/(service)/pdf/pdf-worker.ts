@@ -14,11 +14,12 @@ interface RawFileItem {
 }
 
 interface ProcessedFileItem extends RawFileItem {
-	pageCount?: number;
-	pages?: PageItem[];
+	pageCount: number;
+	pages: PageItem[];
 }
 
-type FileList = ProcessedFileItem[];
+type RawFileList = RawFileItem[];
+type ProcessedFileList = ProcessedFileItem[];
 
 // TODO: multi-language options
 const ASYNC_PDF_MESSAGE = {
@@ -39,15 +40,14 @@ const ASYNC_PDF_MESSAGE = {
 	},
 } as const;
 
-const getTotalPageCount = (files: FileList) => {
+const getTotalPageCount = (files: ProcessedFileList) => {
 	if (files.length === 0) return 0;
 
 	return files.reduce((sum, file) => sum + (file?.pageCount ?? 0), 0);
 };
 
-const getCountedPages = async (files: FileList) => {
+const getCountedPages = async (files: RawFileList): Promise<ProcessedFileList> => {
 	const pageCounts: number[] = [];
-
 	const batchFiles = pipe(files, chunk(3), toArray);
 
 	try {
@@ -74,6 +74,8 @@ const getCountedPages = async (files: FileList) => {
 		if (error instanceof Error) {
 			throw new Error(error.message, { cause: error });
 		}
+
+		throw error;
 	}
 };
 
@@ -117,7 +119,7 @@ const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: st
 // ⚡️ Double try - catch
 // 1. inner : local specific error
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
-const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFileName: string }) => {
+const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList; mergedFileName: string }) => {
 	try {
 		const createdPdf = await PDFDocument.create();
 
@@ -129,12 +131,19 @@ const mergeFiles = async ({ files, mergedFileName }: { files: FileList; mergedFi
 					const arrayBuffer = await file.file.arrayBuffer();
 					const batchedPdf = await PDFDocument.load(arrayBuffer);
 
-					return batchedPdf;
+					return { file, pdf: batchedPdf };
 				}),
 			);
 
-			for (const pdf of loadedPdfs) {
-				const virtualPages = await createdPdf.copyPages(pdf, pdf.getPageIndices());
+			for (const { file, pdf } of loadedPdfs) {
+				const pageIndices = [...file.pages]
+					.sort((prev, curr) => prev.order - curr.order)
+					.map(page => {
+						const originalIndex = +page.id.split('-page-')[1] - 1;
+						return originalIndex;
+					}); // PDF-lib use 0-based index
+
+				const virtualPages = await createdPdf.copyPages(pdf, pageIndices);
 				virtualPages.forEach(page => createdPdf.addPage(page));
 			}
 		}
@@ -183,5 +192,5 @@ const getVirtualFiles = async (file: ProcessedFileItem) => {
 	}
 };
 
-export type { RawFileItem, ProcessedFileItem, FileList };
+export type { PageItem, RawFileItem, ProcessedFileItem, RawFileList, ProcessedFileList };
 export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles, getVirtualFiles };

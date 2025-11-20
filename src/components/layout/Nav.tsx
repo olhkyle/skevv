@@ -31,7 +31,7 @@ export default function Nav() {
 				<MotionBlock onClick={toggle} className="rounded-lg">
 					<Link
 						href={route.SERVICE.WRITE}
-						className="flex justify-between items-center px-3 w-full min-h-[60px] rounded-lg font-medium cursor-pointer active:bg-gray-50 ">
+						className="flex justify-between items-center px-3 w-full min-h-[60px] rounded-lg font-medium cursor-pointer active:bg-light">
 						<span>New Merge</span>
 						<ArrowRightIcon size={20} />
 					</Link>
@@ -39,7 +39,7 @@ export default function Nav() {
 				<MotionBlock onClick={toggle} className="rounded-lg">
 					<Link
 						href={route.SERVICE.DOCUMENTS}
-						className="flex justify-between items-center px-3 w-full min-h-[60px] font-medium rounded-lg cursor-pointer active:bg-gray-50">
+						className="flex justify-between items-center px-3 w-full min-h-[60px] font-medium rounded-lg cursor-pointer active:bg-light">
 						Documents
 						<ArrowRightIcon size={20} />
 					</Link>

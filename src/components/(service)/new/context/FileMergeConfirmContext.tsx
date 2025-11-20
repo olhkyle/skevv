@@ -19,18 +19,18 @@ import {
 	FileNameSetterForm,
 	Kbd,
 } from '@/components';
-import { type FileList, getTotalPageCount } from '../../pdf';
+import { type ProcessedFileList, getTotalPageCount } from '../../pdf';
 import { screenSize } from '@/constant';
 import { useMediaQuery } from '@/hooks';
 
 interface FileMergeConfirmContextProps {
-	files: FileList;
+	files: ProcessedFileList;
 	isOpen: boolean;
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface FileMergeConfirmBody {
-	files: FileList;
+	files: ProcessedFileList;
 	isMobile: boolean;
 	close: () => void;
 }

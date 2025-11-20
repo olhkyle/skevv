@@ -2,14 +2,14 @@
 
 import dynamic from 'next/dynamic';
 import { RotateCcw, RotateCw } from 'lucide-react';
-import { type FileList, Button, getTotalPageCount } from '@/components';
+import { type ProcessedFileList, Button, getTotalPageCount } from '@/components';
 import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
 const PdfPreview = dynamic(() => import('../../pdf/PdfPreview'), { ssr: false });
 
 interface FilePreviewListPanel {
-	files: FileList;
+	files: ProcessedFileList;
 }
 
 export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
@@ -40,7 +40,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 
 			<div className="w-full overflow-y-scroll scrollbar-thin md:min-h-0">
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
-					{files?.map(({ id, file, pageCount }, idx) => (
+					{/* {files?.map(({ id, file, pageCount }, idx) => (
 						<PdfPreview
 							key={id}
 							file={file}
@@ -48,7 +48,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 							startPageNumber={getTotalPageCount(files.slice(0, idx)) + 1}
 							containerWidth={containerWidth}
 						/>
-					))}
+					))} */}
 				</div>
 			</div>
 		</div>

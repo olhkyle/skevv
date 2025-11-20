@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-	type FileList,
+	type ProcessedFileList,
 	FileMergeButton,
 	fileNameSchema,
 	FileNameSchema,
@@ -27,7 +27,7 @@ import { useLoading, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
 
 interface FileNameSetterFormProps {
-	files: FileList;
+	files: ProcessedFileList;
 	close: () => void;
 }
 

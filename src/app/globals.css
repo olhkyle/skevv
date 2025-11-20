@@ -195,19 +195,37 @@
 		@apply bg-black text-white;
 	}
 
+	.bg-light {
+		@apply bg-gray-50;
+	}
+
 	.ui-flex-center {
 		@apply flex justify-center items-center;
 	}
 
+	.min-h-svh {
+		min-height: 100svh;
+	}
+
+	.min-h-lvh {
+		min-height: 100lvh;
+	}
+
+	.scrollbar-thin {
+		scrollbar-gutter: stable overlay;
+	}
+
 	/* thin scrollbar (Edge, Chrome)*/
 	.scrollbar-thin::-webkit-scrollbar {
-		width: 6px;
-		height: 6px;
+		width: var(--windowOS-scrollbar-width);
+		height: var(--windowOS-scrollbar-width);
 	}
+
 	.scrollbar-thin::-webkit-scrollbar-thumb {
 		background-color: rgba(100, 100, 100, 0.3);
 		border-radius: 12px;
 	}
+
 	.scrollbar-thin::-webkit-scrollbar-thumb:hover {
 		background-color: rgba(100, 100, 100, 0.5);
 	}
@@ -221,10 +239,18 @@
 	}
 
 	.bg-gradient-gray-100 {
-		@apply bg-radial-[at_25%_90%] from-gray-200 via-gray-400 to-blue-100;
+		@apply bg-radial-[at_50%_75%] from-gray-100 via-gray-300 to-gray-50 to-90%;
 	}
 
 	.bg-gradient-gray-200 {
-		@apply bg-radial-[at_40%_80%] from-gray-300 via-gray-500 to-blue-200;
+		@apply bg-radial-[at_50%_75%] from-gray-200 via-gray-400 to-gray-100 to-90%;
+	}
+
+	.bg-gradient-indigo-gray-100 {
+		@apply bg-radial-[at_25%_90%] from-gray-200 via-gray-400 to-indigo-100;
+	}
+
+	.bg-gradient-indigo-gray-200 {
+		@apply bg-radial-[at_40%_80%] from-gray-300 via-gray-500 to-indigo-200;
 	}
 }

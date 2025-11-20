@@ -8,7 +8,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 interface PdfPreviewProps {
 	file: File;
-	pageCount?: number;
+	pageCount: number;
 	startPageNumber?: number;
 	containerWidth: number;
 }

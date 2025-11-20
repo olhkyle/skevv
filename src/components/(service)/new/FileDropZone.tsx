@@ -9,7 +9,9 @@ interface FileDropZoneProps {
 	dropzone: DropzoneState;
 }
 
-export default function FileDropZone({ dropzone: { getRootProps, getInputProps, isDragActive, open } }: FileDropZoneProps) {
+export default function FileDropZone({
+	dropzone: { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open },
+}: FileDropZoneProps) {
 	const fileInputId = React.useId();
 
 	return (
@@ -17,14 +19,24 @@ export default function FileDropZone({ dropzone: { getRootProps, getInputProps, 
 			<MotionBlock
 				{...getRootProps()}
 				className={`h-full bg-radial-[at_20%_80%] ${
-					isDragActive ? 'from-sky-300 via-blue-500 to-indigo-400' : 'from-sky-100 via-blue-400 to-indigo-200'
+					isDragActive && isDragAccept
+						? 'from-sky-300 via-blue-500 to-indigo-400'
+						: isDragActive && isDragReject
+						? 'from-gray-100 via-gray-300 to-gray-100'
+						: 'from-sky-100 via-blue-400 to-indigo-200'
 				} to-90% rounded-2xl outline-2 outline-dotted outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4`}>
 				<Input type="file" id={`file-dropzone-${fileInputId}`} className="hidden" {...getInputProps()} />
 				<label
 					htmlFor={`file-dropzone-${fileInputId}`}
 					className="ui-flex-center gap-2 p-4 w-full h-full text-sm text-white font-bold cursor-pointer lg:p-36 lg:text-base">
 					<FileUp size={24} />
-					<span>{isDragActive ? 'Put your files, here 😊' : 'Drag and Drop Your PDFs'} </span>
+					<span>
+						{isDragActive && isDragAccept
+							? 'Put your files, here 😊'
+							: isDragActive && isDragReject
+							? 'Only PDF Files accepted'
+							: 'Drag and Drop Your PDFs'}
+					</span>
 				</label>
 			</MotionBlock>
 			<Button
