@@ -1,11 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import React from 'react';
-import { Document, pdfjs } from 'react-pdf';
-import { PageItem, PdfPreviewSkeleton } from '@/components';
-
-const LazyPage = dynamic(() => import('./LazyPage'), { ssr: false });
+import { Document, Page, pdfjs } from 'react-pdf';
+import { PageItem } from '@/components';
+import PdfPreviewSkeleton from './PdfPreviewSkeleton';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -21,10 +19,6 @@ function DocumentErrorMessage() {
 }
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
-	const pageCache = React.useRef<{ [key: number]: string }>({});
-
-	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
@@ -39,20 +33,27 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
 				error={DocumentErrorMessage}
 				className="flex flex-col gap-2">
-				<div className="flex flex-col gap-2">
-					{sortedPages.map((page, index) => {
+				{pages
+					.sort((prev, curr) => prev.order - curr.order)
+					.map((page, index) => {
 						const originalPageNumber = +page.id.split('-page-')[1];
 
 						return (
-							<div key={page.id} className="relative">
+							<div key={index + 1} className="relative">
 								<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 									{startPageNumber + index}
 								</span>
-								<LazyPage pageNumber={originalPageNumber} pageCache={pageCache.current} containerWidth={containerWidth} />
+								<Page
+									devicePixelRatio={2.5}
+									pageNumber={originalPageNumber}
+									width={containerWidth}
+									renderTextLayer={false}
+									renderAnnotationLayer={false}
+									className="ui-flex-center w-full border border-gray-200"
+								/>
 							</div>
 						);
 					})}
-				</div>
 			</Document>
 		</div>
 	);
