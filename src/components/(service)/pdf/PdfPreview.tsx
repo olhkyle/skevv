@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import { PageItem } from '@/components';
-import PdfPreviewSkeleton from './PdfPreviewSkeleton';
+import { Document, pdfjs } from 'react-pdf';
+import { PageItem, LazyPage, PdfPreviewSkeleton } from '@/components';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -19,6 +18,9 @@ function DocumentErrorMessage() {
 }
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
+	const pageCache = React.useRef<{ [key: number]: string }>({});
+	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
+
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
@@ -33,27 +35,26 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
 				error={DocumentErrorMessage}
 				className="flex flex-col gap-2">
-				{pages
-					.sort((prev, curr) => prev.order - curr.order)
-					.map((page, index) => {
-						const originalPageNumber = +page.id.split('-page-')[1];
+				{sortedPages.map((page, index) => {
+					const originalPageNumber = +page.id.split('-page-')[1];
 
-						return (
-							<div key={index + 1} className="relative">
-								<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
-									{startPageNumber + index}
-								</span>
-								<Page
-									devicePixelRatio={2.5}
-									pageNumber={originalPageNumber}
-									width={containerWidth}
-									renderTextLayer={false}
-									renderAnnotationLayer={false}
-									className="ui-flex-center w-full border border-gray-200"
-								/>
-							</div>
-						);
-					})}
+					return (
+						<div key={index + 1} className="relative">
+							<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
+								{startPageNumber + index}
+							</span>
+							{/* <Page
+								devicePixelRatio={2.5}
+								pageNumber={originalPageNumber}
+								width={containerWidth}
+								renderTextLayer={false}
+								renderAnnotationLayer={false}
+								className="ui-flex-center w-full border border-gray-200"
+							/> */}
+							<LazyPage pageNumber={originalPageNumber} pageCache={pageCache.current} containerWidth={containerWidth} />
+						</div>
+					);
+				})}
 			</Document>
 		</div>
 	);
