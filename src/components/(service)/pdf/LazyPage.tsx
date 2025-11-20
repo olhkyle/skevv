@@ -16,34 +16,20 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 	const { ref, inView } = useInView({ rootMargin: '150px 0px', triggerOnce: false });
 	const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
+	const cachedImage = pageCache[pageNumber];
+
 	return (
 		<div ref={ref} className="w-full flex justify-center">
-			{/* {pageCache[pageNumber] ? (
-        <img
-          src={pageCache[pageNumber]}
-          alt={`페이지 ${pageNumber}`}
-          onLoad={() => setCurrentPage(pageNumber)}
-        />
-      ) : inView ? (
-        <Page
-          pageNumber={pageNumber}
-          renderMode="canvas"
-          scale={0.85}
-          canvasRef={(canvas) => {
-            if (canvas) {
-              canvasRef.current = canvas;
-              pageCache[pageNumber] = canvas.toDataURL();
-              setCurrentPage(pageNumber);
-            }
-          }}
-          loading={<div>페이지 {pageNumber} 로딩 중...</div>}
-        />
-      ) : (
-        <div className="w-[600px] h-[850px] bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-          페이지 {pageNumber} (비활성)
-        </div>
-      )} */}
-			{inView ? (
+			{cachedImage ? (
+				<div className="ui-flex-center">
+					<img
+						src={cachedImage}
+						alt={`Page ${pageNumber}`}
+						style={{ width: containerWidth, height: 'auto' }}
+						className=" w-full border border-gray-200"
+					/>
+				</div>
+			) : inView ? (
 				<Page
 					devicePixelRatio={2.5}
 					pageNumber={pageNumber}
