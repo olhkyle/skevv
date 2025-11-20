@@ -59,7 +59,7 @@ export default function FileListPanel({
 		const newIndex = files.findIndex(file => file.id === over.id);
 		setFiles(files => arrayMove(files, oldIndex, newIndex));
 	};
-
+	console.log(files);
 	return (
 		<div className="relative col-span-full p-3 bg-white border-[1px] border-muted rounded-2xl md:col-span-2">
 			<div className="flex flex-col gap-2 h-full max-h-screen">

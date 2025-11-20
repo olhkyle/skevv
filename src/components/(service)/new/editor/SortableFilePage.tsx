@@ -25,7 +25,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 			ref={setNodeRef}
 			{...attributes}
 			style={transformStyle}
-			className="flex items-center gap-2 p-2 w-full bg-light border border-muted rounded-lg">
+			className="flex items-center gap-2 p-2 w-full bg-light border border-muted rounded-lg touch-none">
 			<Button
 				type="button"
 				size="icon-sm"

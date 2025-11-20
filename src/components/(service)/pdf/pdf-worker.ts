@@ -139,7 +139,7 @@ const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList;
 				const pageIndices = [...file.pages]
 					.sort((prev, curr) => prev.order - curr.order)
 					.map(page => {
-						const originalIndex = +page.id.split('-page-')[1] - 1;
+						const originalIndex = +page.order - 1;
 						return originalIndex;
 					}); // PDF-lib use 0-based index
 

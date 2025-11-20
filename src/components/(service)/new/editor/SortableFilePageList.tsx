@@ -22,6 +22,8 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 		}),
 	);
 
+	const sortedPages = [...file.pages].sort((a, b) => a.order - b.order);
+
 	const handlePageDragEnd = (event: DragEndEvent, fileId: string) => {
 		const { active, over } = event;
 		if (!over || active.id === over.id) return;
@@ -50,11 +52,11 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 				sensors={pageSensors}
 				collisionDetection={closestCenter}
 				onDragEnd={(event: DragEndEvent) => handlePageDragEnd(event, file.id)}>
-				<SortableContext items={file.pages?.map(page => page.id)} strategy={verticalListSortingStrategy}>
+				<SortableContext items={sortedPages.map(page => page.id)} strategy={verticalListSortingStrategy}>
 					<ScrollArea
 						className={`col-span-11 w-full ${isOpen ? 'max-h-48' : 'max-h-0'} overflow-hidden transition-all duration-150 scrollbar-thin`}>
 						<div className="flex flex-col space-y-2">
-							{file?.pages?.map(page => (
+							{sortedPages.map(page => (
 								<SortableFilePage key={page.id} page={page} />
 							))}
 						</div>
