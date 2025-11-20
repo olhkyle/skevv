@@ -230,6 +230,18 @@
 		background-color: rgba(100, 100, 100, 0.5);
 	}
 
+	.bg-gradient-skeleton {
+		background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+		background-size: 200% 100%;
+		animation: shine 1.5s infinite;
+	}
+
+	@keyframes shine {
+		to {
+			background-position-x: -200%;
+		}
+	}
+
 	.bg-gradient-blue-100 {
 		@apply bg-radial-[at_25%_90%] from-sky-200 via-blue-400 to-sky-50;
 	}

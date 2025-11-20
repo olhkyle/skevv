@@ -3,12 +3,12 @@
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { AnimateSpinner, PageItem } from '@/components';
+import PdfPreviewSkeleton from './PdfPreviewSkeleton';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfPreviewProps {
 	file: File;
-	pageCount: number;
 	pages: PageItem[];
 	startPageNumber?: number;
 	containerWidth: number;
@@ -18,20 +18,19 @@ function DocumentErrorMessage() {
 	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({ file, pageCount = 0, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
+export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
 
+	//the purpose of using Document's onLoadSuccess on React-PDF
+	// 1. get to know totalPages
+	// 2. after page's loading, execute other logic
 	return (
 		<div className="w-full rounded-lg">
 			<Document
 				file={file}
-				loading={
-					<div className="ui-flex-center w-full h-[240px] bg-gray-100 rounded-lg">
-						<AnimateSpinner size={24} />
-					</div>
-				}
+				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
 				error={DocumentErrorMessage}
 				className="flex flex-col gap-2">
 				{pages
