@@ -1,6 +1,7 @@
 'use client';
 
 import { AnimateSpinner } from '@/components/common';
+import Image from 'next/image';
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Page } from 'react-pdf';
@@ -13,8 +14,7 @@ interface LazyPageProps {
 }
 
 export default function LazyPage({ pageNumber, pageCache, containerWidth }: LazyPageProps) {
-	const { ref, inView } = useInView({ rootMargin: '150px 0px', triggerOnce: false });
-	const canvasRef = React.useRef<HTMLCanvasElement>(null);
+	const { ref, inView } = useInView({ rootMargin: '150px 0px', triggerOnce: true });
 
 	const cachedImage = pageCache[pageNumber];
 
@@ -22,10 +22,12 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 		<div ref={ref} className="w-full flex justify-center">
 			{cachedImage ? (
 				<div className="ui-flex-center">
-					<img
+					<Image
 						src={cachedImage}
 						alt={`Page ${pageNumber}`}
 						style={{ width: containerWidth, height: 'auto' }}
+						loading="lazy"
+						placeholder="blur"
 						className=" w-full border border-gray-200"
 					/>
 				</div>
@@ -37,13 +39,11 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
 					canvasRef={canvas => {
-						if (canvas) {
-							canvasRef.current = canvas;
+						if (canvas && !pageCache[pageNumber]) {
 							pageCache[pageNumber] = canvas.toDataURL();
-							// setCurrentPage(pageNumber);
 						}
 					}}
-					className="ui-flex-center w-full border borer-gray-200"
+					className="ui-flex-center w-full border border-gray-200"
 				/>
 			) : (
 				<AnimateSpinner />
