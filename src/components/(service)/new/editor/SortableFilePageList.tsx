@@ -21,8 +21,8 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 		useSensor(MouseSensor),
 		useSensor(TouchSensor, {
 			activationConstraint: {
-				delay: 50,
-				tolerance: 10,
+				delay: 10, // 50ms
+				tolerance: 10, // 10px
 			},
 		}),
 	);

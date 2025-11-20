@@ -19,10 +19,10 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pageCount = 0, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const [numPages, setNumPages] = React.useState<number>(pageCount);
-
+	console.log(file);
 	React.useEffect(() => {
 		setNumPages(pageCount);
-	}, [pageCount, file]);
+	}, [file]);
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;

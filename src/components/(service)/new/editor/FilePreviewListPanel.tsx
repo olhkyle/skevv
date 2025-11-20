@@ -18,7 +18,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 		useMediaQuery(screenSize.MIN_XS),
 		useMediaQuery(screenSize.MAX_SM),
 	];
-	console.log(files);
+
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
 		effectTriggers: [isTablet, isMobile, notMobile],
@@ -43,6 +43,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 					{files?.map(({ id, file, pageCount, pages }, idx) => {
 						const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
 						const pagesHash = pages.map(p => p.id).join('-');
+						console.log(id, pagesHash);
 						return (
 							<PdfPreview
 								key={`${id}-${startPageNumber}-${pagesHash}`}
