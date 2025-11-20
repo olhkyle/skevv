@@ -18,13 +18,6 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 		triggerOnce: true, // 한 번 로드 후 unmount 방지
 	});
 
-	const [isRendered, setIsRendered] = React.useState(false);
-
-	// 페이지가 viewport 근처에 들어오면 렌더
-	React.useEffect(() => {
-		if (inView && !isRendered) setIsRendered(true);
-	}, [inView, isRendered]);
-
 	return (
 		<div ref={ref} className="w-full flex justify-center">
 			{pageCache[pageNumber] ? (
@@ -36,7 +29,7 @@ export default function LazyPage({ pageNumber, pageCache, containerWidth }: Lazy
 					placeholder="blur"
 					className="w-full border border-gray-200"
 				/>
-			) : isRendered ? (
+			) : inView ? (
 				<Page
 					pageNumber={pageNumber}
 					width={containerWidth}
