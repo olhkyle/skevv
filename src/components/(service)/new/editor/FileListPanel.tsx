@@ -61,7 +61,7 @@ export default function FileListPanel({
 	};
 
 	return (
-		<div className="relative col-span-full p-3 bg-white border-[1px] border-muted rounded-2xl md:col-span-2">
+		<div className="relative col-span-full p-3 bg-white border border-muted rounded-2xl md:col-span-2">
 			<div className="flex flex-col gap-2 h-full max-h-screen">
 				<div className="flex justify-between items-center">
 					<div>
@@ -116,7 +116,7 @@ export default function FileListPanel({
 					</SortableContext>
 				</DndContext>
 			</div>
-			<div className="absolute left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t-[1px] border-muted">
+			<div className="absolute left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t border-muted">
 				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />}
 			</div>
 		</div>

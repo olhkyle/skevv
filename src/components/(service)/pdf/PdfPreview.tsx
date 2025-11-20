@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, pdfjs } from 'react-pdf';
 import { List, AutoSizer } from 'react-virtualized';
 import { LazyPage, PageItem, PdfPreviewSkeleton } from '@/components';
 
@@ -19,11 +19,7 @@ function DocumentErrorMessage() {
 }
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
-	if (!file) {
-		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
-	}
-
-	const listRef = React.useRef<List>(null);
+	const listRef = React.useRef<List | null>(null);
 	const pageCache = React.useRef<{ [key: number]: string }>({});
 
 	const rowRenderer = React.useCallback(({ index, key, style }: { index: number; key: string; style: React.CSSProperties }) => {
@@ -40,6 +36,10 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 			</div>
 		);
 	}, []);
+
+	if (!file) {
+		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
+	}
 
 	//the purpose of using Document's onLoadSuccess on React-PDF
 	// 1. get to know totalPages
