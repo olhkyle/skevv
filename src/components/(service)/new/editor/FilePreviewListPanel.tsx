@@ -18,7 +18,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 		useMediaQuery(screenSize.MIN_XS),
 		useMediaQuery(screenSize.MAX_SM),
 	];
-
+	console.log(files);
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
 		effectTriggers: [isTablet, isMobile, notMobile],
@@ -40,15 +40,19 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 
 			<div className="w-full overflow-y-scroll scrollbar-thin md:min-h-0">
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
-					{files?.map(({ id, file, pageCount }, idx) => (
-						<PdfPreview
-							key={id}
-							file={file}
-							pageCount={pageCount}
-							startPageNumber={getTotalPageCount(files.slice(0, idx)) + 1}
-							containerWidth={containerWidth}
-						/>
-					))}
+					{files?.map(({ id, file, pageCount, pages }, idx) => {
+						const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
+						const pagesHash = pages.map(p => p.id).join('-');
+						return (
+							<PdfPreview
+								key={`${id}-${startPageNumber}-${pagesHash}`}
+								file={file}
+								pageCount={pageCount}
+								startPageNumber={startPageNumber}
+								containerWidth={containerWidth}
+							/>
+						);
+					})}
 				</div>
 			</div>
 		</div>

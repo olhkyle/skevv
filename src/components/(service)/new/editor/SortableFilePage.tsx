@@ -25,12 +25,11 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 			ref={setNodeRef}
 			{...attributes}
 			style={transformStyle}
-			className="flex items-center gap-2 p-2 w-full bg-light border border-muted rounded-lg touch-none">
+			className="flex items-center gap-2 p-2 w-full bg-light border border-muted rounded-lg ">
 			<Button
 				type="button"
 				size="icon-sm"
 				variant="ghost"
-				className="touch-none"
 				{...listeners}
 				onClick={e => {
 					e.preventDefault();
