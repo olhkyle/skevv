@@ -38,7 +38,7 @@ export default function SortableFile({ file, filePage, setFiles, toggleFilePages
 						<Button type="button" size="icon-sm" variant="ghost" {...listeners}>
 							<GripVertical />
 						</Button>
-						<Button type="button" size="icon-sm" variant="ghost" onClick={() => toggleFilePages(file.id)}>
+						<Button type="button" size="icon-sm" variant="ghost" className="touch-none" onClick={() => toggleFilePages(file.id)}>
 							<ChevronRight className={`${filePage?.isOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</Button>
 					</div>

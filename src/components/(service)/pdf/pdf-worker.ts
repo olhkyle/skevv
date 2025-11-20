@@ -136,10 +136,13 @@ const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList;
 			);
 
 			for (const { file, pdf } of loadedPdfs) {
+				// order : just show order of each page
+				// id : fileName-page-realPageNumber
+				// copyPages function need pageIndices which show the actual number of page
 				const pageIndices = [...file.pages]
 					.sort((prev, curr) => prev.order - curr.order)
 					.map(page => {
-						const originalIndex = +page.order - 1;
+						const originalIndex = +page.id.split('-page-')[1] - 1;
 						return originalIndex;
 					}); // PDF-lib use 0-based index
 
