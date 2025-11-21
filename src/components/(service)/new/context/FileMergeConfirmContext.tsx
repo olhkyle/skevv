@@ -19,7 +19,7 @@ import {
 	FileNameSetterForm,
 	Kbd,
 } from '@/components';
-import { type ProcessedFileList, getTotalPageCount } from '../../pdf';
+import { type ProcessedFileList, getTotalPageCount } from '../pdf';
 import { screenSize } from '@/constant';
 import { useMediaQuery } from '@/hooks';
 

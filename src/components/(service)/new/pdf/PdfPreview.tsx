@@ -4,7 +4,9 @@ import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
+	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+}
 
 interface PdfPreviewProps {
 	file: File;

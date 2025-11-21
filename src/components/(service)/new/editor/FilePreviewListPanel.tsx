@@ -7,7 +7,7 @@ import { type ProcessedFileList, AnimateSpinner, Button, getTotalPageCount } fro
 import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
-const PdfPreview = dynamic(() => import('../../pdf/PdfPreview'), { ssr: false });
+const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
 interface FilePreviewListPanel {
 	files: ProcessedFileList;

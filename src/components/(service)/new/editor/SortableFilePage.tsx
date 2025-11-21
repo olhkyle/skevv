@@ -3,7 +3,7 @@
 import { GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { Button } from '@/components';
-import { type PageItem } from '../../pdf';
+import { type PageItem } from '../pdf';
 
 interface SortableFilePageProps {
 	page: PageItem;

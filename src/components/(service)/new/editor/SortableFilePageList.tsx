@@ -3,7 +3,7 @@
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { ScrollArea, SortableFilePage } from '@/components';
-import { type ProcessedFileItem } from '../../pdf';
+import { type ProcessedFileItem } from '../pdf';
 
 interface SortableFilePagesProps {
 	file: ProcessedFileItem;
