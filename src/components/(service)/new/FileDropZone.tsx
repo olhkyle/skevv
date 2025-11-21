@@ -18,13 +18,13 @@ export default function FileDropZone({
 		<div className="relative w-full h-full">
 			<MotionBlock
 				{...getRootProps()}
-				className={`h-full bg-radial-[at_20%_80%] ${
+				className={`h-full ${
 					isDragActive && isDragAccept
-						? 'from-sky-300 via-blue-500 to-indigo-400'
+						? 'bg-gradient-blue-400'
 						: isDragActive && isDragReject
-						? 'from-gray-100 via-gray-300 to-gray-100'
-						: 'from-sky-100 via-blue-400 to-indigo-200'
-				} to-90% rounded-2xl outline-2 outline-dotted outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4`}>
+						? 'bg-gradient-gray-100'
+						: 'bg-gradient-blue-300'
+				} rounded-2xl outline outline-dashed outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4`}>
 				<Input type="file" id={`file-dropzone-${fileInputId}`} className="hidden" {...getInputProps()} />
 				<label
 					htmlFor={`file-dropzone-${fileInputId}`}

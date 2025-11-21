@@ -250,6 +250,14 @@
 		@apply bg-radial-[at_25%_90%] from-sky-300 via-blue-500 to-indigo-100;
 	}
 
+	.bg-gradient-blue-300 {
+		@apply bg-radial-[at_20%_80%] from-sky-100 via-blue-400 to-indigo-200 to-90%;
+	}
+
+	.bg-gradient-blue-400 {
+		@apply bg-radial-[at_20%_80%] from-sky-300 via-blue-500 to-indigo-400 to-90%;
+	}
+
 	.bg-gradient-gray-100 {
 		@apply bg-radial-[at_50%_75%] from-gray-100 via-gray-300 to-gray-50 to-90%;
 	}
