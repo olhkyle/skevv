@@ -49,7 +49,7 @@ export default function Aside() {
 				<UserProfile />
 				<small className="text-default mx-3 mb-2 mt-1 hidden text-[0.5rem] opacity-50 lg:block">
 					© 2025{' '}
-					<Link href={route.HOME} className="hover:underline" target="_blank">
+					<Link href={route.SERVICE.ROOT} className="hover:underline" target="_blank">
 						SKEVV
 					</Link>
 				</small>

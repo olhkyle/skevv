@@ -55,7 +55,7 @@ export default function Nav() {
 				onClick={toggle}
 				className={`fixed top-0 ${isSideNavOpen ? 'left-0' : 'slide-out-to-bottom-full'} right-0 bottom-0 h-full bg-muted ${
 					isSideNavOpen ? 'opacity-80' : 'opacity-0'
-				} z-10 transition-all duration-300 ease-[cubic-bezier(0.22, 1, 0.36, 1)] cursor-pointer md:hidden`}
+				} z-10 transition-opacity will-change-transform duration-300 ease-[cubic-bezier(0.22, 1, 0.36, 1)] cursor-pointer md:hidden`}
 			/>
 		</>
 	);

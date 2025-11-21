@@ -3,6 +3,7 @@
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
+import { useFileScrollIntoView } from '@/hooks';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -21,6 +22,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
+	const { scrollTargetRef } = useFileScrollIntoView<HTMLDivElement>();
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
@@ -40,7 +42,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 					const originalPageNumber = +page.id.split('-page-')[1];
 
 					return (
-						<div key={index + 1} className="relative">
+						<div key={index + 1} id={page.id} ref={scrollTargetRef} className="relative">
 							<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 								{startPageNumber + index}
 							</span>

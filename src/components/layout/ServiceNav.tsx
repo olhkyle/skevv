@@ -4,16 +4,12 @@ import React from 'react';
 import { SaveIcon, ScreenShareIcon } from 'lucide-react';
 import { Button, FileResetConfirmContext } from '@/components';
 
-interface ServiceNavProps {
-	resetFiles: () => void;
-}
-
-export default function ServiceNav({ resetFiles }: ServiceNavProps) {
+export default function ServiceNav() {
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	return (
 		<nav className="flex justify-between items-center bg-white z-10">
-			<FileResetConfirmContext isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} resetFiles={resetFiles} />
+			<FileResetConfirmContext isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />
 			<div className="flex items-center gap-2">
 				<Button type="button" variant="outline" size="icon-md" className="sm:w-32">
 					<SaveIcon size={21} />

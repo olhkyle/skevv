@@ -25,7 +25,13 @@ export default function FileDropZone({
 						? 'bg-gradient-gray-100'
 						: 'bg-gradient-blue-300'
 				} rounded-2xl outline outline-dashed outline-offset-2 focus-visible:rounded-2xl focus-visible:outline focus-visible:outline-offset-4`}>
-				<Input type="file" id={`file-dropzone-${fileInputId}`} className="hidden" {...getInputProps()} />
+				<Input
+					type="file"
+					id={`file-dropzone-${fileInputId}`}
+					data-input-id={`file-dropzone-outer`}
+					className="hidden"
+					{...getInputProps()}
+				/>
 				<label
 					htmlFor={`file-dropzone-${fileInputId}`}
 					className="ui-flex-center gap-2 p-4 w-full h-full text-sm text-white font-bold cursor-pointer lg:p-36 lg:text-base">

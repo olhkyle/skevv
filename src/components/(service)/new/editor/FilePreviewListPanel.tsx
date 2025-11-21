@@ -3,17 +3,15 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
-import { type ProcessedFileList, AnimateSpinner, Button, getTotalPageCount } from '@/components';
+import { AnimateSpinner, Button, getTotalPageCount } from '@/components';
+import { useFileStore } from '@/store';
 import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
 
-interface FilePreviewListPanel {
-	files: ProcessedFileList;
-}
-
-export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
+export default function FilePreviewListPanel() {
+	const { files } = useFileStore();
 	const [isMobile, notMobile, isTablet] = [
 		useMediaQuery(screenSize.MAX_XS),
 		useMediaQuery(screenSize.MIN_XS),
@@ -43,7 +41,7 @@ export default function FilePreviewListPanel({ files }: FilePreviewListPanel) {
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
 					<Suspense
 						fallback={
-							<div className="ui-flex-center w-full h-full bg-white">
+							<div className="ui-flex-center w-full h-full bg-light rounded-2xl">
 								<AnimateSpinner />
 							</div>
 						}>

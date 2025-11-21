@@ -1,35 +1,27 @@
 'use client';
 
 import React from 'react';
-import { ChevronRight, Plus } from 'lucide-react';
+import { BetweenHorizonalEnd, ChevronRight, EllipsisVertical, FileText, Plus } from 'lucide-react';
 import { DropzoneState } from 'react-dropzone';
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { type ProcessedFileItem, Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner } from '@/components';
-import { useFilePages, useKeyboardTrigger, useMediaQuery } from '@/hooks';
-import { screenSize } from '@/constant';
+import { Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
+import { useFilePages, useKeyboardTrigger } from '@/hooks';
+import { useFileStore } from '@/store';
 
 interface FileListPanelProps {
 	dropzone: DropzoneState;
-	files: ProcessedFileItem[];
-	setFiles: React.Dispatch<React.SetStateAction<ProcessedFileItem[]>>;
-}
-
-function FileInsertSkeleton() {
-	return <div className="min-h-[50px] rounded-lg bg-gray-100" />;
 }
 
 export default function FileListPanel({
 	dropzone: { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open },
-	files,
-	setFiles,
 }: FileListPanelProps) {
 	const fileInputId = React.useId();
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
-	const isNotMobile = useMediaQuery(screenSize.MIN_SM);
+	const [currentDragFilesCount, setCurrentDragFilesCount] = React.useState(0);
 
+	const { files, setFiles } = useFileStore();
 	const { filePages, isSomePageOpen, toggle, toggleAll, closeAll } = useFilePages({ files });
-
 	const sensors = useSensors(
 		useSensor(PointerSensor),
 		useSensor(MouseSensor),
@@ -49,6 +41,28 @@ export default function FileListPanel({
 		},
 	});
 
+	const rootProps = {
+		...getRootProps(),
+		onDragEnter: (e: React.DragEvent<HTMLDivElement>) => {
+			getRootProps().onDragEnter?.(e);
+
+			if (e.dataTransfer?.items) {
+				setCurrentDragFilesCount(e.dataTransfer.items.length);
+			}
+		},
+		onDragOver: (e: React.DragEvent<HTMLDivElement>) => {
+			getRootProps().onDragOver?.(e);
+
+			if (e.dataTransfer?.items) {
+				setCurrentDragFilesCount(e.dataTransfer.items.length);
+			}
+		},
+		onDragLeave: (e: React.DragEvent<HTMLDivElement>) => {
+			getRootProps().onDragLeave?.(e);
+			setCurrentDragFilesCount(0);
+		},
+	};
+
 	const handleDragEnd = (event: DragEndEvent) => {
 		closeAll();
 
@@ -57,7 +71,7 @@ export default function FileListPanel({
 
 		const oldIndex = files.findIndex(file => file.id === active.id);
 		const newIndex = files.findIndex(file => file.id === over.id);
-		setFiles(files => arrayMove([...files], oldIndex, newIndex));
+		setFiles(arrayMove([...files], oldIndex, newIndex));
 	};
 
 	return (
@@ -70,35 +84,44 @@ export default function FileListPanel({
 							<ChevronRight size={18} className={`${isSomePageOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</h3>
 					</div>
-					<Button type="button" variant="outline" size={isNotMobile ? 'icon-sm' : 'icon-lg'} onClick={open} className="lg:px-3 lg:w-auto">
-						<Plus size={21} />
-						<span className="hidden lg:inline">Add</span>
-					</Button>
+					<div className="ui-flex-center gap-2">
+						<Button type="button" variant="ghost" size={'icon-md'} onClick={open}>
+							<BetweenHorizonalEnd />
+						</Button>
+						<Button type="button" variant="ghost" size={'icon-md'}>
+							<EllipsisVertical />
+						</Button>
+					</div>
 				</div>
 
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
-							className="flex flex-col gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:flex-1 md:min-h-0 shrink-0"
-							{...getRootProps()}>
+							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:min-h-0 "
+							{...rootProps}>
 							{files?.map(file => (
 								<SortableFile
 									key={file.id}
 									filePage={filePages.find(filePage => filePage.id === file.id)!}
 									file={file}
-									setFiles={setFiles}
 									toggleFilePages={toggle}
 									deleteFile={() => setFiles(files.filter(prevFile => prevFile.id !== file.id))}
 								/>
 							))}
 
-							{isDragAccept && <FileInsertSkeleton />}
+							{isDragActive && isDragAccept && <FileInsertSkeleton filesLength={currentDragFilesCount} />}
 
 							<MotionBlock
-								className={`hidden h-full ${
+								className={`relative mx-auto w-[calc(100%-8px)] h-full ${
 									isDragActive ? 'bg-gradient-gray-200' : 'bg-gradient-gray-100'
-								} rounded-2xl border border-dashed border-gray-300 transition-colors sm:block`}>
-								<Input type="file" id={`file-dropzone-${fileInputId}`} className="hidden" {...getInputProps()} />
+								} rounded-2xl outline outline-dashed outline-offset-2 outline-gray-300 transition-colors sm:block `}>
+								<Input
+									type="file"
+									id={`file-dropzone-${fileInputId}`}
+									data-input-id={`file-dropzone-inner`}
+									className="hidden"
+									{...getInputProps()}
+								/>
 								<label htmlFor={`file-dropzone-${fileInputId}`} className="ui-flex-center min-h-48 w-full h-full cursor-pointer ">
 									{isDragActive && isDragAccept ? (
 										<AnimateSpinner />
@@ -111,6 +134,10 @@ export default function FileListPanel({
 										</p>
 									)}
 								</label>
+								<div className="absolute bottom-4 left-[50%] -translate-x-[50%] ui-flex-center gap-2 px-2 py-1 text-white text-xs font-medium rounded-full bg-black sm:px-3 sm:py-1.5">
+									<FileText size={16} />
+									<span>PDF only</span>
+								</div>
 							</MotionBlock>
 						</div>
 					</SortableContext>

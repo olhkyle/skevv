@@ -8,12 +8,11 @@ import { Button, ProcessedFileItem, SortableFilePageList } from '@/components';
 interface SortableFileProps {
 	file: ProcessedFileItem;
 	filePage: { id: string; isOpen: boolean };
-	setFiles: React.Dispatch<React.SetStateAction<ProcessedFileItem[]>>;
 	toggleFilePages: (fileId: string) => void;
 	deleteFile: () => void;
 }
 
-export default function SortableFile({ file, filePage, setFiles, toggleFilePages, deleteFile }: SortableFileProps) {
+export default function SortableFile({ file, filePage, toggleFilePages, deleteFile }: SortableFileProps) {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id: file.id,
 		animateLayoutChanges: () => false,
@@ -25,12 +24,12 @@ export default function SortableFile({ file, filePage, setFiles, toggleFilePages
 	};
 
 	return (
-		<div className={`flex flex-col justify-end gap-2 ${filePage?.isOpen ? 'mb-1' : 'mb-0'}`}>
+		<div className={`flex flex-col justify-end gap-2 ${filePage?.isOpen ? 'mb-1' : 'mb-0'} w-full`}>
 			<div
 				ref={setNodeRef}
 				{...attributes}
 				style={transformStyle}
-				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-lg border border-muted touch-none ${
+				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-md border border-muted touch-none ${
 					isDragging ? 'opacity-80 border-dashed' : 'opacity-100'
 				} sm:cursor-pointer`}>
 				<div className="flex items-center gap-2">
@@ -42,13 +41,13 @@ export default function SortableFile({ file, filePage, setFiles, toggleFilePages
 							<ChevronRight className={`${filePage?.isOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</Button>
 					</div>
-					<span className="flex-grow inline-block font-medium  break-all whitespace-normal text-ellipsis">{file.file.name}</span>
+					<span className="grow inline-block font-medium  break-all whitespace-normal text-ellipsis">{file.file.name}</span>
 				</div>
-				<Button type="button" size="icon-sm" variant="ghost" className="shrink-0 pointer-events-auto" onClick={deleteFile}>
+				<Button type="button" size="icon-sm" variant="ghost" onClick={deleteFile}>
 					<X />
 				</Button>
 			</div>
-			<SortableFilePageList file={file} isOpen={filePage?.isOpen} setFiles={setFiles} />
+			<SortableFilePageList file={file} isOpen={filePage?.isOpen} />
 		</div>
 	);
 }

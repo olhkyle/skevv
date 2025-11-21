@@ -4,14 +4,15 @@ import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, To
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { ScrollArea, SortableFilePage } from '@/components';
 import { type ProcessedFileItem } from '../pdf';
+import { useFileStore } from '@/store';
 
 interface SortableFilePagesProps {
 	file: ProcessedFileItem;
 	isOpen: boolean;
-	setFiles: React.Dispatch<React.SetStateAction<ProcessedFileItem[]>>;
 }
 
-export default function SortableFilePageList({ file, isOpen, setFiles }: SortableFilePagesProps) {
+export default function SortableFilePageList({ file, isOpen }: SortableFilePagesProps) {
+	const { files, setFiles } = useFileStore();
 	const pageSensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -33,8 +34,8 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 		const { active, over } = event;
 		if (!over || active.id === over.id) return;
 
-		setFiles(prevFiles =>
-			prevFiles.map(file => {
+		setFiles(
+			files.map(file => {
 				if (file.id !== fileId) return file;
 
 				const oldIndex = file.pages.findIndex(page => page.id === active.id);
@@ -61,7 +62,7 @@ export default function SortableFilePageList({ file, isOpen, setFiles }: Sortabl
 					<ScrollArea
 						className={`col-span-11 w-full ${
 							isOpen ? 'max-h-60 min-h-30' : 'max-h-0'
-						} overflow-y-auto transition-all duration-150 scrollbar-thin`}>
+						} overflow-y-auto transition-all will-change-transform duration-150 scrollbar-thin`}>
 						<div className="flex flex-col space-y-2 pb-10 sm:pb-0">
 							{sortedPages.map(page => (
 								<SortableFilePage key={page.id} page={page} />

@@ -1,5 +1,4 @@
 const route = {
-	HOME: '/landing',
 	AUTH: {
 		ROOT: '/auth',
 		LOGIN: '/auth/login',

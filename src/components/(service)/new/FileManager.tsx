@@ -5,7 +5,7 @@ import { AnimateSpinner, FileDropZone, FileEditor } from '@/components';
 import { useDropzoneFiles } from '@/hooks';
 
 export default function FileManager() {
-	const { dropzone, isPending, files, hasFiles, setFiles, onReset } = useDropzoneFiles();
+	const { dropzone, isPending, hasFiles } = useDropzoneFiles();
 
 	return (
 		<>
@@ -14,13 +14,7 @@ export default function FileManager() {
 					<AnimateSpinner />
 				</div>
 			) : (
-				<>
-					{hasFiles ? (
-						<FileEditor dropzone={dropzone} files={files} setFiles={setFiles} onReset={onReset} />
-					) : (
-						<FileDropZone dropzone={dropzone} />
-					)}
-				</>
+				<>{hasFiles ? <FileEditor dropzone={dropzone} /> : <FileDropZone dropzone={dropzone} />}</>
 			)}
 		</>
 	);

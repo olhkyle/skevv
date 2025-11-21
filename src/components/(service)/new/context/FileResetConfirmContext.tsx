@@ -27,11 +27,11 @@ import {
 } from '@/components/ui';
 import { useMediaQuery } from '@/hooks';
 import screenSize from '@/constant/screenSize';
+import { useFileStore } from '@/store';
 
 interface FileResetConfirmContextProps {
 	isOpen: boolean;
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	resetFiles: () => void;
 }
 
 interface FileResetConfirmBodyProps {
@@ -85,7 +85,8 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 	);
 }
 
-export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles }: FileResetConfirmContextProps) {
+export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileResetConfirmContextProps) {
+	const { resetFiles } = useFileStore();
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Reset Current Files';
 	const description = 'Do you really mind to reset files?';

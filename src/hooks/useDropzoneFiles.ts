@@ -1,18 +1,29 @@
 import React, { useTransition } from 'react';
-import { FileWithPath, useDropzone } from 'react-dropzone';
+import { DropEvent, FileRejection, FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
-import { type RawFileItem, type ProcessedFileItem, getCountedPages } from '@/components';
+import { type RawFileItem, getCountedPages } from '@/components';
+import { useFileStore } from '@/store/useFileStore';
 import PDF_HQ from '@/constant/pdf';
 
+const inputId = {
+	OUTER: 'file-dropzone-outer',
+	INNER: 'file-dropzone-inner',
+} as const;
+
+function isDragEvent(e: unknown): e is React.DragEvent<HTMLElement> {
+	return !!e && typeof e === 'object' && 'target' in e;
+}
+
 export default function useDropzoneFiles() {
-	const [files, setFiles] = React.useState<ProcessedFileItem[]>([]);
+	const { files, setFiles, resetFiles } = useFileStore();
+
 	const [isPending, startTransition] = useTransition();
 	const hasFiles = files.length !== 0;
 
-	const handleResetFiles = () => setFiles([]);
-
 	//TODO: Additional Validation for file thumbnail
-	const onDrop = async (acceptedFiles: FileWithPath[]) => {
+	const onDrop = async (acceptedFiles: FileWithPath[], rejections: FileRejection[], event: DropEvent) => {
+		let inputIdValue: string | undefined;
+
 		const willUpdateFiles: RawFileItem[] = acceptedFiles
 			.map(file => ({
 				id: `${file.name}-${Date.now()}`,
@@ -24,7 +35,20 @@ export default function useDropzoneFiles() {
 
 		try {
 			const asyncFiles = await getCountedPages(fileList);
-			startTransition(() => setFiles(asyncFiles));
+
+			if (rejections.length) {
+				toast.warning(`업로드한 ${rejections.length}개의 파일은 PDF 파일이 아닙니다`);
+			}
+
+			if (isDragEvent(event)) {
+				inputIdValue = (event.target as HTMLElement & { dataset: { inputId?: string } }).dataset.inputId;
+			}
+
+			if (inputIdValue === inputId.OUTER) {
+				startTransition(() => setFiles(asyncFiles));
+			} else {
+				setFiles(asyncFiles);
+			}
 		} catch (error) {
 			console.error(error);
 			toast.error('Error happened to add files');
@@ -39,5 +63,5 @@ export default function useDropzoneFiles() {
 		onDrop,
 	});
 
-	return { dropzone, isPending, hasFiles, files, setFiles, onReset: handleResetFiles };
+	return { dropzone, isPending, hasFiles, files, setFiles, onReset: resetFiles };
 }
