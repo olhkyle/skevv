@@ -45,7 +45,7 @@ export default function FilePreviewListPanel() {
 								<AnimateSpinner />
 							</div>
 						}>
-						{/* {files?.map(({ id, file, pages }, idx) => {
+						{files?.map(({ id, file, pages }, idx) => {
 							const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
 							const pagesHash = pages.map(p => p.id).join('-');
 
@@ -58,7 +58,7 @@ export default function FilePreviewListPanel() {
 									containerWidth={containerWidth}
 								/>
 							);
-						})} */}
+						})}
 					</Suspense>
 				</div>
 			</div>
