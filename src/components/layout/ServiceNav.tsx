@@ -12,14 +12,14 @@ export default function ServiceNav({ resetFiles }: ServiceNavProps) {
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 
 	return (
-		<nav className="flex justify-between items-center p-1.5 bg-white z-10">
+		<nav className="flex justify-between items-center bg-white z-10">
 			<FileResetConfirmContext isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} resetFiles={resetFiles} />
 			<div className="flex items-center gap-2">
-				<Button type="button" variant="outline" size="icon-lg" className="sm:w-32">
+				<Button type="button" variant="outline" size="icon-md" className="sm:w-32">
 					<SaveIcon size={21} />
 					<span className="hidden sm:inline">Save Draft</span>
 				</Button>
-				<Button type="button" variant="outline" size="icon-lg" className="sm:w-32">
+				<Button type="button" variant="outline" size="icon-md" className="sm:w-32">
 					<ScreenShareIcon size={21} />
 					<span className="hidden sm:inline">Preview</span>
 				</Button>

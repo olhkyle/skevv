@@ -44,7 +44,7 @@ function TriggerButton({ open, ...props }: { open: () => void }) {
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>
-				<Button type="button" size="icon-lg" onClick={open} className="rounded-full" {...props}>
+				<Button type="button" size="icon-md" onClick={open} className="rounded-full" {...props}>
 					<RotateCcw size={21} />
 				</Button>
 			</TooltipTrigger>
@@ -103,7 +103,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DrawerContent>
 						<DrawerHeader className="p-3 text-left">
 							<DrawerTitle className="text-start text-lg">{title}</DrawerTitle>
-							<DrawerDescription className="my-2 text-start">{description}</DrawerDescription>
+							<DrawerDescription className="my-2 font-medium text-start">{description}</DrawerDescription>
 						</DrawerHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DrawerContent>
@@ -116,7 +116,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen, resetFiles 
 					<DialogContent className="w-[500px]" aria-describedby="File Reset Confirm Dialog Content">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
-							<DialogDescription className="my-2 text-start">{description}</DialogDescription>
+							<DialogDescription className="my-2 font-medium text-start">{description}</DialogDescription>
 						</DialogHeader>
 						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
 					</DialogContent>
