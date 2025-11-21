@@ -1,15 +1,21 @@
 import React from 'react';
 
 export default function useFileScrollIntoView<T extends HTMLElement>() {
-	const scrollTargetRef = React.useRef<T | null>(null);
+	const pageRefs = React.useRef<Record<string, T | null>>({});
 
 	const [targetId, setTargetId] = React.useState('');
 
-	if (scrollTargetRef.current) {
-		if (scrollTargetRef.current.id === targetId) {
-			scrollTargetRef.current.scrollIntoView();
+	React.useEffect(() => {
+		if (targetId && pageRefs.current[targetId]) {
+			pageRefs.current[targetId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
-	}
+	}, [targetId]);
 
-	return { scrollTargetRef, setTargetId };
+	const setRef = (id: string, el: T | null) => {
+		if (pageRefs?.current) {
+			pageRefs.current[id] = el;
+		}
+	};
+
+	return { pageRefs, setTargetId, setRef };
 }

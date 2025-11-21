@@ -5,10 +5,10 @@ import { Suspense } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
 import { AnimateSpinner, Button, getTotalPageCount } from '@/components';
 import { useFileStore } from '@/store';
-import { useMediaQuery, useResizableObserver } from '@/hooks';
+import { useFileScrollIntoView, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
-const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false });
+const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false, loading: () => <AnimateSpinner /> });
 
 export default function FilePreviewListPanel() {
 	const { files } = useFileStore();
@@ -45,7 +45,7 @@ export default function FilePreviewListPanel() {
 								<AnimateSpinner />
 							</div>
 						}>
-						{files?.map(({ id, file, pages }, idx) => {
+						{/* {files?.map(({ id, file, pages }, idx) => {
 							const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
 							const pagesHash = pages.map(p => p.id).join('-');
 
@@ -58,7 +58,7 @@ export default function FilePreviewListPanel() {
 									containerWidth={containerWidth}
 								/>
 							);
-						})}
+						})} */}
 					</Suspense>
 				</div>
 			</div>
