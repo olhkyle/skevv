@@ -1,18 +1,26 @@
 'use client';
 
 import React from 'react';
-import { FileDropZone, FileEditor } from '@/components';
+import { AnimateSpinner, FileDropZone, FileEditor } from '@/components';
 import { useDropzoneFiles } from '@/hooks';
 
 export default function FileManager() {
-	const { dropzone, files, hasFiles, setFiles, onReset } = useDropzoneFiles();
+	const { dropzone, isPending, files, hasFiles, setFiles, onReset } = useDropzoneFiles();
 
 	return (
 		<>
-			{hasFiles ? (
-				<FileEditor dropzone={dropzone} files={files} setFiles={setFiles} onReset={onReset} />
+			{isPending ? (
+				<div className="ui-flex-center w-full h-full bg-gradient-blue-100 rounded-lg">
+					<AnimateSpinner />
+				</div>
 			) : (
-				<FileDropZone dropzone={dropzone} />
+				<>
+					{hasFiles ? (
+						<FileEditor dropzone={dropzone} files={files} setFiles={setFiles} onReset={onReset} />
+					) : (
+						<FileDropZone dropzone={dropzone} />
+					)}
+				</>
 			)}
 		</>
 	);

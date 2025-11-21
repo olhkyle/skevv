@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useTransition } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 import { type RawFileItem, type ProcessedFileItem, getCountedPages } from '@/components';
@@ -6,6 +6,7 @@ import PDF_HQ from '@/constant/pdf';
 
 export default function useDropzoneFiles() {
 	const [files, setFiles] = React.useState<ProcessedFileItem[]>([]);
+	const [isPending, startTransition] = useTransition();
 	const hasFiles = files.length !== 0;
 
 	const handleResetFiles = () => setFiles([]);
@@ -23,8 +24,7 @@ export default function useDropzoneFiles() {
 
 		try {
 			const asyncFiles = await getCountedPages(fileList);
-
-			setFiles(asyncFiles);
+			startTransition(() => setFiles(asyncFiles));
 		} catch (error) {
 			console.error(error);
 			toast.error('Error happened to add files');
@@ -39,5 +39,5 @@ export default function useDropzoneFiles() {
 		onDrop,
 	});
 
-	return { dropzone, hasFiles, files, setFiles, onReset: handleResetFiles };
+	return { dropzone, isPending, hasFiles, files, setFiles, onReset: handleResetFiles };
 }
