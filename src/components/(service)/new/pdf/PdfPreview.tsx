@@ -23,7 +23,7 @@ function DocumentErrorMessage() {
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
-	const { pageRefs, setTargetId, setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
@@ -53,6 +53,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 								width={containerWidth}
 								renderTextLayer={false}
 								renderAnnotationLayer={false}
+								loading={<PdfPreviewSkeleton pageCount={1} />}
 								className="ui-flex-center w-full border border-gray-200"
 							/>
 						</div>

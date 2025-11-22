@@ -5,10 +5,21 @@ import { Suspense } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
 import { AnimateSpinner, Button, getTotalPageCount } from '@/components';
 import { useFileStore } from '@/store';
-import { useFileScrollIntoView, useMediaQuery, useResizableObserver } from '@/hooks';
+import { useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
-const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), { ssr: false, loading: () => <AnimateSpinner /> });
+const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), {
+	ssr: false,
+	loading: () => <FullContainerLoading />,
+});
+
+function FullContainerLoading() {
+	return (
+		<div className="ui-flex-center w-full h-full bg-light rounded-2xl">
+			<AnimateSpinner />
+		</div>
+	);
+}
 
 export default function FilePreviewListPanel() {
 	const { files } = useFileStore();
@@ -39,12 +50,7 @@ export default function FilePreviewListPanel() {
 
 			<div className="flex-1 min-h-0 w-full overflow-y-scroll scrollbar-thin md:min-h-0">
 				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
-					<Suspense
-						fallback={
-							<div className="ui-flex-center w-full h-full bg-light rounded-2xl">
-								<AnimateSpinner />
-							</div>
-						}>
+					<Suspense fallback={<FullContainerLoading />}>
 						{files?.map(({ id, file, pages }, idx) => {
 							const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;
 							const pagesHash = pages.map(p => p.id).join('-');
