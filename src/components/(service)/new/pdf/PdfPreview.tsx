@@ -5,8 +5,8 @@ import { pdfjs, Document, Page } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
-import { useFileScrollIntoView } from '@/hooks';
-import { SCROLL_BAR_WIDTH } from '@/hooks/useResizableObserver';
+import { useFileScrollIntoView, SCROLL_BAR_WIDTH } from '@/hooks';
+import { PDF_DEFAULT_HEIGHT } from '@/constant';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -72,29 +72,66 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-
 	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
+
 	const [isLoaded, setLoaded] = React.useState(false);
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => documentWrapperRef.current,
-		estimateSize: index => pageHeights[index] || 426,
+		estimateSize: index => pageHeights[index] || PDF_DEFAULT_HEIGHT,
 		overscan: 3,
 	});
 
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
-	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
+	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
-		for (let i = 0; i < pdf.numPages; i++) {
-			const page = await pdf.getPage(i + 1);
-			const viewport = page.getViewport({ scale: 1 });
-			const height = (viewport.height / viewport.width) * containerWidth + 12; // 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
-			heights.push(height);
+
+		try {
+			for (let i = 0; i < pdf.numPages; i++) {
+				const page = await pdf.getPage(i + 1);
+				const viewport = page.getViewport({ scale: 1 });
+				const PADDING = 12;
+
+				// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+				const height = (viewport.height / viewport.width) * containerWidth + PADDING;
+				heights.push(height);
+			}
+
+			setPageHeights(heights);
+		} catch (e) {
+			console.error(e);
 		}
-		setPageHeights(heights);
+	};
+
+	React.useEffect(() => {
+		let cancelled = false;
+
+		const recalculateHeights = async () => {
+			if (!file) return;
+
+			try {
+				const fileArrayBuffer = await file.arrayBuffer();
+				const pdf = await pdfjs.getDocument(fileArrayBuffer).promise;
+				if (!cancelled) {
+					await calculateHeights(pdf);
+				}
+			} catch (e) {
+				if (!cancelled) console.error(e);
+			}
+		};
+
+		recalculateHeights();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [containerWidth, file]);
+
+	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
+		calculateHeights(pdf);
 		setLoaded(true);
 	};
 
@@ -106,10 +143,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div
-			ref={documentWrapperRef}
-			className="scrollbar-thin"
-			style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%', overflowY: 'auto' }}>
+		<div ref={documentWrapperRef} className="scrollbar-hide" style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%' }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}

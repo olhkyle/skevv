@@ -26,7 +26,7 @@ import {
 	TooltipTrigger,
 } from '@/components/ui';
 import { useMediaQuery } from '@/hooks';
-import screenSize from '@/constant/screenSize';
+import { screenSize } from '@/constant';
 import { useFileStore } from '@/store';
 
 interface FileResetConfirmContextProps {

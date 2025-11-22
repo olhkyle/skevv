@@ -3,19 +3,15 @@ import { throttle } from 'es-toolkit';
 
 interface UseResizableObserverProps {
 	initialWidth?: number;
-	initialHeight?: number;
 	effectTriggers: (number | string | boolean)[];
 }
 
-export const SCROLL_BAR_WIDTH = 6;
+const SCROLL_BAR_WIDTH = 6;
+const THROTTLE_TIME = 150;
 
-export default function useResizableObserver<T extends HTMLElement>({
-	initialWidth = 0,
-	initialHeight = 0,
-	effectTriggers = [],
-}: UseResizableObserverProps) {
+function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
-	const [containerHeight, setContainerHeight] = React.useState<number>(initialHeight);
+
 	const containerRef = React.useRef<T>(null);
 
 	/**
@@ -45,12 +41,11 @@ export default function useResizableObserver<T extends HTMLElement>({
 		const currentHeight = height - paddingY - 2 * borderWidth;
 
 		setContainerWidth(prevWidth => (prevWidth !== currentWidth ? currentWidth : prevWidth));
-		setContainerHeight(prevHeight => (prevHeight !== currentHeight ? currentHeight : prevHeight));
 	};
 
 	const throttledResize = throttle(() => {
 		handleResize();
-	}, 150);
+	}, THROTTLE_TIME);
 
 	React.useEffect(() => {
 		if (!containerRef.current) return;
@@ -81,5 +76,7 @@ export default function useResizableObserver<T extends HTMLElement>({
 		};
 	}, []);
 
-	return { containerRef, containerWidth, containerHeight };
+	return { containerRef, containerWidth };
 }
+
+export { useResizableObserver, SCROLL_BAR_WIDTH };

@@ -211,6 +211,20 @@
 		min-height: 100lvh;
 	}
 
+	.scrollbar-hide {
+		overflow: auto; /* 스크롤 가능 */
+
+		/* Firefox */
+		scrollbar-width: none;
+
+		/* IE 10+ */
+		-ms-overflow-style: none;
+	}
+	/* Chrome, Safari, Edge */
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+
 	.scrollbar-thin {
 		scrollbar-gutter: stable overlay;
 	}

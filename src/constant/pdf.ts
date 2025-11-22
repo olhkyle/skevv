@@ -3,4 +3,6 @@ const PDF_HQ = {
 	VALUE: ['.pdf'],
 };
 
-export default PDF_HQ;
+const PDF_DEFAULT_HEIGHT = 426;
+
+export { PDF_DEFAULT_HEIGHT, PDF_HQ };
