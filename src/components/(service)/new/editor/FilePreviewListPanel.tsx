@@ -15,7 +15,7 @@ const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), {
 
 function FullContainerLoading() {
 	return (
-		<div className="ui-flex-center w-full h-full bg-light rounded-2xl">
+		<div className="ui-flex-center w-full h-120 bg-light rounded-2xl">
 			<AnimateSpinner />
 		</div>
 	);
