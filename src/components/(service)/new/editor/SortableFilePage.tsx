@@ -4,7 +4,7 @@ import { GripVertical, SquareMousePointer } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { Button } from '@/components';
 import { type PageItem } from '../pdf';
-import { useFileScrollIntoView, useMediaQuery } from '@/hooks';
+import { useFileScrollIntoView, useFileTargetRef, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
 
 interface SortableFilePageProps {
@@ -12,7 +12,7 @@ interface SortableFilePageProps {
 }
 
 export default function SortableFilePage({ page }: SortableFilePageProps) {
-	const { setTargetId } = useFileScrollIntoView();
+	const { setTargetId } = useFileTargetRef();
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
 		id: page.id,
 		animateLayoutChanges: () => false,

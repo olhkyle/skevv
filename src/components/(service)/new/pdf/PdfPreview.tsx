@@ -4,7 +4,7 @@ import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
-import { useFileScrollIntoView, SCROLL_BAR_WIDTH, useMergedRefs } from '@/hooks';
+import { useFileScrollIntoView, SCROLL_BAR_WIDTH, useMergedRefs, useFileTargetRef } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 import dynamic from 'next/dynamic';
 
@@ -29,7 +29,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { targetId, setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { targetId, setRef } = useFileTargetRef<HTMLDivElement>();
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
