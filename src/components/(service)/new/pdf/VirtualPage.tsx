@@ -10,17 +10,16 @@ interface VirtualPageProps {
 	style: React.CSSProperties;
 	pageNumber: number;
 	startPageNumber: number;
-	targetId: string;
 	containerWidth: number;
 	setRef: (id: string, el: HTMLDivElement | null) => void;
 }
 
-export default function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, containerWidth, setRef }: VirtualPageProps) {
+export default function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
 	const { ref: inViewRef, inView } = useInView({
 		rootMargin: '300px 0px',
 	});
 
-	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(targetId, el));
+	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(page.id, el));
 
 	return (
 		<div ref={combinedRef} style={style} id={page.id} className="relative">

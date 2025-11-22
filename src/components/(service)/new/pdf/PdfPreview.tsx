@@ -118,7 +118,6 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 								page={page}
 								pageNumber={pageNumber}
 								startPageNumber={startPageNumber}
-								targetId={page.id}
 								containerWidth={containerWidth}
 								setRef={setRef}
 							/>
