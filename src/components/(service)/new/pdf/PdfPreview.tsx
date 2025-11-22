@@ -40,7 +40,7 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 
 			{inView ? (
 				<Page
-					devicePixelRatio={2}
+					devicePixelRatio={2.5}
 					pageNumber={pageNumber}
 					width={containerWidth}
 					renderTextLayer={false}
@@ -77,7 +77,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => parentRef.current,
-		estimateSize: index => pageHeights[index] || 426, // PDF 높이 준비 안되면 임시값
+		estimateSize: index => pageHeights[index] || 426,
 		overscan: 3,
 	});
 
@@ -101,7 +101,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={parentRef} className="w-full h-full overflow-y-auto">
+		<div ref={parentRef} style={{ width: containerWidth, height: '100%', overflowY: 'auto' }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
@@ -110,7 +110,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				className="relative">
 				<div
 					className="scrollbar-thin"
-					style={{ height: rowVirtualizer?.getTotalSize(), width: containerWidth, position: 'relative', overflowX: 'hidden' }}>
+					style={{ position: 'relative', width: containerWidth, height: rowVirtualizer?.getTotalSize(), overflowX: 'hidden' }}>
 					{rowVirtualizer?.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];

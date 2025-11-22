@@ -37,7 +37,7 @@ export default function useResizableObserver<T extends HTMLElement>({
 			const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
 			const scrollbarWidth = 6;
 
-			const currentWidth = width - (paddingLeft + paddingRight) - scrollbarWidth - 2 * borderWidth;
+			const currentWidth = width - (paddingLeft + paddingRight) - 2 * scrollbarWidth - 2 * borderWidth;
 			const currentHeight = height - (paddingLeft + paddingRight) - 2 * borderWidth;
 
 			setContainerWidth(currentWidth);
