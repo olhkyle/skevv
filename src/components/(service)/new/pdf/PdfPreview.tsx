@@ -34,7 +34,13 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, conta
 		rootMargin: '300px 0px',
 	});
 
-	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(targetId, el));
+	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => {
+		if (targetId !== page.id) {
+			console.log('here');
+			return;
+		}
+		setRef(targetId, el);
+	});
 
 	return (
 		<div ref={combinedRef} style={style} id={page.id} className="relative">
@@ -78,6 +84,12 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
+	React.useEffect(() => {
+		if (isLoaded && rowVirtualizer) {
+			rowVirtualizer.measure();
+		}
+	}, [pageHeights, isLoaded]);
+
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
 
@@ -88,18 +100,22 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				const PADDING = 12;
 
 				// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+				// 1. width > height
+				// 2. height > width
 				const height = (viewport.height / viewport.width) * containerWidth + PADDING;
 				heights.push(height);
 			}
 
-			setPageHeights(heights);
+			return heights;
 		} catch (e) {
 			console.error(e);
 		}
 	};
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
-		calculateHeights(pdf);
+		const heights = await calculateHeights(pdf);
+
+		setPageHeights(heights!);
 		setLoaded(true);
 	};
 
