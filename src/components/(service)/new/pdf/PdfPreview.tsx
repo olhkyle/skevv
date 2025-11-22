@@ -5,7 +5,7 @@ import { pdfjs, Document, Page } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
-import { useFileScrollIntoView, SCROLL_BAR_WIDTH } from '@/hooks';
+import { useFileScrollIntoView, SCROLL_BAR_WIDTH, useMergedRefs } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
@@ -30,24 +30,14 @@ interface VirtualPageProps {
 }
 
 function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, containerWidth, setRef }: VirtualPageProps) {
-	const { ref, inView } = useInView({
+	const { ref: inViewRef, inView } = useInView({
 		rootMargin: '300px 0px',
 	});
 
-	return (
-		<div
-			id={page.id}
-			ref={ref}
-			style={style}
-			className="relative"
-			onClick={e => {
-				if (page.id !== targetId) return;
+	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(targetId, el));
 
-				if (e.currentTarget) {
-					console.log('here');
-					setRef(page.id, e.currentTarget);
-				}
-			}}>
+	return (
+		<div ref={combinedRef} style={style} id={page.id} className="relative">
 			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 				{startPageNumber + (page.order - 1)}
 			</span>
@@ -74,7 +64,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { targetId, setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
@@ -88,23 +78,17 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
-	const calculateHeight = async (pdf: pdfjs.PDFDocumentProxy, index: number) => {
-		const PADDING = 12;
-
-		const page = await pdf.getPage(index);
-		const viewport = page.getViewport({ scale: 1 });
-
-		// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
-		const height = (viewport.height / viewport.width) * containerWidth + PADDING;
-		return height;
-	};
-
-	const getVirtualizerItemsHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
+	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
 
 		try {
-			for (let idx = 0; idx < pdf.numPages; idx++) {
-				const height = await calculateHeight(pdf, idx + 1);
+			for (let i = 0; i < pdf.numPages; i++) {
+				const page = await pdf.getPage(i + 1);
+				const viewport = page.getViewport({ scale: 1 });
+				const PADDING = 12;
+
+				// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+				const height = (viewport.height / viewport.width) * containerWidth + PADDING;
 				heights.push(height);
 			}
 
@@ -115,8 +99,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	};
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
-		getVirtualizerItemsHeights(pdf);
-
+		calculateHeights(pdf);
 		setLoaded(true);
 	};
 
@@ -154,7 +137,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 								page={page}
 								pageNumber={pageNumber}
 								startPageNumber={startPageNumber}
-								targetId={targetId}
+								targetId={page.id}
 								containerWidth={containerWidth}
 								setRef={setRef}
 							/>
