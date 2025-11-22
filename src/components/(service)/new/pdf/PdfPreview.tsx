@@ -38,7 +38,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
-		getScrollElement: () => documentWrapperRef.current,
+		getScrollElement: () => documentWrapperRef.current?.parentElement!,
 		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
 	});
@@ -96,7 +96,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={documentWrapperRef} className="scrollbar-hide" style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%' }}>
+		<div ref={documentWrapperRef} style={{ width: containerWidth + SCROLL_BAR_WIDTH }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
