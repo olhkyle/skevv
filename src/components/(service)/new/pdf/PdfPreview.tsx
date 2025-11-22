@@ -34,7 +34,7 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 
 	return (
 		<div ref={ref} style={style} id={page.id} className="relative">
-			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
+			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 border border-gray-200 rounded-full z-10">
 				{startPageNumber + (page.order - 1)}
 			</span>
 
@@ -45,7 +45,7 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 					width={containerWidth}
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
-					className="ui-flex-center w-full border border-gray-200"
+					className="ui-flex-center w-full"
 					onClick={e => {
 						if (+page.id !== pageNumber) {
 							return;
