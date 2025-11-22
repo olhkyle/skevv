@@ -30,7 +30,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ scrollParentRef, file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { targetId, setRef } = useFileTargetRef<HTMLDivElement>();
+	const { setRef } = useFileTargetRef<HTMLDivElement>();
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
@@ -44,19 +44,12 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		overscan: 3,
 	});
 
+	React.useEffect(() => {
+		rowVirtualizer.measure();
+	}, []);
+
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
-
-	React.useEffect(() => {
-		if (!targetId || !rowVirtualizer || pageHeights.length === 0) return;
-
-		const index = sortedPages.findIndex(p => p.id === targetId);
-		if (index !== -1) {
-			requestAnimationFrame(() => {
-				rowVirtualizer.scrollToIndex(index, { align: 'center' });
-			});
-		}
-	}, [targetId, rowVirtualizer, pageHeights]);
 
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
