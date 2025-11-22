@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
+import { throttle } from 'es-toolkit';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
@@ -68,7 +69,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
 	const { setRef } = useFileScrollIntoView<HTMLCanvasElement>();
-	const parentRef = React.useRef<HTMLDivElement>(null);
+	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 
 	// PDF 페이지 별 높이를 저장
 	const [isLoaded, setLoaded] = React.useState(false);
@@ -76,7 +77,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
-		getScrollElement: () => parentRef.current,
+		getScrollElement: () => documentWrapperRef.current,
 		estimateSize: index => pageHeights[index] || 426,
 		overscan: 3,
 	});
@@ -93,6 +94,26 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		setLoaded(true);
 	};
 
+	React.useEffect(() => {
+		if (!documentWrapperRef.current) return;
+
+		const handleResize = throttle(() => {
+			setPageHeights(prev => [...prev]); // Virtualizer 재측정
+			rowVirtualizer.measure();
+		}, 100);
+
+		const observer = new ResizeObserver(() => {
+			requestAnimationFrame(() => handleResize());
+		});
+
+		observer.observe(documentWrapperRef.current);
+
+		return () => {
+			observer.disconnect();
+			handleResize.cancel?.();
+		};
+	}, [containerWidth]);
+
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
@@ -101,7 +122,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={parentRef} style={{ width: containerWidth, height: '100%', overflowY: 'auto' }}>
+		<div ref={documentWrapperRef} style={{ width: containerWidth, height: '100%', overflowY: 'auto' }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
