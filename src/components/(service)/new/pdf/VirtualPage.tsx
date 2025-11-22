@@ -32,7 +32,7 @@ export default function VirtualPage({ page, style, pageNumber, startPageNumber, 
 					devicePixelRatio={2.5}
 					pageNumber={pageNumber}
 					loading={
-						<div style={{ height: style.height }} className="ui-flex-center w-full  bg-light rounded-lg">
+						<div style={{ height: style.height }} className="ui-flex-center w-full bg-light rounded-lg">
 							<AnimateSpinner size={18} />
 						</div>
 					}

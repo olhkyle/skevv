@@ -46,19 +46,6 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
-	React.useEffect(() => {
-		if (!targetId || !rowVirtualizer || pageHeights.length === 0) return;
-
-		const index = sortedPages.findIndex(page => page.id === targetId);
-		console.log(index);
-		if (index !== -1) {
-			console.log('here');
-			requestAnimationFrame(() => {
-				rowVirtualizer.scrollToIndex(index, { align: 'center' });
-			});
-		}
-	}, [targetId, rowVirtualizer, sortedPages, pageHeights]);
-
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
 
@@ -118,6 +105,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 									left: 0,
 									width: containerWidth,
 									height: getEstimateHeightSize(index),
+									border: targetId === page.id ? '1px solid black' : '0',
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
 								page={page}
