@@ -1,4 +1,5 @@
 import React from 'react';
+import { throttle } from 'es-toolkit';
 
 interface UseResizableObserverProps {
 	initialWidth?: number;
@@ -27,23 +28,28 @@ export default function useResizableObserver<T extends HTMLElement>({
 
 	const handleResize = () => {
 		const target = containerRef.current;
-		if (target) {
-			// $element.getBoundingClientRect().width = padding + content width + border
-			const { width, height } = target.getBoundingClientRect();
 
-			const targetStyle = getComputedStyle(target);
-			const paddingLeft = parseFloat(targetStyle.paddingLeft) || 0;
-			const paddingRight = parseFloat(targetStyle.paddingRight) || 0;
-			const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
-			const scrollbarWidth = 6;
+		if (!target) return;
 
-			const currentWidth = width - (paddingLeft + paddingRight) - 2 * scrollbarWidth - 2 * borderWidth;
-			const currentHeight = height - (paddingLeft + paddingRight) - 2 * borderWidth;
+		// $element.getBoundingClientRect().width = padding + content width + border
+		const { width, height } = target.getBoundingClientRect();
 
-			setContainerWidth(currentWidth);
-			setContainerHeight(currentHeight);
-		}
+		const targetStyle = getComputedStyle(target);
+		const paddingX = (parseFloat(targetStyle.paddingLeft) || 0) + (parseFloat(targetStyle.paddingRight) || 0);
+		const paddingY = (parseFloat(targetStyle.paddingTop) || 0) + (parseFloat(targetStyle.paddingBottom) || 0);
+		const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
+		const scrollbarWidth = 6;
+
+		const currentWidth = width - paddingX - 2 * scrollbarWidth - 2 * borderWidth;
+		const currentHeight = height - paddingY - 2 * borderWidth;
+
+		setContainerWidth(prevWidth => (prevWidth !== currentWidth ? currentWidth : prevWidth));
+		setContainerHeight(prevHeight => (prevHeight !== currentHeight ? currentHeight : prevHeight));
 	};
+
+	const throttledResize = throttle(() => {
+		handleResize();
+	}, 150);
 
 	React.useEffect(() => {
 		if (!containerRef.current) return;
@@ -56,6 +62,23 @@ export default function useResizableObserver<T extends HTMLElement>({
 			window.removeEventListener('resize', handleResize);
 		};
 	}, [...effectTriggers]);
+
+	React.useEffect(() => {
+		if (!containerRef.current) return;
+
+		const observer = new ResizeObserver(() => {
+			requestAnimationFrame(() => {
+				throttledResize();
+			});
+		});
+
+		observer.observe(containerRef.current);
+
+		return () => {
+			observer.disconnect();
+			throttledResize.cancel?.();
+		};
+	}, []);
 
 	return { containerRef, containerWidth, containerHeight };
 }
