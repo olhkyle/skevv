@@ -7,6 +7,8 @@ interface UseResizableObserverProps {
 	effectTriggers: (number | string | boolean)[];
 }
 
+export const SCROLL_BAR_WIDTH = 6;
+
 export default function useResizableObserver<T extends HTMLElement>({
 	initialWidth = 0,
 	initialHeight = 0,
@@ -38,9 +40,8 @@ export default function useResizableObserver<T extends HTMLElement>({
 		const paddingX = (parseFloat(targetStyle.paddingLeft) || 0) + (parseFloat(targetStyle.paddingRight) || 0);
 		const paddingY = (parseFloat(targetStyle.paddingTop) || 0) + (parseFloat(targetStyle.paddingBottom) || 0);
 		const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
-		const scrollbarWidth = 6;
 
-		const currentWidth = width - paddingX - 2 * scrollbarWidth - 2 * borderWidth;
+		const currentWidth = width - paddingX - 2 * SCROLL_BAR_WIDTH - 2 * borderWidth;
 		const currentHeight = height - paddingY - 2 * borderWidth;
 
 		setContainerWidth(prevWidth => (prevWidth !== currentWidth ? currentWidth : prevWidth));

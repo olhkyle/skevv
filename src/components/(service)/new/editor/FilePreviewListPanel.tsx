@@ -49,7 +49,7 @@ export default function FilePreviewListPanel() {
 			</div>
 
 			<div className="flex-1 min-h-0 w-full overflow-y-auto scrollbar-thin md:min-h-0">
-				<div ref={containerRef} className="flex flex-col gap-2 md:flex-1">
+				<div ref={containerRef} className="flex flex-col gap-2 items-center md:flex-1">
 					<Suspense fallback={<FullContainerLoading />}>
 						{files?.map(({ id, file, pages }, idx) => {
 							const startPageNumber = getTotalPageCount(files.slice(0, idx)) + 1;

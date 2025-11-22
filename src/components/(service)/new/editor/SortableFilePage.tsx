@@ -17,7 +17,8 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 		id: page.id,
 		animateLayoutChanges: () => false,
 	});
-	const isMobile = useMediaQuery(screenSize.MAX_SM);
+
+	const isLessThanMD = useMediaQuery(screenSize.MAX_MD);
 
 	const transformStyle = {
 		transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
@@ -44,17 +45,18 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 				</Button>
 				<span> Page {page.order}</span>
 			</div>
-			<Button
-				type="button"
-				size="icon-sm"
-				variant="ghost"
-				className="hidden md:inline-flex"
-				onClick={() => {
-					if (isMobile) return;
-					setTargetId(page.id);
-				}}>
-				<SquareMousePointer className="text-gray-500" />
-			</Button>
+			{!isLessThanMD && (
+				<Button
+					type="button"
+					size="icon-sm"
+					variant="ghost"
+					onClick={() => {
+						if (isLessThanMD) return;
+						setTargetId(page.id);
+					}}>
+					<SquareMousePointer className="text-gray-500" />
+				</Button>
+			)}
 		</div>
 	);
 }

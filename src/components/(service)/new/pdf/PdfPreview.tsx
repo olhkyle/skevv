@@ -7,6 +7,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
 import { useFileScrollIntoView } from '@/hooks';
+import { SCROLL_BAR_WIDTH } from '@/hooks/useResizableObserver';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -25,7 +26,7 @@ interface VirtualPageProps {
 	pageNumber: number;
 	startPageNumber: number;
 	containerWidth: number;
-	setRef: (id: string, el: HTMLCanvasElement | null) => void;
+	setRef: (id: string, el: HTMLDivElement | null) => void;
 }
 
 function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
@@ -34,7 +35,18 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 	});
 
 	return (
-		<div ref={ref} style={style} id={page.id} className="relative border border-gray-200">
+		<div
+			ref={ref}
+			style={style}
+			id={page.id}
+			className="relative"
+			onClick={e => {
+				if (+page.id !== pageNumber) return;
+
+				if (e.currentTarget) {
+					setRef(page.id, e.currentTarget);
+				}
+			}}>
 			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 				{startPageNumber + (page.order - 1)}
 			</span>
@@ -46,13 +58,7 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 					width={containerWidth}
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
-					className="ui-flex-center w-full"
-					onClick={e => {
-						if (+page.id !== pageNumber) {
-							return;
-						}
-						setRef(page.id, e.current.target);
-					}}
+					className="ui-flex-center w-full border border-gray-200"
 				/>
 			) : (
 				<PdfPreviewSkeleton pageCount={1} />
@@ -68,12 +74,8 @@ function DocumentErrorMessage() {
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
-	const { setRef } = useFileScrollIntoView<HTMLCanvasElement>();
-	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
-
-	// PDF 페이지 별 높이를 저장
+	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
 	const [isLoaded, setLoaded] = React.useState(false);
-	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
@@ -81,6 +83,9 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		estimateSize: index => pageHeights[index] || 426,
 		overscan: 3,
 	});
+
+	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
+	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
@@ -94,26 +99,6 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		setLoaded(true);
 	};
 
-	React.useEffect(() => {
-		if (!documentWrapperRef.current) return;
-
-		const handleResize = throttle(() => {
-			setPageHeights(prev => [...prev]); // Virtualizer 재측정
-			rowVirtualizer.measure();
-		}, 100);
-
-		const observer = new ResizeObserver(() => {
-			requestAnimationFrame(() => handleResize());
-		});
-
-		observer.observe(documentWrapperRef.current);
-
-		return () => {
-			observer.disconnect();
-			handleResize.cancel?.();
-		};
-	}, [containerWidth]);
-
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
@@ -122,16 +107,14 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={documentWrapperRef} style={{ width: containerWidth, height: '100%', overflowY: 'auto' }}>
+		<div ref={documentWrapperRef} style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%', overflowY: 'auto' }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
 				className="relative">
-				<div
-					className="scrollbar-thin"
-					style={{ position: 'relative', width: containerWidth, height: rowVirtualizer?.getTotalSize(), overflowX: 'hidden' }}>
+				<div className="scrollbar-thin" style={{ position: 'relative', width: containerWidth, height: rowVirtualizer?.getTotalSize() }}>
 					{rowVirtualizer?.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];
