@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
-import { throttle } from 'es-toolkit';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
