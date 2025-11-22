@@ -1,12 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
-import { useFileScrollIntoView, SCROLL_BAR_WIDTH, useMergedRefs, useFileTargetRef } from '@/hooks';
+import { SCROLL_BAR_WIDTH, useFileTargetRef } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
-import dynamic from 'next/dynamic';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
