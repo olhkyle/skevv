@@ -2,7 +2,7 @@
 
 import { useInView } from 'react-intersection-observer';
 import { Page } from 'react-pdf';
-import { type PageItem, PdfPreviewSkeleton } from '@/components';
+import { AnimateSpinner, type PageItem, PdfPreviewSkeleton } from '@/components';
 import { useMergedRefs } from '@/hooks';
 
 interface VirtualPageProps {
@@ -31,6 +31,11 @@ export default function VirtualPage({ page, style, pageNumber, startPageNumber, 
 				<Page
 					devicePixelRatio={2.5}
 					pageNumber={pageNumber}
+					loading={
+						<div style={{ height: style.height }} className="ui-flex-center w-full  bg-light rounded-lg">
+							<AnimateSpinner size={18} />
+						</div>
+					}
 					width={containerWidth}
 					renderTextLayer={false}
 					renderAnnotationLayer={false}

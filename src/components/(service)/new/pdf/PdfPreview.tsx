@@ -33,10 +33,13 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
+	// single row height
+	const getEstimateHeightSize = (index: number) => pageHeights[index] || PDF_DEFAULT_HEIGHT;
+
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => documentWrapperRef.current,
-		estimateSize: index => pageHeights[index] || PDF_DEFAULT_HEIGHT,
+		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
 	});
 
@@ -113,6 +116,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 									top: 0,
 									left: 0,
 									width: containerWidth,
+									height: getEstimateHeightSize(index),
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
 								page={page}
