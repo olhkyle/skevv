@@ -24,25 +24,27 @@ interface VirtualPageProps {
 	style: React.CSSProperties;
 	pageNumber: number;
 	startPageNumber: number;
+	targetId: string;
 	containerWidth: number;
 	setRef: (id: string, el: HTMLDivElement | null) => void;
 }
 
-function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
+function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, containerWidth, setRef }: VirtualPageProps) {
 	const { ref, inView } = useInView({
 		rootMargin: '300px 0px',
 	});
 
 	return (
 		<div
+			id={page.id}
 			ref={ref}
 			style={style}
-			id={page.id}
 			className="relative"
 			onClick={e => {
-				if (+page.id !== pageNumber) return;
+				if (page.id !== targetId) return;
 
 				if (e.currentTarget) {
+					console.log('here');
 					setRef(page.id, e.currentTarget);
 				}
 			}}>
@@ -72,7 +74,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { targetId, setRef } = useFileScrollIntoView<HTMLDivElement>();
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
@@ -152,6 +154,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 								page={page}
 								pageNumber={pageNumber}
 								startPageNumber={startPageNumber}
+								targetId={targetId}
 								containerWidth={containerWidth}
 								setRef={setRef}
 							/>

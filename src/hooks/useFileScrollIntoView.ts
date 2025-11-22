@@ -17,5 +17,5 @@ export default function useFileScrollIntoView<T extends HTMLElement>() {
 		}
 	};
 
-	return { pageRefs, setTargetId, setRef };
+	return { pageRefs, targetId, setTargetId, setRef };
 }
