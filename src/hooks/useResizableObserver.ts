@@ -34,11 +34,9 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 
 		const targetStyle = getComputedStyle(target);
 		const paddingX = (parseFloat(targetStyle.paddingLeft) || 0) + (parseFloat(targetStyle.paddingRight) || 0);
-		const paddingY = (parseFloat(targetStyle.paddingTop) || 0) + (parseFloat(targetStyle.paddingBottom) || 0);
 		const borderWidth = parseFloat(targetStyle.borderWidth) || 0;
 
 		const currentWidth = width - paddingX - 2 * SCROLL_BAR_WIDTH - 2 * borderWidth;
-		const currentHeight = height - paddingY - 2 * borderWidth;
 
 		setContainerWidth(prevWidth => (prevWidth !== currentWidth ? currentWidth : prevWidth));
 	};
