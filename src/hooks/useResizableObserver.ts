@@ -2,11 +2,17 @@ import React from 'react';
 
 interface UseResizableObserverProps {
 	initialWidth?: number;
+	initialHeight?: number;
 	effectTriggers: (number | string | boolean)[];
 }
 
-export default function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
+export default function useResizableObserver<T extends HTMLElement>({
+	initialWidth = 0,
+	initialHeight = 0,
+	effectTriggers = [],
+}: UseResizableObserverProps) {
 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
+	const [containerHeight, setContainerHeight] = React.useState<number>(initialWidth);
 	const containerRef = React.useRef<T>(null);
 
 	/**
@@ -23,7 +29,7 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 		const target = containerRef.current;
 		if (target) {
 			// $element.getBoundingClientRect().width = padding + content width + border
-			const { width } = target.getBoundingClientRect();
+			const { width, height } = target.getBoundingClientRect();
 
 			const targetStyle = getComputedStyle(target);
 			const paddingLeft = parseFloat(targetStyle.paddingLeft) || 0;
@@ -32,8 +38,10 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 			const scrollbarWidth = 6;
 
 			const currentWidth = width - (paddingLeft + paddingRight) - scrollbarWidth - 2 * borderWidth;
+			const currentHeight = height - (paddingLeft + paddingRight) - 2 * borderWidth;
 
 			setContainerWidth(currentWidth);
+			setContainerHeight(currentHeight);
 		}
 	};
 
@@ -49,5 +57,5 @@ export default function useResizableObserver<T extends HTMLElement>({ initialWid
 		};
 	}, [...effectTriggers]);
 
-	return { containerRef, containerWidth };
+	return { containerRef, containerWidth, containerHeight };
 }

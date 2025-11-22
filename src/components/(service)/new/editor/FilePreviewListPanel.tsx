@@ -29,7 +29,7 @@ export default function FilePreviewListPanel() {
 		useMediaQuery(screenSize.MAX_SM),
 	];
 
-	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
+	const { containerRef, containerWidth, containerHeight } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
 		effectTriggers: [isTablet, isMobile, notMobile],
 	});
@@ -62,6 +62,7 @@ export default function FilePreviewListPanel() {
 									pages={pages}
 									startPageNumber={startPageNumber}
 									containerWidth={containerWidth}
+									containerHeight={containerHeight}
 								/>
 							);
 						})}

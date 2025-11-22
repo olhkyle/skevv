@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
 import { useFileScrollIntoView } from '@/hooks';
 
@@ -14,16 +16,63 @@ interface PdfPreviewProps {
 	pages: PageItem[];
 	startPageNumber?: number;
 	containerWidth: number;
+	containerHeight: number;
+}
+
+interface VirtualPageProps {
+	page: PageItem;
+	style: React.CSSProperties;
+	pageNumber: number;
+	startPageNumber: number;
+	containerWidth: number;
+	setRef: (id: string, el: HTMLCanvasElement | null) => void;
+}
+
+function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
+	const { ref, inView } = useInView({
+		rootMargin: '600px 0px',
+	});
+
+	return (
+		<div ref={ref} style={style} id={page.id} className="relative">
+			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
+				{startPageNumber + (page.order - 1)}
+			</span>
+
+			{inView ? (
+				<Page
+					devicePixelRatio={2}
+					pageNumber={pageNumber}
+					width={containerWidth}
+					renderTextLayer={false}
+					renderAnnotationLayer={false}
+					className="ui-flex-center w-full border border-gray-200"
+					canvasRef={el => setRef(page.id, el)}
+				/>
+			) : (
+				<PdfPreviewSkeleton pageCount={1} />
+			)}
+		</div>
+	);
 }
 
 function DocumentErrorMessage() {
 	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
+export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth, containerHeight }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
-	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { setRef } = useFileScrollIntoView<HTMLCanvasElement>();
+	const parentRef = React.useRef<HTMLDivElement>(null);
+
+	/**  페이지 가상 스크롤 설정 */
+	const rowVirtualizer = useVirtualizer({
+		count: sortedPages.length,
+		getScrollElement: () => parentRef.current,
+		estimateSize: () => containerWidth * 1.414 + 24, // PDF 비율 + padding
+		overscan: 2,
+	});
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
@@ -33,32 +82,37 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div className="w-full rounded-lg">
-			<Document
-				file={file}
-				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
-				error={DocumentErrorMessage}
-				className="flex flex-col gap-2">
-				{sortedPages.map((page, index) => {
-					const originalPageNumber = +page.id.split('-page-')[1];
+		<div ref={parentRef} className={`w-full overflow-y-auto rounded-lg h-${containerHeight}px`}>
+			<Document file={file} loading={<PdfPreviewSkeleton pageCount={pages.length} />} error={DocumentErrorMessage} className="relative">
+				<div
+					style={{
+						position: 'relative',
+						height: rowVirtualizer.getTotalSize(),
+						width: '100%',
+					}}>
+					{rowVirtualizer.getVirtualItems().map(virtualRow => {
+						const index = virtualRow.index;
+						const page = sortedPages[index];
+						const pageNumber = +page.id.split('-page-')[1];
 
-					return (
-						<div key={index + 1} id={page.id} ref={el => setRef(page.id, el)} className="relative">
-							<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
-								{startPageNumber + index}
-							</span>
-							<Page
-								devicePixelRatio={2.5}
-								pageNumber={originalPageNumber}
-								width={containerWidth}
-								renderTextLayer={false}
-								renderAnnotationLayer={false}
-								loading={<PdfPreviewSkeleton pageCount={1} />}
-								className="ui-flex-center w-full border border-gray-200"
+						return (
+							<VirtualPage
+								key={page.id}
+								style={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									transform: `translateY(${virtualRow.start}px)`,
+								}}
+								page={page}
+								pageNumber={pageNumber}
+								startPageNumber={startPageNumber}
+								containerWidth={containerWidth}
+								setRef={setRef}
 							/>
-						</div>
-					);
-				})}
+						);
+					})}
+				</div>
 			</Document>
 		</div>
 	);
