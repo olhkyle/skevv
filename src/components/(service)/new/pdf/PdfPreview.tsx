@@ -65,13 +65,19 @@ function DocumentErrorMessage() {
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
-	const { isPending } = useDropzoneFiles();
 	const { setRef } = useFileScrollIntoView<HTMLCanvasElement>();
 	const parentRef = React.useRef<HTMLDivElement>(null);
 
 	// PDF 페이지 별 높이를 저장
-	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 	const [isLoaded, setLoaded] = React.useState(false);
+	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
+
+	const rowVirtualizer = useVirtualizer({
+		count: isLoaded ? sortedPages.length : 0,
+		getScrollElement: () => parentRef.current,
+		estimateSize: index => pageHeights[index] || 300, // PDF 높이 준비 안되면 임시값
+		overscan: 3,
+	});
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
@@ -84,17 +90,6 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		setPageHeights(heights);
 		setLoaded(true);
 	};
-
-	// PDF 로딩 후 virtualizer 생성
-	const rowVirtualizer = React.useMemo(() => {
-		if (!isLoaded || pageHeights.length === 0) return null;
-		return useVirtualizer({
-			count: sortedPages.length,
-			getScrollElement: () => parentRef.current,
-			estimateSize: index => pageHeights[index],
-			overscan: 3,
-		});
-	}, [isLoaded, pageHeights, sortedPages.length]);
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
