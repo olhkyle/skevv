@@ -42,7 +42,9 @@ export default function VirtualPage({ page, style, pageNumber, startPageNumber, 
 					className="ui-flex-center w-full border border-gray-200"
 				/>
 			) : (
-				<PdfPreviewSkeleton pageCount={1} />
+				<div style={{ height: style.height }} className="ui-flex-center w-full bg-light rounded-lg">
+					<AnimateSpinner size={18} />
+				</div>
 			)}
 		</div>
 	);
