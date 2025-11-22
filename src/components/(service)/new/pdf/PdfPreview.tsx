@@ -108,7 +108,9 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
 				className="relative">
-				<div style={{ height: rowVirtualizer?.getTotalSize(), width: containerWidth, position: 'relative', overflowX: 'hidden' }}>
+				<div
+					className="scrollbar-thin"
+					style={{ height: rowVirtualizer?.getTotalSize(), width: containerWidth, position: 'relative', overflowX: 'hidden' }}>
 					{rowVirtualizer?.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];
