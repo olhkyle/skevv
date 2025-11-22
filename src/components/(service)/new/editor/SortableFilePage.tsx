@@ -48,6 +48,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 				type="button"
 				size="icon-sm"
 				variant="ghost"
+				className="hidden md:inline-flex"
 				onClick={() => {
 					if (isMobile) return;
 					setTargetId(page.id);
