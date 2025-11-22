@@ -46,17 +46,18 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
-	// targetId가 바뀌면 가상화 리스트 스크롤
 	React.useEffect(() => {
-		if (!targetId || !rowVirtualizer) return;
+		if (!targetId || !rowVirtualizer || pageHeights.length === 0) return;
 
 		const index = sortedPages.findIndex(page => page.id === targetId);
 		console.log(index);
 		if (index !== -1) {
 			console.log('here');
-			rowVirtualizer.scrollToIndex(index, { align: 'center' });
+			requestAnimationFrame(() => {
+				rowVirtualizer.scrollToIndex(index, { align: 'center' });
+			});
 		}
-	}, [targetId, rowVirtualizer, sortedPages]);
+	}, [targetId, rowVirtualizer, sortedPages, pageHeights]);
 
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
