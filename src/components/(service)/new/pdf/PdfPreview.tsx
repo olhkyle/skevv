@@ -1,61 +1,26 @@
 'use client';
 
 import React from 'react';
-import { pdfjs, Document, Page } from 'react-pdf';
+import { pdfjs, Document } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useInView } from 'react-intersection-observer';
-import { PageItem, PdfPreviewSkeleton } from '@/components';
+import { type PageItem, PdfPreviewSkeleton } from '@/components';
 import { useFileScrollIntoView, SCROLL_BAR_WIDTH, useMergedRefs } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
+import dynamic from 'next/dynamic';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 }
+
+const VirtualPage = dynamic(() => import('../pdf/VirtualPage'), {
+	ssr: false,
+});
 
 interface PdfPreviewProps {
 	file: File;
 	pages: PageItem[];
 	startPageNumber?: number;
 	containerWidth: number;
-}
-
-interface VirtualPageProps {
-	page: PageItem;
-	style: React.CSSProperties;
-	pageNumber: number;
-	startPageNumber: number;
-	targetId: string;
-	containerWidth: number;
-	setRef: (id: string, el: HTMLDivElement | null) => void;
-}
-
-function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, containerWidth, setRef }: VirtualPageProps) {
-	const { ref: inViewRef, inView } = useInView({
-		rootMargin: '300px 0px',
-	});
-
-	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(targetId, el));
-
-	return (
-		<div ref={combinedRef} style={style} id={page.id} className="relative">
-			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
-				{startPageNumber + (page.order - 1)}
-			</span>
-
-			{inView ? (
-				<Page
-					devicePixelRatio={2.5}
-					pageNumber={pageNumber}
-					width={containerWidth}
-					renderTextLayer={false}
-					renderAnnotationLayer={false}
-					className="ui-flex-center w-full border border-gray-200"
-				/>
-			) : (
-				<PdfPreviewSkeleton pageCount={1} />
-			)}
-		</div>
-	);
 }
 
 function DocumentErrorMessage() {
@@ -83,7 +48,9 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		if (!targetId || !rowVirtualizer) return;
 
 		const index = sortedPages.findIndex(page => page.id === targetId);
+		console.log(index);
 		if (index !== -1) {
+			console.log('here');
 			rowVirtualizer.scrollToIndex(index, { align: 'center' });
 		}
 	}, [targetId, rowVirtualizer, sortedPages]);
