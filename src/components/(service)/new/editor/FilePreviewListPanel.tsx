@@ -23,15 +23,10 @@ function FullContainerLoading() {
 
 export default function FilePreviewListPanel() {
 	const { files } = useFileStore();
-	const [isMobile, notMobile, isTablet] = [
-		useMediaQuery(screenSize.MAX_XS),
-		useMediaQuery(screenSize.MIN_XS),
-		useMediaQuery(screenSize.MAX_SM),
-	];
+	const isMobile = useMediaQuery(screenSize.MAX_XS);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
-		effectTriggers: [isTablet, isMobile, notMobile],
 	});
 
 	return (

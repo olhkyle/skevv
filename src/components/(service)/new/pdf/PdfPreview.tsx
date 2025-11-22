@@ -86,17 +86,23 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
-	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
+	const calculateHeight = async (pdf: pdfjs.PDFDocumentProxy, index: number) => {
+		const PADDING = 12;
+
+		const page = await pdf.getPage(index);
+		const viewport = page.getViewport({ scale: 1 });
+
+		// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+		const height = (viewport.height / viewport.width) * containerWidth + PADDING;
+		return height;
+	};
+
+	const getVirtualizerItemsHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
 
 		try {
-			for (let i = 0; i < pdf.numPages; i++) {
-				const page = await pdf.getPage(i + 1);
-				const viewport = page.getViewport({ scale: 1 });
-				const PADDING = 12;
-
-				// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
-				const height = (viewport.height / viewport.width) * containerWidth + PADDING;
+			for (let idx = 0; idx < pdf.numPages; idx++) {
+				const height = await calculateHeight(pdf, idx + 1);
 				heights.push(height);
 			}
 
@@ -106,32 +112,9 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		}
 	};
 
-	React.useEffect(() => {
-		let cancelled = false;
-
-		const recalculateHeights = async () => {
-			if (!file) return;
-
-			try {
-				const fileArrayBuffer = await file.arrayBuffer();
-				const pdf = await pdfjs.getDocument(fileArrayBuffer).promise;
-				if (!cancelled) {
-					await calculateHeights(pdf);
-				}
-			} catch (e) {
-				if (!cancelled) console.error(e);
-			}
-		};
-
-		recalculateHeights();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [containerWidth, file]);
-
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
-		calculateHeights(pdf);
+		getVirtualizerItemsHeights(pdf);
+
 		setLoaded(true);
 	};
 

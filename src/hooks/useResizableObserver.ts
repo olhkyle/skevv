@@ -3,7 +3,7 @@ import { throttle } from 'es-toolkit';
 
 interface UseResizableObserverProps {
 	initialWidth?: number;
-	effectTriggers: (number | string | boolean)[];
+	effectTriggers?: (number | string | boolean)[];
 }
 
 const SCROLL_BAR_WIDTH = 6;
@@ -30,7 +30,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		if (!target) return;
 
 		// $element.getBoundingClientRect().width = padding + content width + border
-		const { width, height } = target.getBoundingClientRect();
+		const { width } = target.getBoundingClientRect();
 
 		const targetStyle = getComputedStyle(target);
 		const paddingX = (parseFloat(targetStyle.paddingLeft) || 0) + (parseFloat(targetStyle.paddingRight) || 0);
@@ -45,6 +45,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		handleResize();
 	}, THROTTLE_TIME);
 
+	// browser size effect
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 
@@ -57,6 +58,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		};
 	}, [...effectTriggers]);
 
+	// container resizing
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 
