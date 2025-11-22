@@ -17,6 +17,7 @@ const VirtualPage = dynamic(() => import('../pdf/VirtualPage'), {
 });
 
 interface PdfPreviewProps {
+	scrollParentRef: React.RefObject<HTMLDivElement | null>;
 	file: File;
 	pages: PageItem[];
 	startPageNumber?: number;
@@ -27,7 +28,7 @@ function DocumentErrorMessage() {
 	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
-export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
+export default function PdfPreview({ scrollParentRef, file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 	const { targetId, setRef } = useFileTargetRef<HTMLDivElement>();
 
@@ -38,13 +39,24 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
-		getScrollElement: () => documentWrapperRef.current!.parentElement!,
+		getScrollElement: () => scrollParentRef.current,
 		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
 	});
 
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
+
+	React.useEffect(() => {
+		if (!targetId || !rowVirtualizer || pageHeights.length === 0) return;
+
+		const index = sortedPages.findIndex(p => p.id === targetId);
+		if (index !== -1) {
+			requestAnimationFrame(() => {
+				rowVirtualizer.scrollToIndex(index, { align: 'center' });
+			});
+		}
+	}, [targetId, rowVirtualizer, pageHeights]);
 
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
@@ -104,8 +116,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 									top: 0,
 									left: 0,
 									width: containerWidth,
-									height: getEstimateHeightSize(index),
-									border: targetId === page.id ? '1px solid black' : '0',
+									height: `${virtualRow.size}px`,
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
 								page={page}

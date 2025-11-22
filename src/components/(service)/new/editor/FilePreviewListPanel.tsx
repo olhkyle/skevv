@@ -53,6 +53,7 @@ export default function FilePreviewListPanel() {
 							return (
 								<PdfPreview
 									key={`${id}-${startPageNumber}-${pagesHash}`}
+									scrollParentRef={containerRef}
 									file={file}
 									pages={pages}
 									startPageNumber={startPageNumber}
