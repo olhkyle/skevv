@@ -38,7 +38,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
-		getScrollElement: () => documentWrapperRef.current?.parentElement!,
+		getScrollElement: () => documentWrapperRef.current!.parentElement!,
 		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
 	});
