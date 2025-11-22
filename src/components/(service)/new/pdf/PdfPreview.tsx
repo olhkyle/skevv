@@ -69,12 +69,31 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const { setRef } = useFileScrollIntoView<HTMLCanvasElement>();
 	const parentRef = React.useRef<HTMLDivElement>(null);
 
+	// PDF 페이지 별 높이를 저장
+	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
+
+	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
+		const heights: number[] = [];
+		for (let i = 0; i < pdf.numPages; i++) {
+			const page = await pdf.getPage(i + 1);
+			const viewport = page.getViewport({ scale: 1 });
+			// width 기준으로 height 계산
+			const height = (viewport.height / viewport.width) * containerWidth + 24; // padding 포함
+			heights.push(height);
+		}
+		setPageHeights(heights);
+	};
+
+	// 페이지 수만큼 estimateSize를 반환하는 함수
+	const estimateSize = (index: number) => pageHeights[index] || 300; // 초기값 300
+
 	/**  페이지 가상 스크롤 설정 */
 	const rowVirtualizer = useVirtualizer({
 		count: sortedPages.length,
 		getScrollElement: () => parentRef.current,
-		estimateSize: () => containerHeight * 1.414 + 24, // when parentRef is vertical Srcoll -> must be height / horizontal scroll -> must be width | PDF ratio + padding
-		overscan: 2,
+		estimateSize,
+		//() => containerWidth * 1.414 + 24, // when parentRef is vertical Srcoll -> must be height / horizontal scroll -> must be width | PDF ratio + padding
+		overscan: 3,
 	});
 
 	if (!file) {
@@ -85,15 +104,14 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={parentRef} className={`w-full overflow-y-auto`} style={{ height: containerHeight }}>
-			<Document file={file} loading={<PdfPreviewSkeleton pageCount={pages.length} />} error={DocumentErrorMessage} className="relative">
-				<div
-					className={`relative w-full`}
-					style={{
-						position: 'relative',
-						height: rowVirtualizer.getTotalSize(),
-						width: '100%',
-					}}>
+		<div ref={parentRef} style={{ height: containerHeight, overflowY: 'auto', width: '100%' }}>
+			<Document
+				file={file}
+				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
+				onLoadSuccess={handleDocumentLoadSuccess}
+				error={DocumentErrorMessage}
+				className="relative w-full">
+				<div style={{ height: rowVirtualizer.getTotalSize(), width: '100%', position: 'relative' }}>
 					{rowVirtualizer.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];
@@ -106,6 +124,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 									position: 'absolute',
 									top: 0,
 									left: 0,
+									width: '100%',
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
 								page={page}
