@@ -106,7 +106,10 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={documentWrapperRef} style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%', overflowY: 'auto' }}>
+		<div
+			ref={documentWrapperRef}
+			className="scrollbar-thin"
+			style={{ width: containerWidth + SCROLL_BAR_WIDTH, height: '100%', overflowY: 'auto' }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
