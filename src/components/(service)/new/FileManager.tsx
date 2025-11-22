@@ -10,7 +10,7 @@ export default function FileManager() {
 	return (
 		<>
 			{isPending ? (
-				<div className="ui-flex-center w-full h-full bg-gradient-blue-100 rounded-lg">
+				<div className="ui-flex-center w-full h-full bg-gradient-blue-100 rounded-lg text-white">
 					<AnimateSpinner />
 				</div>
 			) : (
