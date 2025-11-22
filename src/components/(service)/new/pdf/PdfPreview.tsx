@@ -5,7 +5,7 @@ import { pdfjs, Document, Page } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { PageItem, PdfPreviewSkeleton } from '@/components';
-import { useDropzoneFiles, useFileScrollIntoView } from '@/hooks';
+import { useFileScrollIntoView } from '@/hooks';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -29,7 +29,7 @@ interface VirtualPageProps {
 
 function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
 	const { ref, inView } = useInView({
-		rootMargin: '200px 0px',
+		rootMargin: '300px 0px',
 	});
 
 	return (
@@ -46,9 +46,11 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
 					className="ui-flex-center w-full border border-gray-200"
-					canvasRef={el => {
-						console.log('here');
-						setRef(page.id, el);
+					onClick={e => {
+						if (+page.id !== pageNumber) {
+							return;
+						}
+						setRef(page.id, e.current.target);
 					}}
 				/>
 			) : (
@@ -75,7 +77,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => parentRef.current,
-		estimateSize: index => pageHeights[index] || 300, // PDF 높이 준비 안되면 임시값
+		estimateSize: index => pageHeights[index] || 426, // PDF 높이 준비 안되면 임시값
 		overscan: 3,
 	});
 
@@ -84,7 +86,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 		for (let i = 0; i < pdf.numPages; i++) {
 			const page = await pdf.getPage(i + 1);
 			const viewport = page.getViewport({ scale: 1 });
-			const height = (viewport.height / viewport.width) * containerWidth + 24; // 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+			const height = (viewport.height / viewport.width) * containerWidth + 12; // 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
 			heights.push(height);
 		}
 		setPageHeights(heights);
@@ -105,8 +107,8 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
-				className="relative w-full">
-				<div style={{ height: rowVirtualizer?.getTotalSize(), width: '100%', position: 'relative' }}>
+				className="relative">
+				<div style={{ height: rowVirtualizer?.getTotalSize(), width: containerWidth, position: 'relative', overflowX: 'hidden' }}>
 					{rowVirtualizer?.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];
@@ -119,7 +121,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 									position: 'absolute',
 									top: 0,
 									left: 0,
-									width: '100%',
+									width: containerWidth,
 									transform: `translateY(${virtualRow.start}px)`,
 								}}
 								page={page}
