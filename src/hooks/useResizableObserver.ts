@@ -12,7 +12,7 @@ export default function useResizableObserver<T extends HTMLElement>({
 	effectTriggers = [],
 }: UseResizableObserverProps) {
 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
-	const [containerHeight, setContainerHeight] = React.useState<number>(initialWidth);
+	const [containerHeight, setContainerHeight] = React.useState<number>(initialHeight);
 	const containerRef = React.useRef<T>(null);
 
 	/**

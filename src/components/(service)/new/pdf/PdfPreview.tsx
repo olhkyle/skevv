@@ -30,7 +30,7 @@ interface VirtualPageProps {
 
 function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
 	const { ref, inView } = useInView({
-		rootMargin: '600px 0px',
+		rootMargin: '200px 0px',
 	});
 
 	return (
@@ -47,7 +47,10 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth,
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
 					className="ui-flex-center w-full border border-gray-200"
-					canvasRef={el => setRef(page.id, el)}
+					canvasRef={el => {
+						console.log('here');
+						setRef(page.id, el);
+					}}
 				/>
 			) : (
 				<PdfPreviewSkeleton pageCount={1} />
@@ -70,7 +73,7 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const rowVirtualizer = useVirtualizer({
 		count: sortedPages.length,
 		getScrollElement: () => parentRef.current,
-		estimateSize: () => containerWidth * 1.414 + 24, // PDF 비율 + padding
+		estimateSize: () => containerHeight * 1.414 + 24, // when parentRef is vertical Srcoll -> must be height / horizontal scroll -> must be width | PDF ratio + padding
 		overscan: 2,
 	});
 
@@ -82,9 +85,10 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={parentRef} className={`w-full overflow-y-auto rounded-lg h-${containerHeight}px`}>
+		<div ref={parentRef} className={`w-full overflow-y-auto`} style={{ height: containerHeight }}>
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={pages.length} />} error={DocumentErrorMessage} className="relative">
 				<div
+					className={`relative w-full`}
 					style={{
 						position: 'relative',
 						height: rowVirtualizer.getTotalSize(),

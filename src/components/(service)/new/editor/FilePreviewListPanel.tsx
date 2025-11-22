@@ -35,7 +35,7 @@ export default function FilePreviewListPanel() {
 	});
 
 	return (
-		<div className="hidden flex-col flex-1 gap-2 min-h-0 col-span-full p-3 border border-muted rounded-2xl sm:flex md:col-span-4">
+		<div className="hidden flex-col flex-1 gap-2 min-h-0 col-span-full p-3 border border-muted rounded-2xl md:flex md:col-span-4">
 			<div className="flex justify-between items-center min-h-[32px]">
 				<h3 className="text-md font-bold">Preview</h3>
 				<div className="flex justify-between items-center gap-2">
