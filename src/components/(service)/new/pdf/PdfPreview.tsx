@@ -34,13 +34,7 @@ function VirtualPage({ page, style, pageNumber, startPageNumber, targetId, conta
 		rootMargin: '300px 0px',
 	});
 
-	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => {
-		if (targetId !== page.id) {
-			console.log('here');
-			return;
-		}
-		setRef(targetId, el);
-	});
+	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(targetId, el));
 
 	return (
 		<div ref={combinedRef} style={style} id={page.id} className="relative">
@@ -70,7 +64,7 @@ function DocumentErrorMessage() {
 
 export default function PdfPreview({ file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { setRef } = useFileScrollIntoView<HTMLDivElement>();
+	const { targetId, setRef } = useFileScrollIntoView<HTMLDivElement>();
 
 	const [isLoaded, setLoaded] = React.useState(false);
 
@@ -84,11 +78,15 @@ export default function PdfPreview({ file, pages, startPageNumber = 1, container
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 
+	// targetId가 바뀌면 가상화 리스트 스크롤
 	React.useEffect(() => {
-		if (isLoaded && rowVirtualizer) {
-			rowVirtualizer.measure();
+		if (!targetId || !rowVirtualizer) return;
+
+		const index = sortedPages.findIndex(page => page.id === targetId);
+		if (index !== -1) {
+			rowVirtualizer.scrollToIndex(index, { align: 'center' });
 		}
-	}, [pageHeights, isLoaded]);
+	}, [targetId, rowVirtualizer, sortedPages]);
 
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
