@@ -30,7 +30,7 @@ export default function SortableFile({ file, filePage, toggleFilePages, deleteFi
 				{...attributes}
 				style={transformStyle}
 				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-md border border-muted touch-none ${
-					isDragging ? 'opacity-80 border-dashed' : 'opacity-100'
+					isDragging ? 'opacity-85 border-2 border-dashed' : 'opacity-100'
 				} sm:cursor-pointer`}>
 				<div className="flex items-center gap-2">
 					<div className="flex items-center gap-1 shrink-0">
@@ -41,7 +41,7 @@ export default function SortableFile({ file, filePage, toggleFilePages, deleteFi
 							<ChevronRight className={`${filePage?.isOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</Button>
 					</div>
-					<span className="grow inline-block font-medium  break-all whitespace-normal text-ellipsis">{file.file.name}</span>
+					<span className="grow inline-block font-medium break-all whitespace-normal text-ellipsis">{file.file.name}</span>
 				</div>
 				<Button type="button" size="icon-sm" variant="ghost" onClick={deleteFile}>
 					<X />
