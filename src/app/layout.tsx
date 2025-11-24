@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import '@/styles/font.css';
+import { satoshi } from '@/styles/font';
 import { Toaster } from '@/components';
 
 export const metadata: Metadata = {
@@ -14,8 +14,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className="antialiased bg-white">
+		<html lang="en" className={`${satoshi.variable}`}>
+			<body className="font-satoshi antialiased bg-white">
 				{children}
 				<Toaster />
 			</body>
