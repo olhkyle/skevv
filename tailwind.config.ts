@@ -5,7 +5,7 @@ const config: Config = {
 	theme: {
 		extend: {
 			fontFamily: {
-				satoshi: ['var(--font-satoshi)', 'sans-serif'],
+				inter: ['var(--font-inter)'],
 			},
 		},
 	},
