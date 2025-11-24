@@ -6,9 +6,9 @@ import { ArrowRightIcon, X } from 'lucide-react';
 import { MotionBlock, Button, UserProfile } from '@/components';
 import { route } from '@/constant';
 
-const Menu = () => {
+const Menu = ({ className }: { className?: string }) => {
 	return (
-		<svg width="24" height="24" viewBox="0 0 24 24" fill="transparent">
+		<svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="transparent">
 			<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8.5h18m-18 7h18"></path>
 		</svg>
 	);
@@ -25,8 +25,13 @@ export default function Nav() {
 					<h1 className="text-xl font-black" onClick={() => setIsSideNavOpen(false)}>
 						<Link href={route.SERVICE.ROOT}>SKEVV</Link>
 					</h1>
-					<Button type="button" size="icon-lg" variant="ghost" onClick={toggle}>
-						{isSideNavOpen ? <X /> : <Menu />}
+					<Button
+						type="button"
+						size="icon-lg"
+						variant="ghost"
+						className={`${isSideNavOpen ? 'bg-light' : 'bg-none'} rounded-full`}
+						onClick={toggle}>
+						{isSideNavOpen ? <X className="size-5" /> : <Menu className="size-5" />}
 					</Button>
 				</div>
 			</nav>
