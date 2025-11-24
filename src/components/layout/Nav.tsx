@@ -2,9 +2,17 @@
 
 import Link from 'next/link';
 import React from 'react';
-import { ArrowRightIcon, Menu, X } from 'lucide-react';
+import { ArrowRightIcon, X } from 'lucide-react';
 import { MotionBlock, Button, UserProfile } from '@/components';
 import { route } from '@/constant';
+
+const Menu = () => {
+	return (
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="transparent">
+			<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8.5h18m-18 7h18"></path>
+		</svg>
+	);
+};
 
 export default function Nav() {
 	const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
@@ -17,7 +25,7 @@ export default function Nav() {
 					<h1 className="text-xl font-black" onClick={() => setIsSideNavOpen(false)}>
 						<Link href={route.SERVICE.ROOT}>SKEVV</Link>
 					</h1>
-					<Button type="button" size="icon-md" variant="ghost" onClick={toggle}>
+					<Button type="button" size="icon-lg" variant="ghost" onClick={toggle}>
 						{isSideNavOpen ? <X /> : <Menu />}
 					</Button>
 				</div>

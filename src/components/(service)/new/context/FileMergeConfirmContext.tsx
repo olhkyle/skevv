@@ -37,7 +37,7 @@ interface FileMergeConfirmBody {
 
 function TriggerButton({ pageCount, isMobile, ...props }: { pageCount: number; isMobile: boolean }) {
 	return (
-		<Button type="button" size="icon-lg" className={`inline-flex justify-center gap-4 w-full px-${isMobile ? 'auto' : '4'}`} {...props}>
+		<Button type="button" size="icon-md" className={`inline-flex justify-center gap-4 w-full px-${isMobile ? 'auto' : '4'}`} {...props}>
 			<div className="flex items-center gap-2 overflow-hidden text-ellipsis ">
 				<Download size={18} />
 				Merge {pageCount} Pages
