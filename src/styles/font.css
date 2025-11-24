@@ -23,80 +23,80 @@
 */
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Light.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Light.woff') format('woff');
+	src: local('Satoshi Light'), url('/static/fonts/satoshi/Satoshi-Light.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Light.woff') format('woff');
 	font-weight: 300;
 	font-display: swap;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-LightItalic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-LightItalic.woff') format('woff');
+	src: local('Satoshi LightItalic'), url('/static/fonts/satoshi/Satoshi-LightItalic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-LightItalic.woff') format('woff');
 	font-weight: 300;
 	font-display: swap;
 	font-style: italic;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Regular.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Regular.woff') format('woff');
+	src: local('Satoshi Regular'), url('/static/fonts/satoshi/Satoshi-Regular.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Regular.woff') format('woff');
 	font-weight: 400;
 	font-display: swap;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Italic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Italic.woff') format('woff');
+	src: local('Satoshi Italic'), url('/static/fonts/satoshi/Satoshi-Italic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Italic.woff') format('woff');
 	font-weight: 400;
 	font-display: swap;
 	font-style: italic;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Medium.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Medium.woff') format('woff');
+	src: local('Satoshi Medium'), url('/static/fonts/satoshi/Satoshi-Medium.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Medium.woff') format('woff');
 	font-weight: 500;
 	font-display: swap;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-MediumItalic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-MediumItalic.woff') format('woff');
+	src: local('Satoshi MediumItalic'), url('/static/fonts/satoshi/Satoshi-MediumItalic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-MediumItalic.woff') format('woff');
 	font-weight: 500;
 	font-display: swap;
 	font-style: italic;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Bold.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Bold.woff') format('woff');
+	src: local('Satoshi Bold'), url('/static/fonts/satoshi/Satoshi-Bold.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Bold.woff') format('woff');
 	font-weight: 700;
 	font-display: swap;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-BoldItalic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-BoldItalic.woff') format('woff');
+	src: local('Satoshi BoldItalic'), url('/static/fonts/satoshi/Satoshi-BoldItalic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-BoldItalic.woff') format('woff');
 	font-weight: 700;
 	font-display: swap;
 	font-style: italic;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-Black.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Black.woff') format('woff');
+	src: local('Satoshi Black'), url('/static/fonts/satoshi/Satoshi-Black.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Black.woff') format('woff');
 	font-weight: 900;
 	font-display: swap;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'Satoshi';
-	src: url('/public/static/fonts/satoshi/Satoshi-BlackItalic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-BlackItalic.woff') format('woff');
+	src: local('Satoshi BlackItalic'), url('/static/fonts/satoshi/Satoshi-BlackItalic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-BlackItalic.woff') format('woff');
 	font-weight: 900;
 	font-display: swap;
 	font-style: italic;
@@ -110,9 +110,9 @@
 'wght' (range from 300.0 to 900.0
 */
 @font-face {
-	font-family: 'Satoshi-Variable';
-	src: url('/public/static/fonts/satoshi/Satoshi-Variable.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-Variable.woff') format('woff');
+	font-family: 'Satoshi';
+	src: local('Satoshi Variable'), url('/static/fonts/satoshi/Satoshi-Variable.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-Variable.woff') format('woff');
 	font-weight: 300 900;
 	font-display: swap;
 	font-style: normal;
@@ -126,9 +126,9 @@
 'wght' (range from 300.0 to 900.0
 */
 @font-face {
-	font-family: 'Satoshi-VariableItalic';
-	src: url('/public/static/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2'),
-		url('/public/static/fonts/satoshi/Satoshi-VariableItalic.woff') format('woff');
+	font-family: 'Satoshi';
+	src: local('Satoshi VariableItalic'), url('/static/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2'),
+		url('/static/fonts/satoshi/Satoshi-VariableItalic.woff') format('woff');
 	font-weight: 300 900;
 	font-display: swap;
 	font-style: italic;
