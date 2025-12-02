@@ -49,7 +49,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 	// single row height
 	const getEstimateHeightSize = (index: number) => pageHeights[index] || PDF_DEFAULT_HEIGHT;
 
-	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = React.useCallback((offset, canSmooth, instance) => {
+	const scrollToFn: VirtualizerOptions<HTMLDivElement, Element>['scrollToFn'] = React.useCallback((offset, canSmooth, instance) => {
 		const duration = 1000;
 		const start = scrollParentRef.current?.scrollTop || 0;
 		const startTime = (scrollingRef.current = Date.now());
