@@ -3,9 +3,9 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
-import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
-import { SCROLL_BAR_WIDTH, useDebouncedEffect, useFileTargetRef } from '@/hooks';
+import { SCROLL_BAR_WIDTH, useDebouncedEffect } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
@@ -26,10 +26,6 @@ interface PdfPreviewProps {
 	containerWidth: number;
 }
 
-function easeInOutQuint(t: number) {
-	return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
-}
-
 function DocumentErrorMessage() {
 	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
@@ -37,11 +33,8 @@ function DocumentErrorMessage() {
 export default function PdfPreview({ scrollParentRef, file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 
-	const { targetId } = useFileTargetRef();
-
 	const pdfDocumentProxyRef = React.useRef<PDFDocumentProxy | null>(null);
 	const viewportRatioCache = React.useRef<number[]>([]);
-	const scrollingRef = React.useRef<number>(0);
 
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 	const [isLoaded, setLoaded] = React.useState(false);
@@ -49,35 +42,11 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 	// single row height
 	const getEstimateHeightSize = (index: number) => pageHeights[index] || PDF_DEFAULT_HEIGHT;
 
-	const scrollToFn: VirtualizerOptions<HTMLDivElement, Element>['scrollToFn'] = React.useCallback((offset, canSmooth, instance) => {
-		const duration = 1000;
-		const start = scrollParentRef.current?.scrollTop || 0;
-		const startTime = (scrollingRef.current = Date.now());
-
-		const run = () => {
-			if (scrollingRef.current !== startTime) return;
-			const now = Date.now();
-			const elapsed = now - startTime;
-			const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
-			const interpolated = start + (offset - start) * progress;
-
-			if (elapsed < duration) {
-				elementScroll(interpolated, canSmooth, instance);
-				requestAnimationFrame(run);
-			} else {
-				elementScroll(interpolated, canSmooth, instance);
-			}
-		};
-
-		requestAnimationFrame(run);
-	}, []);
-
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => scrollParentRef.current,
 		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
-		scrollToFn,
 	});
 
 	useDebouncedEffect({
@@ -96,12 +65,6 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		},
 		effectTriggers: [containerWidth],
 	});
-
-	React.useEffect(() => {
-		if (targetId) {
-			rowVirtualizer.scrollToIndex(+targetId.split('-')[2]);
-		}
-	}, [targetId]);
 
 	const calculateHeights = async (pdf: PDFDocumentProxy, containerWidth: number) => {
 		const heights: number[] = [];
@@ -147,8 +110,9 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		}
 	};
 
-	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
+	const handleDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
 		pdfDocumentProxyRef.current = pdf;
+
 		const heights = await calculateHeights(pdf, containerWidth);
 
 		if (heights) {
@@ -156,8 +120,6 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 			setLoaded(true);
 		}
 	};
-
-	console.log(rowVirtualizer?.getVirtualItems());
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;

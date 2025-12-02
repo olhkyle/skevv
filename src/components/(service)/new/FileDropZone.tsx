@@ -2,13 +2,8 @@
 
 import React from 'react';
 import { CirclePlus, FileUp } from 'lucide-react';
-import { DropzoneState } from 'react-dropzone';
 import { MotionBlock, Button, Input } from '@/components';
 import { useDropzoneFiles } from '@/hooks';
-
-interface FileDropZoneProps {
-	dropzone: DropzoneState;
-}
 
 export default function FileDropZone() {
 	const {
