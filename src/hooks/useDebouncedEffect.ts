@@ -1,5 +1,5 @@
-import { debounce } from 'es-toolkit';
 import React from 'react';
+import { debounce } from 'es-toolkit';
 
 interface UseDebouncedEffectProps {
 	callback: () => void;
@@ -11,19 +11,15 @@ export default function useDebouncedEffect({ callback, effectTriggers, delay = 1
 	const ref = React.useRef<() => void | null>(null);
 	ref.current = callback;
 
-	const useDebouncedCallback = React.useMemo(
-		() =>
-			debounce(() => {
-				ref.current?.();
-			}, delay),
-		[delay],
-	);
-
 	React.useEffect(() => {
-		useDebouncedCallback();
+		const debouncedCallback = debounce(() => {
+			ref.current?.();
+		}, delay);
+
+		debouncedCallback();
 
 		return () => {
-			useDebouncedCallback?.cancel();
+			debouncedCallback?.cancel();
 		};
-	}, [...effectTriggers]);
+	}, [...effectTriggers, delay]);
 }

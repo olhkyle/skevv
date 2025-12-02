@@ -2,8 +2,7 @@
 
 import { useInView } from 'react-intersection-observer';
 import { Page } from 'react-pdf';
-import { AnimateSpinner, type PageItem, PdfPreviewSkeleton } from '@/components';
-import { useMergedRefs } from '@/hooks';
+import { AnimateSpinner, type PageItem } from '@/components';
 
 interface VirtualPageProps {
 	page: PageItem;
