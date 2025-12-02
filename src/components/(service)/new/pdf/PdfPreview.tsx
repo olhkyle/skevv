@@ -45,12 +45,18 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		overscan: 3,
 	});
 
-	React.useEffect(() => {
-		rowVirtualizer.measure();
-	}, [files, containerWidth]);
-
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
+
+	React.useEffect(() => {
+		rowVirtualizer.measure();
+	}, [pageHeights]);
+
+	React.useEffect(() => {
+		if (!isLoaded) return;
+
+		recalculateHeights();
+	}, [containerWidth]);
 
 	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
 		const heights: number[] = [];
@@ -72,6 +78,13 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		} catch (e) {
 			console.error(e);
 		}
+	};
+
+	const recalculateHeights = async () => {
+		const arrayBuffer = await file.arrayBuffer();
+		const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+		const heights = await calculateHeights(pdf);
+		setPageHeights(heights ?? pageHeights);
 	};
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
