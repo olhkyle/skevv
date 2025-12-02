@@ -38,7 +38,7 @@ function TriggerButton({ isMobile, ...props }: { isMobile: boolean }) {
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = `Page ${page.order} Preview`;
-	const description = `﹡ ${page.id.split('-')[0]}`;
+	const description = `﹡ ${page.id.split('-page-')[0]}.pdf`;
 
 	return (
 		<>
@@ -50,7 +50,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DrawerContent>
 						<DrawerHeader className="p-3 text-left">
 							<DrawerTitle className="text-lg">{title}</DrawerTitle>
-							<DrawerDescription className="py-1.5 px-3 bg-light text-gray-500 text-sm text-start rounded-md">
+							<DrawerDescription className="inline-block py-1.5 px-3 w-auto bg-light text-gray-500 text-sm text-start rounded-md">
 								{description}
 							</DrawerDescription>
 						</DrawerHeader>
@@ -64,7 +64,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogContent className="">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
-							<DialogDescription className="py-1.5 px-3 bg-light text-gray-500 text-sm text-start rounded-md">
+							<DialogDescription className="inline-block py-1.5 px-3 w-auto bg-light text-gray-500 text-sm text-start rounded-md">
 								{description}
 							</DialogDescription>
 						</DialogHeader>
