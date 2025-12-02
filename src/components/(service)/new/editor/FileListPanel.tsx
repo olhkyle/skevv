@@ -2,25 +2,22 @@
 
 import React from 'react';
 import { BetweenHorizonalEnd, ChevronRight, EllipsisVertical, FileText, Plus } from 'lucide-react';
-import { DropzoneState } from 'react-dropzone';
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
-import { useFilePages, useKeyboardTrigger } from '@/hooks';
-import { useFileStore } from '@/store';
+import { useDropzoneFiles, useFilePages, useKeyboardTrigger } from '@/hooks';
 
-interface FileListPanelProps {
-	dropzone: DropzoneState;
-}
+export default function FileListPanel() {
+	const {
+		dropzone: { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open },
+		files,
+		setFiles,
+	} = useDropzoneFiles();
 
-export default function FileListPanel({
-	dropzone: { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open },
-}: FileListPanelProps) {
 	const fileInputId = React.useId();
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 	const [currentDragFilesCount, setCurrentDragFilesCount] = React.useState(0);
 
-	const { files, setFiles } = useFileStore();
 	const { filePages, isSomePageOpen, toggle, toggleAll, closeAll } = useFilePages({ files });
 	const sensors = useSensors(
 		useSensor(PointerSensor),

@@ -3,8 +3,8 @@
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { ScrollArea, SortableFilePage } from '@/components';
+import { useDropzoneFiles } from '@/hooks';
 import { type ProcessedFileItem } from '../pdf';
-import { useFileStore } from '@/store';
 
 interface SortableFilePagesProps {
 	file: ProcessedFileItem;
@@ -12,7 +12,7 @@ interface SortableFilePagesProps {
 }
 
 export default function SortableFilePageList({ file, isOpen }: SortableFilePagesProps) {
-	const { files, setFiles } = useFileStore();
+	const { files, setFiles } = useDropzoneFiles();
 	const pageSensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {

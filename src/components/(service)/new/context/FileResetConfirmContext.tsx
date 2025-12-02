@@ -25,9 +25,8 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui';
-import { useMediaQuery } from '@/hooks';
+import { useDropzoneFiles, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
-import { useFileStore } from '@/store';
 
 interface FileResetConfirmContextProps {
 	isOpen: boolean;
@@ -86,7 +85,7 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 }
 
 export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileResetConfirmContextProps) {
-	const { resetFiles } = useFileStore();
+	const { onReset } = useDropzoneFiles();
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Reset Current Files';
 	const description = 'Do you really mind to reset files?';
@@ -106,7 +105,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileReset
 							<DrawerTitle className="text-start text-lg">{title}</DrawerTitle>
 							<DrawerDescription className="my-2 font-medium text-start">{description}</DrawerDescription>
 						</DrawerHeader>
-						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
+						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={onReset} />
 					</DrawerContent>
 				</Drawer>
 			) : (
@@ -119,7 +118,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileReset
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="my-2 font-medium text-start">{description}</DialogDescription>
 						</DialogHeader>
-						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={resetFiles} />
+						<FileResetConfirmBody isMobile={isMobile} close={close} resetFiles={onReset} />
 					</DialogContent>
 				</Dialog>
 			)}

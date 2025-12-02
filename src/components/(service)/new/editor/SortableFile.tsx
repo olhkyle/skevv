@@ -4,6 +4,7 @@ import React from 'react';
 import { ChevronRight, GripVertical, X } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { Button, ProcessedFileItem, SortableFilePageList } from '@/components';
+import { getTransformStyleOnSortableContext } from '@/utils/dndSortable';
 
 interface SortableFileProps {
 	file: ProcessedFileItem;
@@ -18,17 +19,12 @@ export default function SortableFile({ file, filePage, toggleFilePages, deleteFi
 		animateLayoutChanges: () => false,
 	});
 
-	const transformStyle = {
-		transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-		transition,
-	};
-
 	return (
 		<div className={`flex flex-col justify-end gap-2 ${filePage?.isOpen ? 'mb-1' : 'mb-0'} w-full`}>
 			<div
 				ref={setNodeRef}
 				{...attributes}
-				style={transformStyle}
+				style={getTransformStyleOnSortableContext(transform, transition)}
 				className={`flex justify-between items-center gap-2 p-2 bg-white rounded-md border border-muted touch-none ${
 					isDragging ? 'opacity-85 border-2 border-dashed' : 'opacity-100'
 				} sm:cursor-pointer`}>

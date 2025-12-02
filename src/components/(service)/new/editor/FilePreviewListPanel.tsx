@@ -4,8 +4,7 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
 import { AnimateSpinner, Button, getTotalPageCount } from '@/components';
-import { useFileStore } from '@/store';
-import { useMediaQuery, useResizableObserver } from '@/hooks';
+import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
 const PdfPreview = dynamic(() => import('../pdf/PdfPreview'), {
@@ -22,11 +21,11 @@ function FullContainerLoading() {
 }
 
 export default function FilePreviewListPanel() {
-	const { files } = useFileStore();
-	const isMobile = useMediaQuery(screenSize.MAX_XS);
+	const { files } = useDropzoneFiles();
+	const isXSDown = useMediaQuery(screenSize.MAX_XS);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: typeof window !== 'undefined' && isMobile ? 320 : window.innerWidth * 0.5,
+		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
 
 	return (

@@ -5,7 +5,7 @@ import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
-import { SCROLL_BAR_WIDTH, useFileTargetRef } from '@/hooks';
+import { SCROLL_BAR_WIDTH, useDropzoneFiles, useFileTargetRef } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
@@ -29,6 +29,7 @@ function DocumentErrorMessage() {
 }
 
 export default function PdfPreview({ scrollParentRef, file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
+	const { files } = useDropzoneFiles();
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
 	const { setRef } = useFileTargetRef<HTMLDivElement>();
 
@@ -46,7 +47,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 
 	React.useEffect(() => {
 		rowVirtualizer.measure();
-	}, []);
+	}, [files]);
 
 	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
 	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
@@ -79,6 +80,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		setPageHeights(heights!);
 		setLoaded(true);
 	};
+	console.log(rowVirtualizer?.getVirtualItems());
 
 	if (!file) {
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
