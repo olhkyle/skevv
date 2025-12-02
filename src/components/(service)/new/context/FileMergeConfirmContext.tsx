@@ -20,13 +20,13 @@ import {
 	Kbd,
 } from '@/components';
 import { type ProcessedFileList, getTotalPageCount } from '../pdf';
-import { screenSize } from '@/constant';
 import { useMediaQuery } from '@/hooks';
+import { screenSize } from '@/constant';
 
 interface FileMergeConfirmContextProps {
 	files: ProcessedFileList;
 	isOpen: boolean;
-	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	toggle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface FileMergeConfirmBody {
@@ -59,19 +59,19 @@ function FileMergeConfirmBody({ files, isMobile, close }: FileMergeConfirmBody) 
 	);
 }
 
-export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: FileMergeConfirmContextProps) {
+export default function FileMergeConfirmContext({ files, isOpen, toggle }: FileMergeConfirmContextProps) {
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Confirm Merge';
 	const description = `Check your all PDFs status here. Click merge when you're done.`;
 
 	const pageCount = getTotalPageCount(files);
 
-	const onClose = () => setIsOpen(false);
+	const onClose = () => toggle(false);
 
 	return (
 		<>
 			{isMobile ? (
-				<Drawer open={isOpen} onOpenChange={setIsOpen}>
+				<Drawer open={isOpen} onOpenChange={toggle}>
 					<DrawerTrigger asChild>
 						<TriggerButton pageCount={pageCount} isMobile={isMobile} />
 					</DrawerTrigger>
@@ -84,7 +84,7 @@ export default function FileMergeConfirmContext({ files, isOpen, setIsOpen }: Fi
 					</DrawerContent>
 				</Drawer>
 			) : (
-				<Dialog open={isOpen} onOpenChange={setIsOpen}>
+				<Dialog open={isOpen} onOpenChange={toggle}>
 					<DialogTrigger asChild>
 						<TriggerButton pageCount={pageCount} isMobile={isMobile} />
 					</DialogTrigger>

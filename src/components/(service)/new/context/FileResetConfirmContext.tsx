@@ -30,7 +30,7 @@ import { screenSize } from '@/constant';
 
 interface FileResetConfirmContextProps {
 	isOpen: boolean;
-	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	toggle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface FileResetConfirmBodyProps {
@@ -84,19 +84,19 @@ function FileResetConfirmBody({ isMobile, close, resetFiles }: FileResetConfirmB
 	);
 }
 
-export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileResetConfirmContextProps) {
+export default function FileResetConfirmContext({ isOpen, toggle }: FileResetConfirmContextProps) {
 	const { onReset } = useDropzoneFiles();
 	const isMobile = useMediaQuery(screenSize.MAX_SM);
 	const title = 'Reset Current Files';
 	const description = 'Do you really mind to reset files?';
 
-	const open = () => setIsOpen(true);
-	const close = () => setIsOpen(false);
+	const open = () => toggle(true);
+	const close = () => toggle(false);
 
 	return (
 		<>
 			{isMobile ? (
-				<Drawer open={isOpen} onOpenChange={setIsOpen}>
+				<Drawer open={isOpen} onOpenChange={toggle}>
 					<DrawerTrigger asChild>
 						<TriggerButton open={open} />
 					</DrawerTrigger>
@@ -109,7 +109,7 @@ export default function FileResetConfirmContext({ isOpen, setIsOpen }: FileReset
 					</DrawerContent>
 				</Drawer>
 			) : (
-				<Dialog open={isOpen} onOpenChange={setIsOpen}>
+				<Dialog open={isOpen} onOpenChange={toggle}>
 					<DialogTrigger asChild>
 						<TriggerButton open={open} />
 					</DialogTrigger>

@@ -141,7 +141,7 @@ export default function FileListPanel() {
 				</DndContext>
 			</div>
 			<div className="absolute left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t border-muted">
-				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />}
+				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />}
 			</div>
 		</div>
 	);

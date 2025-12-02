@@ -9,7 +9,7 @@ export default function ServiceNav() {
 
 	return (
 		<nav className="flex justify-between items-center bg-white z-10">
-			<FileResetConfirmContext isOpen={isConfirmContextOpen} setIsOpen={setIsConfirmContextOpen} />
+			<FileResetConfirmContext isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />
 			<div className="flex items-center gap-2">
 				<Button type="button" variant="outline" size="icon-md" className="sm:w-32">
 					<SaveIcon size={21} />
