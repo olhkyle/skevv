@@ -18,7 +18,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 		animateLayoutChanges: () => false,
 	});
 
-	const isLessThanMD = useMediaQuery(screenSize.MAX_MD);
+	const isMDDown = useMediaQuery(screenSize.MAX_MD);
 
 	const transformStyle = {
 		transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
@@ -45,13 +45,13 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 				</Button>
 				<span> Page {page.order}</span>
 			</div>
-			{!isLessThanMD && (
+			{!isMDDown && (
 				<Button
 					type="button"
 					size="icon-sm"
 					variant="ghost"
 					onClick={() => {
-						if (isLessThanMD) return;
+						if (isMDDown) return;
 						setTargetId(page.id);
 					}}>
 					<SquareMousePointer className="text-gray-500" />

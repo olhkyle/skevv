@@ -3,9 +3,9 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
-import { SCROLL_BAR_WIDTH, useDropzoneFiles, useFileTargetRef } from '@/hooks';
+import { SCROLL_BAR_WIDTH, useDebouncedEffect, useFileTargetRef } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
@@ -16,6 +16,8 @@ const VirtualPage = dynamic(() => import('../pdf/VirtualPage'), {
 	ssr: false,
 });
 
+type PDFDocumentProxy = pdfjs.PDFDocumentProxy;
+
 interface PdfPreviewProps {
 	scrollParentRef: React.RefObject<HTMLDivElement | null>;
 	file: File;
@@ -24,54 +26,103 @@ interface PdfPreviewProps {
 	containerWidth: number;
 }
 
+function easeInOutQuint(t: number) {
+	return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
+}
+
 function DocumentErrorMessage() {
 	return <p className="p-3 w-full bg-red-100 text-red-400 rounded-full">Error happened to get a file</p>;
 }
 
 export default function PdfPreview({ scrollParentRef, file, pages, startPageNumber = 1, containerWidth }: PdfPreviewProps) {
-	const { files } = useDropzoneFiles();
 	const sortedPages = React.useMemo(() => [...pages].sort((prev, curr) => prev.order - curr.order), [pages]);
-	const { setRef } = useFileTargetRef<HTMLDivElement>();
 
+	const { targetId } = useFileTargetRef();
+
+	const pdfDocumentProxyRef = React.useRef<PDFDocumentProxy | null>(null);
+	const viewportRatioCache = React.useRef<number[]>([]);
+	const scrollingRef = React.useRef<number>(0);
+
+	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
 	const [isLoaded, setLoaded] = React.useState(false);
 
 	// single row height
 	const getEstimateHeightSize = (index: number) => pageHeights[index] || PDF_DEFAULT_HEIGHT;
+
+	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = React.useCallback((offset, canSmooth, instance) => {
+		const duration = 1000;
+		const start = scrollParentRef.current?.scrollTop || 0;
+		const startTime = (scrollingRef.current = Date.now());
+
+		const run = () => {
+			if (scrollingRef.current !== startTime) return;
+			const now = Date.now();
+			const elapsed = now - startTime;
+			const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
+			const interpolated = start + (offset - start) * progress;
+
+			if (elapsed < duration) {
+				elementScroll(interpolated, canSmooth, instance);
+				requestAnimationFrame(run);
+			} else {
+				elementScroll(interpolated, canSmooth, instance);
+			}
+		};
+
+		requestAnimationFrame(run);
+	}, []);
 
 	const rowVirtualizer = useVirtualizer({
 		count: isLoaded ? sortedPages.length : 0,
 		getScrollElement: () => scrollParentRef.current,
 		estimateSize: index => getEstimateHeightSize(index),
 		overscan: 3,
+		scrollToFn,
 	});
 
-	const documentWrapperRef = React.useRef<HTMLDivElement>(null);
-	const [pageHeights, setPageHeights] = React.useState<number[]>([]);
+	useDebouncedEffect({
+		callback: () => {
+			rowVirtualizer.measure();
+		},
+		effectTriggers: [pageHeights],
+		delay: 50,
+	});
+
+	useDebouncedEffect({
+		callback: () => {
+			if (!isLoaded) return;
+
+			recalculateHeights();
+		},
+		effectTriggers: [containerWidth],
+	});
 
 	React.useEffect(() => {
-		rowVirtualizer.measure();
-	}, [pageHeights]);
+		if (targetId) {
+			rowVirtualizer.scrollToIndex(+targetId.split('-')[2]);
+		}
+	}, [targetId]);
 
-	React.useEffect(() => {
-		if (!isLoaded) return;
-
-		recalculateHeights();
-	}, [containerWidth]);
-
-	const calculateHeights = async (pdf: pdfjs.PDFDocumentProxy) => {
+	const calculateHeights = async (pdf: PDFDocumentProxy, containerWidth: number) => {
 		const heights: number[] = [];
+		const PADDING = 12;
 
 		try {
 			for (let i = 0; i < pdf.numPages; i++) {
-				const page = await pdf.getPage(i + 1);
-				const viewport = page.getViewport({ scale: 1 });
-				const PADDING = 12;
+				if (viewportRatioCache.current[i]) {
+					heights.push(viewportRatioCache.current[i] * containerWidth + PADDING);
+				} else {
+					const page = await pdf.getPage(i + 1);
+					const viewport = page.getViewport({ scale: 1 });
 
-				// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
-				// 1. width > height
-				// 2. height > width
-				const height = (viewport.height / viewport.width) * containerWidth + PADDING;
-				heights.push(height);
+					// 가로가 긴 or 세로가 긴 PDF -> width 기준 + padding
+					// 1. width > height
+					// 2. height > width
+					const ratio = viewport.height / viewport.width;
+
+					viewportRatioCache.current[i] = ratio;
+					heights.push(ratio * containerWidth + PADDING);
+				}
 			}
 
 			return heights;
@@ -81,18 +132,31 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 	};
 
 	const recalculateHeights = async () => {
-		const arrayBuffer = await file.arrayBuffer();
-		const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-		const heights = await calculateHeights(pdf);
-		setPageHeights(heights ?? pageHeights);
+		const pdf = pdfDocumentProxyRef.current;
+
+		if (!pdf) return;
+
+		try {
+			const heights = await calculateHeights(pdf, containerWidth);
+
+			if (heights) {
+				setPageHeights(heights);
+			}
+		} catch (e) {
+			console.error(e);
+		}
 	};
 
 	const handleDocumentLoadSuccess = async (pdf: pdfjs.PDFDocumentProxy) => {
-		const heights = await calculateHeights(pdf);
+		pdfDocumentProxyRef.current = pdf;
+		const heights = await calculateHeights(pdf, containerWidth);
 
-		setPageHeights(heights!);
-		setLoaded(true);
+		if (heights) {
+			setPageHeights(heights);
+			setLoaded(true);
+		}
 	};
+
 	console.log(rowVirtualizer?.getVirtualItems());
 
 	if (!file) {
@@ -103,7 +167,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (
-		<div ref={documentWrapperRef} style={{ width: containerWidth + SCROLL_BAR_WIDTH }}>
+		<div style={{ width: containerWidth + SCROLL_BAR_WIDTH }}>
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
@@ -131,7 +195,6 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 								pageNumber={pageNumber}
 								startPageNumber={startPageNumber}
 								containerWidth={containerWidth}
-								setRef={setRef}
 							/>
 						);
 					})}

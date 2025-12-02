@@ -1,3 +1,4 @@
+export { default as useDebouncedEffect } from './useDebouncedEffect';
 export { default as useDropzoneFiles } from './useDropzoneFiles';
 export { default as useFilePages } from './useFilePages';
 export { default as useFileTargetRef } from './useFileTargetRef';

@@ -11,18 +11,17 @@ interface VirtualPageProps {
 	pageNumber: number;
 	startPageNumber: number;
 	containerWidth: number;
-	setRef: (id: string, el: HTMLDivElement | null) => void;
 }
 
-export default function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth, setRef }: VirtualPageProps) {
+export default function VirtualPage({ page, style, pageNumber, startPageNumber, containerWidth }: VirtualPageProps) {
 	const { ref: inViewRef, inView } = useInView({
 		rootMargin: '300px 0px',
 	});
 
-	const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(page.id, el));
+	// const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(page.id, el));
 
 	return (
-		<div ref={combinedRef} style={style} id={page.id} className="relative">
+		<div ref={inViewRef} style={style} id={page.id} className="relative">
 			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 				{startPageNumber + (page.order - 1)}
 			</span>
