@@ -109,7 +109,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DialogTrigger>
-					<DialogContent ref={containerRef} className="max-w-[90dvw] min-w-[60dvw] max-h-[90dvh] w-auto h-auto overflow-y-auto">
+					<DialogContent
+						ref={containerRef}
+						className="max-w-[90dvw] min-w-[60dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden  overflow-y-auto scroll-bar-thin">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
