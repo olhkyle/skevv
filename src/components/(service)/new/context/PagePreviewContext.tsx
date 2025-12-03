@@ -52,21 +52,23 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 
 function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
 	return (
-		<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
-			<Page
-				devicePixelRatio={2.5}
-				loading={
-					<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-						<AnimateSpinner size={18} />
-					</div>
-				}
-				pageNumber={pageNumber}
-				width={containerWidth}
-				renderTextLayer={false}
-				renderAnnotationLayer={false}
-				className="ui-flex-center w-full border border-gray-200"
-			/>
-		</Document>
+		<div className="my-3">
+			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+				<Page
+					devicePixelRatio={2.5}
+					loading={
+						<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+							<AnimateSpinner size={18} />
+						</div>
+					}
+					pageNumber={pageNumber}
+					width={containerWidth}
+					renderTextLayer={false}
+					renderAnnotationLayer={false}
+					className="ui-flex-center w-full border border-gray-200"
+				/>
+			</Document>
+		</div>
 	);
 }
 
@@ -107,7 +109,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DialogTrigger>
-					<DialogContent ref={containerRef} className="w-4/5">
+					<DialogContent ref={containerRef} className="min-w-[80dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-200 text-gray-500 text-xs border border-gray-300 rounded-md">
