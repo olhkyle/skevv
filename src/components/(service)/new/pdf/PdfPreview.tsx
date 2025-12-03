@@ -7,6 +7,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
 import { SCROLL_BAR_WIDTH, useDebouncedEffect } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
+import { FileWithPath } from 'react-dropzone';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -20,7 +21,7 @@ type PDFDocumentProxy = pdfjs.PDFDocumentProxy;
 
 interface PdfPreviewProps {
 	scrollParentRef: React.RefObject<HTMLDivElement | null>;
-	file: File;
+	file: FileWithPath;
 	pages: PageItem[];
 	startPageNumber?: number;
 	containerWidth: number;

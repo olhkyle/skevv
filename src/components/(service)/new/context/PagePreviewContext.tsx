@@ -1,7 +1,8 @@
 'use client';
 
-import { Document, Page } from 'react-pdf';
 import React from 'react';
+import { Document, Page } from 'react-pdf';
+import { FileWithPath } from 'react-dropzone';
 import { Asterisk, SquareMousePointer } from 'lucide-react';
 import {
 	AnimateSpinner,
@@ -19,6 +20,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 	PageItem,
+	PdfDocumentErrorMessage,
 	PdfPreviewSkeleton,
 } from '@/components';
 import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
@@ -30,11 +32,37 @@ interface PagePreviewContextProps {
 	toggle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface PagePreviewProps {
+	file: FileWithPath;
+	pageNumber: number;
+	containerWidth: number;
+}
+
 function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 	return (
 		<Button type="button" size="icon-sm" variant="ghost" className={`px-${isSMDown ? 'auto' : '4'}`} {...props}>
 			<SquareMousePointer className="text-gray-500" />
 		</Button>
+	);
+}
+
+function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
+	return (
+		<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+			<Page
+				devicePixelRatio={2.5}
+				loading={
+					<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+						<AnimateSpinner size={18} />
+					</div>
+				}
+				pageNumber={pageNumber}
+				width={containerWidth}
+				renderTextLayer={false}
+				renderAnnotationLayer={false}
+				className="ui-flex-center w-full border border-gray-200"
+			/>
+		</Document>
 	);
 }
 
@@ -49,6 +77,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	const file = files.find(file => page.id.includes(file.id))?.file;
 	const pageNumber = +page.id.split('-page-')[1];
 	console.log(file, page);
+
 	const title = `Page ${page.order} Preview`;
 	const description = `${page.id.split('.pdf')[0]}.pdf`;
 
@@ -66,20 +95,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<Asterisk size={12} />
 								{description}
 							</DrawerDescription>
-							<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
-								<Page
-									devicePixelRatio={2.5}
-									loading={
-										<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-											<AnimateSpinner size={18} />
-										</div>
-									}
-									width={containerWidth}
-									renderTextLayer={false}
-									renderAnnotationLayer={false}
-									className="ui-flex-center w-full border border-gray-200"
-								/>
-							</Document>
+							{file ? <PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} /> : <PdfDocumentErrorMessage />}
 						</DrawerHeader>
 					</DrawerContent>
 				</Drawer>
@@ -96,21 +112,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DialogDescription>
 						</DialogHeader>
-						<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
-							<Page
-								devicePixelRatio={2.5}
-								loading={
-									<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-										<AnimateSpinner size={18} />
-									</div>
-								}
-								pageNumber={pageNumber}
-								width={containerWidth}
-								renderTextLayer={false}
-								renderAnnotationLayer={false}
-								className="ui-flex-center w-full border border-gray-200"
-							/>
-						</Document>
+						{file ? <PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} /> : <PdfDocumentErrorMessage />}
 					</DialogContent>
 				</Dialog>
 			)}
