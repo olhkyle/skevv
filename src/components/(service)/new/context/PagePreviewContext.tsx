@@ -52,7 +52,7 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 
 function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
 	return (
-		<div className="my-3">
+		<div className="mt-1.5 mb-6">
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
 				<Page
 					devicePixelRatio={2.5}
@@ -81,7 +81,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	});
 
 	const file = files.find(file => page.id.includes(file.id))?.file;
-	const pageNumber = +page.id.split('-page-')[1];
+	const pageNumber = page.order;
 
 	const title = `Page ${page.order} Preview`;
 	const description = `${page.id.split('.pdf')[0]}.pdf`;
@@ -96,7 +96,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DrawerContent>
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
-							<DrawerDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-200 text-gray-500 text-xs border border-gray-300 rounded-md">
+							<DrawerDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
 								<Asterisk size={12} />
 								{description}
 							</DrawerDescription>
@@ -112,7 +112,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogContent ref={containerRef} className="min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
-							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-200 text-gray-500 text-xs border border-gray-300 rounded-md">
+							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
 								<Asterisk size={12} />
 								{description}
 							</DialogDescription>

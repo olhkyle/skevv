@@ -56,7 +56,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [...effectTriggers]);
+	}, [...effectTriggers, handleResize]);
 
 	// container resizing
 	React.useEffect(() => {

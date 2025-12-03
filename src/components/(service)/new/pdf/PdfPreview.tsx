@@ -141,7 +141,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 					{rowVirtualizer?.getVirtualItems().map(virtualRow => {
 						const index = virtualRow.index;
 						const page = sortedPages[index];
-						const pageNumber = +page.id.split('-page-')[1];
+						const pageNumber = page.order;
 
 						return (
 							<VirtualPage
