@@ -5,8 +5,6 @@ import { GripVertical, SquareMousePointer } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { Button, PagePreviewContext } from '@/components';
 import { type PageItem } from '../pdf';
-import { useMediaQuery } from '@/hooks';
-import { screenSize } from '@/constant';
 import { getTransformStyleOnSortableContext } from '@/utils/dndSortable';
 
 interface SortableFilePageProps {
@@ -20,7 +18,6 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 	});
 
 	const [isPagePreviewContextOpen, setIsPagePreviewContextOpen] = React.useState(false);
-	const isMDDown = useMediaQuery(screenSize.MAX_MD);
 
 	return (
 		<div
@@ -33,6 +30,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 					type="button"
 					size="icon-sm"
 					variant="ghost"
+					className="touch-none"
 					{...listeners}
 					onClick={e => {
 						e.preventDefault();
@@ -42,7 +40,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 				</Button>
 				<span> Page {page.order}</span>
 			</div>
-			{!isMDDown && <PagePreviewContext page={page} isOpen={isPagePreviewContextOpen} toggle={setIsPagePreviewContextOpen} />}
+			<PagePreviewContext page={page} isOpen={isPagePreviewContextOpen} toggle={setIsPagePreviewContextOpen} />
 		</div>
 	);
 }

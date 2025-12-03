@@ -24,7 +24,8 @@ export default function FileListPanel() {
 		useSensor(MouseSensor),
 		useSensor(TouchSensor, {
 			activationConstraint: {
-				distance: 5, // prevent mal-function of finger touch
+				tolerance: 2,
+				distance: 2, // prevent mal-function of finger touch
 			},
 		}),
 	);
@@ -76,7 +77,9 @@ export default function FileListPanel() {
 			<div className="flex flex-col gap-2 h-full max-h-screen">
 				<div className="flex justify-between items-center">
 					<div>
-						<h3 className="flex items-center gap-2 text-md font-bold cursor-pointer" onClick={toggleAll}>
+						<h3
+							className="flex items-center gap-2 p-1.5 text-md font-bold rounded-md cursor-pointer transition-colors hover:bg-muted"
+							onClick={toggleAll}>
 							<span>Uploaded PDFs</span>
 							<ChevronRight size={18} className={`${isSomePageOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</h3>
@@ -94,7 +97,8 @@ export default function FileListPanel() {
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
-							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin md:min-h-0 "
+							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin touch-pan-y md:min-h-0"
+							style={{ WebkitOverflowScrolling: 'touch' }}
 							{...rootProps}>
 							{files?.map(file => (
 								<SortableFile
@@ -131,8 +135,8 @@ export default function FileListPanel() {
 										</p>
 									)}
 								</label>
-								<div className="absolute bottom-4 left-[50%] -translate-x-[50%] ui-flex-center gap-2 px-2 py-1 text-white text-xs font-medium rounded-full bg-black sm:px-3 sm:py-1.5">
-									<FileText size={16} />
+								<div className="absolute bottom-3 left-[50%] -translate-x-[50%] ui-flex-center gap-2 px-2 py-1 text-white text-xs font-medium rounded-full bg-black sm:px-3 sm:py-1.5">
+									<FileText size={14} />
 									<span>PDF only</span>
 								</div>
 							</MotionBlock>

@@ -16,14 +16,14 @@ export default function SortableFilePageList({ file, isOpen }: SortableFilePages
 	const pageSensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
-				distance: 8,
+				distance: 2,
 			},
 		}),
 		useSensor(MouseSensor),
 		useSensor(TouchSensor, {
 			activationConstraint: {
 				delay: 10, // 50ms
-				tolerance: 10, // 10px
+				tolerance: 2, // 5px
 			},
 		}),
 	);
@@ -61,9 +61,9 @@ export default function SortableFilePageList({ file, isOpen }: SortableFilePages
 				<SortableContext items={sortedPages.map(page => page.id)} strategy={verticalListSortingStrategy}>
 					<ScrollArea
 						className={`col-span-11 w-full ${
-							isOpen ? 'max-h-60 min-h-30' : 'max-h-0'
+							isOpen ? 'max-h-60 min-h-8' : 'max-h-0'
 						} overflow-y-auto transition-all will-change-transform duration-150 scrollbar-thin`}>
-						<div className="flex flex-col space-y-2 pb-10 sm:pb-0">
+						<div className="flex flex-col space-y-2 pb-3 sm:pb-0">
 							{sortedPages.map(page => (
 								<SortableFilePage key={page.id} page={page} />
 							))}
