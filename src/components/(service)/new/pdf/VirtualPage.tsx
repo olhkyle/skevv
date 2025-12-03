@@ -17,11 +17,9 @@ export default function VirtualPage({ page, style, pageNumber, startPageNumber, 
 		rootMargin: '300px 0px',
 	});
 
-	// const combinedRef = useMergedRefs<HTMLDivElement>(inViewRef, (el: HTMLDivElement) => setRef(page.id, el));
-
 	return (
 		<div ref={inViewRef} style={style} id={page.id} className="relative">
-			<span className="absolute top-2 right-2 ui-flex-center w-[24px] h-[24px] bg-gray-200 text-sm text-gray-600 rounded-full z-10">
+			<span className="absolute top-2 right-2 ui-flex-center w-6 h-6 bg-gray-200 text-sm text-gray-600 rounded-full z-10">
 				{startPageNumber + (page.order - 1)}
 			</span>
 
