@@ -1,6 +1,6 @@
 'use client';
 
-import { Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import React from 'react';
 import { Asterisk, SquareMousePointer } from 'lucide-react';
 import {
@@ -19,8 +19,9 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 	PageItem,
+	PdfPreviewSkeleton,
 } from '@/components';
-import { useMediaQuery, useResizableObserver } from '@/hooks';
+import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
 
 interface PagePreviewContextProps {
@@ -38,8 +39,9 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 }
 
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
+	const { files } = useDropzoneFiles();
 	const [isXSDown, isSMDown] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MAX_SM)];
-
+	console.log(files);
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
@@ -61,6 +63,18 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<Asterisk size={12} />
 								{description}
 							</DrawerDescription>
+							<Page
+								devicePixelRatio={2.5}
+								loading={
+									<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+										<AnimateSpinner size={18} />
+									</div>
+								}
+								width={containerWidth}
+								renderTextLayer={false}
+								renderAnnotationLayer={false}
+								className="ui-flex-center w-full border border-gray-200"
+							/>
 						</DrawerHeader>
 					</DrawerContent>
 				</Drawer>
@@ -77,18 +91,20 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DialogDescription>
 						</DialogHeader>
-						<Page
-							devicePixelRatio={2.5}
-							loading={
-								<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-									<AnimateSpinner size={18} />
-								</div>
-							}
-							width={containerWidth}
-							renderTextLayer={false}
-							renderAnnotationLayer={false}
-							className="ui-flex-center w-full border border-gray-200"
-						/>
+						<Document file={files.find(file => page.id.includes(file.id))?.file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+							<Page
+								devicePixelRatio={2.5}
+								loading={
+									<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+										<AnimateSpinner size={18} />
+									</div>
+								}
+								width={containerWidth}
+								renderTextLayer={false}
+								renderAnnotationLayer={false}
+								className="ui-flex-center w-full border border-gray-200"
+							/>
+						</Document>
 					</DialogContent>
 				</Dialog>
 			)}

@@ -74,7 +74,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 			observer.disconnect();
 			throttledResize.cancel?.();
 		};
-	}, []);
+	}, [throttledResize]);
 
 	return { containerRef, containerWidth };
 }

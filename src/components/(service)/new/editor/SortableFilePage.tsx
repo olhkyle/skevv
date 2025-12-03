@@ -1,15 +1,18 @@
 'use client';
 
 import React from 'react';
-import { GripVertical, SquareMousePointer } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
-import { Button, PagePreviewContext } from '@/components';
+import { Button } from '@/components';
 import { type PageItem } from '../pdf';
 import { getTransformStyleOnSortableContext } from '@/utils/dndSortable';
+import dynamic from 'next/dynamic';
 
 interface SortableFilePageProps {
 	page: PageItem;
 }
+
+const PagePreviewContext = dynamic(() => import('../context/PagePreviewContext'), { ssr: false });
 
 export default function SortableFilePage({ page }: SortableFilePageProps) {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -38,7 +41,7 @@ export default function SortableFilePage({ page }: SortableFilePageProps) {
 					}}>
 					<GripVertical className="text-gray-500" />
 				</Button>
-				<span> Page {page.order}</span>
+				<span>Page {page.order}</span>
 			</div>
 			<PagePreviewContext page={page} isOpen={isPagePreviewContextOpen} toggle={setIsPagePreviewContextOpen} />
 		</div>
