@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Document, Page } from 'react-pdf';
+import { pdfjs, Document, Page } from 'react-pdf';
 import { FileWithPath } from 'react-dropzone';
 import { Asterisk, SquareMousePointer } from 'lucide-react';
 import {
@@ -25,6 +25,10 @@ import {
 } from '@/components';
 import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
+
+if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
+	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+}
 
 interface PagePreviewContextProps {
 	page: PageItem;
@@ -76,7 +80,6 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 
 	const file = files.find(file => page.id.includes(file.id))?.file;
 	const pageNumber = +page.id.split('-page-')[1];
-	console.log(file, page);
 
 	const title = `Page ${page.order} Preview`;
 	const description = `${page.id.split('.pdf')[0]}.pdf`;
@@ -104,7 +107,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DialogTrigger>
-					<DialogContent ref={containerRef} className="">
+					<DialogContent ref={containerRef} className="w-4/5">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-200 text-gray-500 text-xs border border-gray-300 rounded-md">
