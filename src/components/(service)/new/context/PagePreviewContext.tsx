@@ -41,11 +41,14 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
 	const { files } = useDropzoneFiles();
 	const [isXSDown, isSMDown] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MAX_SM)];
-	console.log(files);
+
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
 
+	const file = files.find(file => page.id.includes(file.id))?.file;
+	const pageNumber = +page.id.split('-page-')[1];
+	console.log(file, page);
 	const title = `Page ${page.order} Preview`;
 	const description = `${page.id.split('.pdf')[0]}.pdf`;
 
@@ -63,18 +66,20 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<Asterisk size={12} />
 								{description}
 							</DrawerDescription>
-							<Page
-								devicePixelRatio={2.5}
-								loading={
-									<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-										<AnimateSpinner size={18} />
-									</div>
-								}
-								width={containerWidth}
-								renderTextLayer={false}
-								renderAnnotationLayer={false}
-								className="ui-flex-center w-full border border-gray-200"
-							/>
+							<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+								<Page
+									devicePixelRatio={2.5}
+									loading={
+										<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+											<AnimateSpinner size={18} />
+										</div>
+									}
+									width={containerWidth}
+									renderTextLayer={false}
+									renderAnnotationLayer={false}
+									className="ui-flex-center w-full border border-gray-200"
+								/>
+							</Document>
 						</DrawerHeader>
 					</DrawerContent>
 				</Drawer>
@@ -91,7 +96,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DialogDescription>
 						</DialogHeader>
-						<Document file={files.find(file => page.id.includes(file.id))?.file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+						<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
 							<Page
 								devicePixelRatio={2.5}
 								loading={
@@ -99,6 +104,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 										<AnimateSpinner size={18} />
 									</div>
 								}
+								pageNumber={pageNumber}
 								width={containerWidth}
 								renderTextLayer={false}
 								renderAnnotationLayer={false}
