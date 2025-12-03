@@ -109,7 +109,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DialogTrigger>
-					<DialogContent ref={containerRef} className="min-w-[80dvw]">
+					<DialogContent ref={containerRef} className="min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-200 text-gray-500 text-xs border border-gray-300 rounded-md">
