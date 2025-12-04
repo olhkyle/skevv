@@ -126,7 +126,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		return <p className="p-3 w-full bg-muted rounded-full">Invalid File</p>;
 	}
 
-	//the purpose of using Document's onLoadSuccess on React-PDF
+	// the purpose of using Document's onLoadSuccess on React-PDF
 	// 1. get to know totalPages
 	// 2. after page's loading, execute other logic
 	return (

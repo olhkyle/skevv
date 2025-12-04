@@ -1,12 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { Button } from '@/components';
 import { type PageItem } from '../pdf';
 import { getTransformStyleOnSortableContext } from '@/utils/dndSortable';
-import dynamic from 'next/dynamic';
 
 interface SortableFilePageProps {
 	page: PageItem;
