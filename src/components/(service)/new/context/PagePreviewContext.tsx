@@ -52,7 +52,7 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 
 function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
 	return (
-		<div className="mt-1.5 mb-6">
+		<div className="mt-1.5 mb-6 sm:mt-0">
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
 				<Page
 					devicePixelRatio={2.5}
