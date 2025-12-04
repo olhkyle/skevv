@@ -81,7 +81,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	});
 
 	const file = files.find(file => page.id.includes(file.id))?.file;
-	const pageNumber = page.order;
+	const pageNumber = +page.id.split('-page-')[1];
 
 	const title = `Page ${page.order} Preview`;
 	const description = `${page.id.split('.pdf')[0]}.pdf`;
