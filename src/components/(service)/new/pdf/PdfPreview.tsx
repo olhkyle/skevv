@@ -120,7 +120,6 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		if (heights) {
 			setPageHeights(heights);
 			setLoaded(true);
-			toast.success('Successfully load all uploaded PDFs');
 		}
 	};
 
