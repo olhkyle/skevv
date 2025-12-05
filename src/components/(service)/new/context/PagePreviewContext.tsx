@@ -123,7 +123,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DrawerTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DrawerTrigger>
-					<DrawerContent className="max-h-[85vh] overflow-y-auto px-0">
+					<DrawerContent className="max-h-[85vh] px-0 overflow-y-auto scrollbar-thin">
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
 							<DrawerDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
@@ -146,7 +146,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					</DialogTrigger>
 					<DialogContent
 						ref={containerRef}
-						className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scroll-bar-thin xl:min-w-[60dvw]">
+						className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scrollbar-thin xl:min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
