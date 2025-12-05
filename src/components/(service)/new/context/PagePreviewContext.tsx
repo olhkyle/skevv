@@ -3,7 +3,7 @@
 import React from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
 import { FileWithPath } from 'react-dropzone';
-import { Asterisk, SquareMousePointer } from 'lucide-react';
+import { Asterisk, RotateCcw, RotateCw, SquareMousePointer } from 'lucide-react';
 import {
 	AnimateSpinner,
 	Button,
@@ -40,6 +40,7 @@ interface PagePreviewProps {
 	file: FileWithPath;
 	pageNumber: number;
 	containerWidth: number;
+	rotatedAngle: number;
 }
 
 function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
@@ -50,7 +51,21 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 	);
 }
 
-function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
+function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'left') => void }) {
+	return (
+		<div className="flex justify-between items-center gap-2">
+			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('left')}>
+				<RotateCcw />
+			</Button>
+			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('right')}>
+				<RotateCw />
+			</Button>
+		</div>
+	);
+}
+
+function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePreviewProps) {
+	console.log(rotatedAngle);
 	return (
 		<div className="mt-1.5 mb-6 sm:mt-0">
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
@@ -65,6 +80,7 @@ function PagePreview({ file, pageNumber, containerWidth }: PagePreviewProps) {
 					width={containerWidth}
 					renderTextLayer={false}
 					renderAnnotationLayer={false}
+					rotate={rotatedAngle}
 					className="ui-flex-center w-full border border-gray-200"
 				/>
 			</Document>
@@ -79,6 +95,20 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
+
+	const [rotatedAngle, setRotatedAngle] = React.useState(0);
+	const modifyAngle = (factor: 'right' | 'left') =>
+		setRotatedAngle(angle => {
+			if (factor === 'right') {
+				return angle + 90 >= 360 ? 90 : angle + 90;
+			}
+
+			if (factor === 'left') {
+				return angle - 90 <= 0 ? 270 : angle - 90;
+			}
+
+			return angle;
+		});
 
 	const file = files.find(file => page.id.includes(file.id))?.file;
 	const pageNumber = +page.id.split('-page-')[1];
@@ -100,8 +130,13 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<Asterisk size={12} />
 								{description}
 							</DrawerDescription>
-							{file ? <PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} /> : <PdfDocumentErrorMessage />}
 						</DrawerHeader>
+						<RotateButtonList modifyAngle={modifyAngle} />
+						{file ? (
+							<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+						) : (
+							<PdfDocumentErrorMessage />
+						)}
 					</DrawerContent>
 				</Drawer>
 			) : (
@@ -111,7 +146,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					</DialogTrigger>
 					<DialogContent
 						ref={containerRef}
-						className="max-w-[90dvw] min-w-[60dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden  overflow-y-auto scroll-bar-thin">
+						className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scroll-bar-thin xl:min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
@@ -119,7 +154,12 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DialogDescription>
 						</DialogHeader>
-						{file ? <PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} /> : <PdfDocumentErrorMessage />}
+						<RotateButtonList modifyAngle={modifyAngle} />
+						{file ? (
+							<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+						) : (
+							<PdfDocumentErrorMessage />
+						)}
 					</DialogContent>
 				</Dialog>
 			)}

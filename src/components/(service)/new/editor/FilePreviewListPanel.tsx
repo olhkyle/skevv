@@ -33,34 +33,24 @@ export default function FilePreviewListPanel() {
 			<div className="flex justify-between items-center min-h-8">
 				<h3 className="text-md font-bold">Preview</h3>
 				<div className="flex justify-between items-center gap-2">
-					<div className="flex justify-between items-center gap-2">
-						<Button
-							type="button"
-							size="icon-sm"
-							variant="ghost"
-							onClick={() => {
-								containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-							}}>
-							<ArrowUp />
-						</Button>
-						<Button
-							type="button"
-							size="icon-sm"
-							variant="ghost"
-							onClick={() => {
-								containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-							}}>
-							<ArrowDown />
-						</Button>
-					</div>
-					<div className="flex justify-between items-center gap-2">
-						<Button type="button" size="icon-sm" variant="ghost">
-							<RotateCcw />
-						</Button>
-						<Button type="button" size="icon-sm" variant="ghost">
-							<RotateCw />
-						</Button>
-					</div>
+					<Button
+						type="button"
+						size="icon-sm"
+						variant="ghost"
+						onClick={() => {
+							containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						}}>
+						<ArrowUp />
+					</Button>
+					<Button
+						type="button"
+						size="icon-sm"
+						variant="ghost"
+						onClick={() => {
+							containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+						}}>
+						<ArrowDown />
+					</Button>
 				</div>
 			</div>
 
