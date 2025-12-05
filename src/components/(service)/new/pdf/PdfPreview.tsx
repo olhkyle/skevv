@@ -136,7 +136,6 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
-				onLoadProgress={() => toast.loading('Loading all PDFs...')}
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
 				className="relative">
