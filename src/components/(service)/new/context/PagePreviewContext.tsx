@@ -53,7 +53,7 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 
 function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'left') => void }) {
 	return (
-		<div className="flex justify-between items-center gap-2">
+		<div className="flex items-center gap-2">
 			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('left')}>
 				<RotateCcw />
 			</Button>
@@ -100,11 +100,11 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	const modifyAngle = (factor: 'right' | 'left') =>
 		setRotatedAngle(angle => {
 			if (factor === 'right') {
-				return angle + 90 >= 360 ? 90 : angle + 90;
+				return angle + 90 > 360 ? 90 : angle + 90;
 			}
 
 			if (factor === 'left') {
-				return angle - 90 <= 0 ? 270 : angle - 90;
+				return angle - 90 < 0 ? 270 : angle - 90;
 			}
 
 			return angle;
