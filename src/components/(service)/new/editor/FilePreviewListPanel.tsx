@@ -24,37 +24,43 @@ export default function FilePreviewListPanel() {
 	const { files } = useDropzoneFiles();
 	const isXSDown = useMediaQuery(screenSize.MAX_XS);
 
-	const scrollTopRef = React.useRef<HTMLDivElement | null>(null);
-
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
 		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
 
 	return (
 		<div className="hidden flex-col flex-1 gap-2 min-h-0 col-span-full p-3 border border-muted rounded-2xl md:flex md:col-span-4">
-			<div className="flex justify-between items-center gap-2 min-h-8">
+			<div className="flex justify-between items-center min-h-8">
 				<h3 className="text-md font-bold">Preview</h3>
 				<div className="flex justify-between items-center gap-2">
-					<Button
-						type="button"
-						size="icon-sm"
-						variant="ghost"
-						onClick={() => {
-							containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-						}}>
-						<ArrowUp />
-					</Button>
-					<Button type="button" size="icon-sm" variant="ghost">
-						<ArrowDown />
-					</Button>
-				</div>
-				<div className="flex justify-between items-center gap-2">
-					<Button type="button" size="icon-sm" variant="ghost">
-						<RotateCcw />
-					</Button>
-					<Button type="button" size="icon-sm" variant="ghost">
-						<RotateCw />
-					</Button>
+					<div className="flex justify-between items-center gap-2">
+						<Button
+							type="button"
+							size="icon-sm"
+							variant="ghost"
+							onClick={() => {
+								containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+							}}>
+							<ArrowUp />
+						</Button>
+						<Button
+							type="button"
+							size="icon-sm"
+							variant="ghost"
+							onClick={() => {
+								containerRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+							}}>
+							<ArrowDown />
+						</Button>
+					</div>
+					<div className="flex justify-between items-center gap-2">
+						<Button type="button" size="icon-sm" variant="ghost">
+							<RotateCcw />
+						</Button>
+						<Button type="button" size="icon-sm" variant="ghost">
+							<RotateCw />
+						</Button>
+					</div>
 				</div>
 			</div>
 
