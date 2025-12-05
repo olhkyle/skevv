@@ -8,6 +8,7 @@ import { type PageItem, PdfPreviewSkeleton } from '@/components';
 import { SCROLL_BAR_WIDTH, useDebouncedEffect } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
 import { FileWithPath } from 'react-dropzone';
+import { toast } from 'sonner';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -119,6 +120,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		if (heights) {
 			setPageHeights(heights);
 			setLoaded(true);
+			toast.success('Successfully load all uploaded PDFs');
 		}
 	};
 
@@ -134,6 +136,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 			<Document
 				file={file}
 				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
+				onLoadProgress={() => toast.loading('Loading all PDFs...')}
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
 				className="relative">

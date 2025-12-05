@@ -65,7 +65,6 @@ function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'le
 }
 
 function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePreviewProps) {
-	console.log(rotatedAngle);
 	return (
 		<div className="mt-1.5 mb-6 sm:mt-0">
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
@@ -97,6 +96,8 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	});
 
 	const [rotatedAngle, setRotatedAngle] = React.useState(0);
+
+	// TODO: use ScaleFactor to zoom in and out
 	const modifyAngle = (factor: 'right' | 'left') =>
 		setRotatedAngle(angle => {
 			if (factor === 'right') {
