@@ -128,9 +128,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
 							<div className="flex justify-between items-center">
-								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs font-medium  border border-gray-200 rounded-md overflow-hidden whitespace-nowrap text-ellipsis">
-									<Asterisk size={12} />
-									<span className="text-start whitespace-nowrap text-ellipsis">{description}</span>
+								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 max-w-[200px] bg-gray-100 text-gray-500 text-xs font-medium border border-gray-200 rounded-md overflow-hidden whitespace-nowrap text-ellipsis">
+									<Asterisk size={12} className="shrink-0" />
+									<span className="truncate">{description}</span>
 								</DrawerDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
