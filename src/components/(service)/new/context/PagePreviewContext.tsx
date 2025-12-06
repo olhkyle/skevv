@@ -130,7 +130,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 							<div className="flex justify-between items-center">
 								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
 									<Asterisk size={12} />
-									<span className="font-medium text-start break-all whitespace-normal text-ellipsis">{description}</span>
+									<span className="font-medium text-start whitespace-nowrap text-ellipsis">{description}</span>
 								</DrawerDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
@@ -157,7 +157,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 							<div className="flex justify-between items-center">
 								<DialogDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
 									<Asterisk size={12} />
-									<span className="font-medium text-start break-all whitespace-normal text-ellipsis">{description}</span>
+									<span className="font-medium text-start whitespace-nowrap text-ellipsis">{description}</span>
 								</DialogDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
