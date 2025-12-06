@@ -54,11 +54,11 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'left') => void }) {
 	return (
 		<div className="flex items-center gap-2">
-			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('left')}>
-				<RotateCcw />
-			</Button>
 			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('right')}>
 				<RotateCw />
+			</Button>
+			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('left')}>
+				<RotateCcw />
 			</Button>
 		</div>
 	);
@@ -66,7 +66,7 @@ function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'le
 
 function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePreviewProps) {
 	return (
-		<div className="mt-1.5 mb-6 sm:mt-0">
+		<div className="mt-1.5 mb-6">
 			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
 				<Page
 					devicePixelRatio={2.5}
@@ -127,13 +127,15 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DrawerContent className="max-h-[85vh] px-0 h-auto overflow-y-auto scrollbar-thin">
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
-							<DrawerDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
-								<Asterisk size={12} />
-								{description}
-							</DrawerDescription>
+							<div className="flex justify-between items-center">
+								<DrawerDescription className="inline-flex grow items-center gap-1.5 p-1.5 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
+									<Asterisk size={12} />
+									{description}
+								</DrawerDescription>
+								<RotateButtonList modifyAngle={modifyAngle} />
+							</div>
 						</DrawerHeader>
-						<div className="p-3">
-							<RotateButtonList modifyAngle={modifyAngle} />
+						<div className="pb-3 px-3">
 							{file ? (
 								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
 							) : (
@@ -152,13 +154,15 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scrollbar-thin xl:min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
-							<DialogDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
-								<Asterisk size={12} />
-								{description}
-							</DialogDescription>
+							<div className="flex justify-between items-center">
+								<DialogDescription className="inline-flex grow items-center gap-1.5 p-1.5 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
+									<Asterisk size={12} />
+									{description}
+								</DialogDescription>
+								<RotateButtonList modifyAngle={modifyAngle} />
+							</div>
 						</DialogHeader>
 						<div>
-							<RotateButtonList modifyAngle={modifyAngle} />
 							{file ? (
 								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
 							) : (
