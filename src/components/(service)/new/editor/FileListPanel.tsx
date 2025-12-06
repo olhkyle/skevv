@@ -5,7 +5,8 @@ import { BetweenHorizonalEnd, ChevronRight, EllipsisVertical, FileText, Plus } f
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
-import { useDropzoneFiles, useFilePages, useKeyboardTrigger } from '@/hooks';
+import { useDropzoneFiles, useFilePages, useKeyboardTrigger, useMediaQuery } from '@/hooks';
+import { screenSize } from '@/constant';
 
 export default function FileListPanel() {
 	const {
@@ -13,6 +14,8 @@ export default function FileListPanel() {
 		files,
 		setFiles,
 	} = useDropzoneFiles();
+
+	const isMDDown = useMediaQuery(screenSize.MAX_MD);
 
 	const fileInputId = React.useId();
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
@@ -144,7 +147,8 @@ export default function FileListPanel() {
 					</SortableContext>
 				</DndContext>
 			</div>
-			<div className="absolute left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t border-muted">
+			<div
+				className={`${isMDDown ? 'fixed' : 'absolute'} left-0 bottom-0 p-3 w-full bg-light rounded-b-xl border-t border-muted md:absolute`}>
 				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />}
 			</div>
 		</div>
