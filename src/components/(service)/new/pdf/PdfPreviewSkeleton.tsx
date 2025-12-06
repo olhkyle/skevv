@@ -1,6 +1,6 @@
 import { AnimateSpinner } from '@/components';
 
-export default function PdfPreviewSkeleton({ pageCount = 3, estimateHeight = 480 }: { pageCount?: number; estimateHeight?: number }) {
+export default function PdfPreviewSkeleton({ pageCount = 3, estimateHeight = 180 }: { pageCount?: number; estimateHeight?: number }) {
 	return (
 		<>
 			{pageCount === 1 ? (
