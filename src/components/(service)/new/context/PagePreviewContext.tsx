@@ -54,11 +54,11 @@ function TriggerButton({ isSMDown, ...props }: { isSMDown: boolean }) {
 function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'left') => void }) {
 	return (
 		<div className="flex items-center gap-2">
-			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('right')}>
-				<RotateCw />
-			</Button>
 			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('left')}>
 				<RotateCcw />
+			</Button>
+			<Button type="button" size="icon-sm" variant="outline" onClick={() => modifyAngle('right')}>
+				<RotateCw />
 			</Button>
 		</div>
 	);
@@ -128,9 +128,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
 							<div className="flex justify-between items-center">
-								<DrawerDescription className="inline-flex grow items-center gap-1.5 p-1.5 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
+								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
 									<Asterisk size={12} />
-									{description}
+									<span className="font-medium text-start break-all whitespace-normal text-ellipsis">{description}</span>
 								</DrawerDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
@@ -155,9 +155,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<div className="flex justify-between items-center">
-								<DialogDescription className="inline-flex grow items-center gap-1.5 p-1.5 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
+								<DialogDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
 									<Asterisk size={12} />
-									{description}
+									<span className="font-medium text-start break-all whitespace-normal text-ellipsis">{description}</span>
 								</DialogDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
