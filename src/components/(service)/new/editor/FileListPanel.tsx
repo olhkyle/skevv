@@ -126,7 +126,7 @@ export default function FileListPanel() {
 									className="hidden"
 									{...getInputProps()}
 								/>
-								<label htmlFor={`file-dropzone-${fileInputId}`} className="ui-flex-center min-h-48 w-full h-full cursor-pointer ">
+								<label htmlFor={`file-dropzone-${fileInputId}`} className="ui-flex-center min-h-64 w-full h-full cursor-pointer ">
 									{isDragActive && isDragAccept ? (
 										<AnimateSpinner />
 									) : isDragActive && isDragReject ? (
