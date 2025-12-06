@@ -128,9 +128,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
 							<div className="flex justify-between items-center">
-								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
+								<DrawerDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs font-medium  border border-gray-200 rounded-md overflow-hidden whitespace-nowrap text-ellipsis">
 									<Asterisk size={12} />
-									<span className="font-medium text-start whitespace-nowrap text-ellipsis">{description}</span>
+									<span className="text-start whitespace-nowrap text-ellipsis">{description}</span>
 								</DrawerDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
@@ -155,9 +155,9 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<div className="flex justify-between items-center">
-								<DialogDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md font-medium break-all whitespace-normal text-ellipsis">
+								<DialogDescription className="inline-flex shrink-0 items-center gap-1.5 py-1.5 px-2 w-fit bg-gray-100 text-gray-500 text-xs font-medium  border border-gray-200 rounded-md overflow-hidden whitespace-nowrap text-ellipsis">
 									<Asterisk size={12} />
-									<span className="font-medium text-start whitespace-nowrap text-ellipsis">{description}</span>
+									<span className="text-start whitespace-nowrap text-ellipsis">{description}</span>
 								</DialogDescription>
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
