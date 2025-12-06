@@ -64,10 +64,10 @@ const getCountedPages = async (files: RawFileList): Promise<ProcessedFileList> =
 			pageCounts.push(...counts);
 		}
 
-		return files.map((file, idx) => ({
+		return files.map((file, fileIndex) => ({
 			...file,
-			pageCount: pageCounts[idx],
-			pages: Array.from({ length: pageCounts[idx] }, (_, idx) => ({ id: `${file.id}-page-${idx + 1}`, order: idx + 1 })),
+			pageCount: pageCounts[fileIndex],
+			pages: Array.from({ length: pageCounts[fileIndex] }, (_, idx) => ({ id: `${file.id}-page-${idx + 1}`, order: idx + 1 })),
 		}));
 	} catch (error) {
 		console.error('Something happened wrong to get page count');
