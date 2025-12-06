@@ -124,7 +124,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DrawerTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DrawerTrigger>
-					<DrawerContent className="max-h-[85vh] px-0 overflow-y-auto scrollbar-thin">
+					<DrawerContent className="max-h-[85vh] px-0 h-auto overflow-y-auto scrollbar-thin">
 						<DrawerHeader className="p-3">
 							<DrawerTitle className="text-lg text-start">{title}</DrawerTitle>
 							<DrawerDescription className="inline-flex items-center gap-1.5 p-1.5 w-auto bg-gray-100 text-gray-500 text-xs border border-gray-200 rounded-md">
@@ -132,12 +132,14 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DrawerDescription>
 						</DrawerHeader>
-						<RotateButtonList modifyAngle={modifyAngle} />
-						{file ? (
-							<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
-						) : (
-							<PdfDocumentErrorMessage />
-						)}
+						<div className="p-3">
+							<RotateButtonList modifyAngle={modifyAngle} />
+							{file ? (
+								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+							) : (
+								<PdfDocumentErrorMessage />
+							)}
+						</div>
 					</DrawerContent>
 				</Drawer>
 			) : (
@@ -155,12 +157,14 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								{description}
 							</DialogDescription>
 						</DialogHeader>
-						<RotateButtonList modifyAngle={modifyAngle} />
-						{file ? (
-							<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
-						) : (
-							<PdfDocumentErrorMessage />
-						)}
+						<div>
+							<RotateButtonList modifyAngle={modifyAngle} />
+							{file ? (
+								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+							) : (
+								<PdfDocumentErrorMessage />
+							)}
+						</div>
 					</DialogContent>
 				</Dialog>
 			)}
