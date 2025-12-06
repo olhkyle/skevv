@@ -100,7 +100,7 @@ export default function FileListPanel() {
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
-							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-16 w-full h-full overflow-y-scroll scrollbar-thin touch-pan-y md:min-h-0"
+							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-12 w-full h-full overflow-y-scroll scrollbar-thin touch-pan-y md:min-h-0"
 							style={{ WebkitOverflowScrolling: 'touch' }}
 							{...rootProps}>
 							{files?.map(file => (
