@@ -134,7 +134,7 @@ export default function PdfPreview({ scrollParentRef, file, pages, startPageNumb
 		<div style={{ width: containerWidth + SCROLL_BAR_WIDTH }}>
 			<Document
 				file={file}
-				loading={<PdfPreviewSkeleton pageCount={pages.length} />}
+				loading={<PdfPreviewSkeleton pageCount={pages.length} estimateHeight={getEstimateHeightSize(1)} />}
 				onLoadSuccess={handleDocumentLoadSuccess}
 				error={DocumentErrorMessage}
 				className="relative">
