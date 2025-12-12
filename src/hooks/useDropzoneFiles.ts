@@ -19,7 +19,6 @@ function isDragEvent(e: unknown): e is React.DragEvent<HTMLElement> {
 export default function useDropzoneFiles() {
 	const { files, setFiles, resetFiles } = useFileStore();
 
-	const [isPending, startTransition] = useTransition();
 	const hasFiles = files.length !== 0;
 
 	//TODO: Additional Validation for file thumbnail
@@ -36,24 +35,29 @@ export default function useDropzoneFiles() {
 		const fileList = hasFiles ? [...files, ...willUpdateFiles] : willUpdateFiles;
 
 		try {
-			const asyncFiles = await getCountedPages(fileList);
-
 			if (rejections.length) {
 				toast.warning(`업로드한 ${rejections.length}개의 파일은 PDF 파일이 아닙니다`);
 			}
+
+			const asyncFiles = await toast
+				.promise(getCountedPages(fileList), {
+					loading: 'Loading all your files...',
+					success: `Successfully upload your files ${rejections.length ? `without ${rejections.length} file` : ''}`,
+					error: 'Error happened to add files',
+				})
+				.unwrap();
 
 			if (isDragEvent(event)) {
 				inputIdValue = (event.target as HTMLElement & { dataset: { inputId?: string } }).dataset.inputId;
 			}
 
 			if (inputIdValue === inputId.OUTER) {
-				startTransition(() => setFiles(asyncFiles));
+				setFiles(asyncFiles);
 			} else {
 				setFiles(asyncFiles);
 			}
 		} catch (error) {
 			console.error(error);
-			toast.error('Error happened to add files');
 		}
 	};
 
@@ -62,11 +66,8 @@ export default function useDropzoneFiles() {
 	const dropzone = useDropzone({
 		accept: ACCEPT_TYPE,
 		noClick: true,
-		onDropAccepted: () => {
-			toast.success('Successfully upload your files');
-		},
 		onDrop,
 	});
 
-	return { dropzone, isPending, hasFiles, files, setFiles, onReset: resetFiles };
+	return { dropzone, hasFiles, files, setFiles, onReset: resetFiles };
 }
