@@ -98,7 +98,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 	const isSMDown = useMediaQuery(screenSize.MAX_SM);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: 300,
+		initialWidth: typeof window !== 'undefined' && isSMDown ? 320 : window.innerWidth * 0.5,
 	});
 
 	const isReady = containerWidth > 0;
