@@ -3,12 +3,11 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { pdfjs, Document } from 'react-pdf';
+import { FileWithPath } from 'react-dropzone';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { type PageItem, PdfPreviewSkeleton } from '@/components';
 import { SCROLL_BAR_WIDTH, useDebouncedEffect } from '@/hooks';
 import { PDF_DEFAULT_HEIGHT } from '@/constant';
-import { FileWithPath } from 'react-dropzone';
-import { toast } from 'sonner';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
