@@ -4,9 +4,7 @@ import { LayoutSpinner, FileManager } from '@/components';
 export default function NewFilesMergePage() {
 	return (
 		<section className="p-3">
-			<Suspense fallback={<LayoutSpinner />}>
-				<FileManager />
-			</Suspense>
+			<FileManager />
 		</section>
 	);
 }
