@@ -65,37 +65,50 @@ function RotateButtonList({ modifyAngle }: { modifyAngle: (factor: 'right' | 'le
 }
 
 function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePreviewProps) {
+	const isReady = containerWidth > 0;
+
 	return (
 		<div className="mt-1.5 mb-6">
-			<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
-				<Page
-					devicePixelRatio={2.5}
-					loading={
-						<div className="ui-flex-center w-full h-full bg-light rounded-lg">
-							<AnimateSpinner size={18} />
-						</div>
-					}
-					pageNumber={pageNumber}
-					width={containerWidth}
-					renderTextLayer={false}
-					renderAnnotationLayer={false}
-					rotate={rotatedAngle}
-					className="ui-flex-center w-full border border-gray-200"
-				/>
-			</Document>
+			{!isReady ? (
+				<PdfPreviewSkeleton pageCount={1} />
+			) : (
+				<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+					<Page
+						devicePixelRatio={2.5}
+						loading={
+							<div className="ui-flex-center w-full h-full bg-light rounded-lg">
+								<AnimateSpinner size={18} />
+							</div>
+						}
+						pageNumber={pageNumber}
+						width={containerWidth}
+						renderTextLayer={false}
+						renderAnnotationLayer={false}
+						rotate={rotatedAngle}
+						className="ui-flex-center w-full border border-gray-200"
+					/>
+				</Document>
+			)}
 		</div>
 	);
 }
 
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
 	const { files } = useDropzoneFiles();
-	const [isXSDown, isSMDown] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MAX_SM)];
+	const isSMDown = useMediaQuery(screenSize.MAX_SM);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
+		initialWidth: 0,
 	});
 
 	const [rotatedAngle, setRotatedAngle] = React.useState(0);
+
+	// Before closing Dialog and Drawer, reinitialize rotated Angle
+	React.useEffect(() => {
+		if (!isOpen) {
+			setRotatedAngle(0);
+		}
+	}, [isOpen]);
 
 	// TODO: use ScaleFactor to zoom in and out
 	const modifyAngle = (factor: 'right' | 'left') =>
@@ -135,7 +148,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
 						</DrawerHeader>
-						<div className="pb-3 px-3">
+						<div ref={containerRef} className="pb-3 px-3">
 							{file ? (
 								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
 							) : (
@@ -149,9 +162,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 					<DialogTrigger asChild>
 						<TriggerButton isSMDown={isSMDown} />
 					</DialogTrigger>
-					<DialogContent
-						ref={containerRef}
-						className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scrollbar-thin xl:min-w-[60dvw]">
+					<DialogContent className="max-w-[90dvw] min-w-[80dvw] max-h-[90dvh] w-auto h-auto overflow-x-hidden overflow-y-auto scrollbar-thin xl:min-w-[60dvw]">
 						<DialogHeader>
 							<DialogTitle className="text-lg">{title}</DialogTitle>
 							<div className="flex justify-between items-center">
@@ -162,7 +173,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
 						</DialogHeader>
-						<div>
+						<div ref={containerRef}>
 							{file ? (
 								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
 							) : (
