@@ -7,7 +7,7 @@ export default function FileEditor() {
 	const is_MD_Up = useMediaQuery(screenSize.MIN_MD);
 
 	return (
-		<div className="flex flex-col gap-3 w-full h-[calc(100dvh-var(--global-layout-nav-height)-2*var(--global-layout-padding)-var(--service-nav-height))] min-h-0 overflow-hidden sm:h-[calc(100dvh-2*var(--global-layout-padding))]">
+		<div className="flex flex-col gap-3 w-full h-[calc(100dvh-var(--global-layout-nav-height)-6*var(--global-layout-padding)-var(--service-nav-height))] min-h-0 overflow-hidden sm:h-[calc(100dvh-2*var(--global-layout-padding))]">
 			<ServiceNav />
 
 			<div className="grid grid-rows-1 flex-1 gap-3 min-h-0 h-full md:grid-cols-6 md:max-w-full">

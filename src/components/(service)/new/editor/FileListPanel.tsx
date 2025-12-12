@@ -77,7 +77,7 @@ export default function FileListPanel() {
 
 	return (
 		<div className="relative col-span-full p-3 bg-white border border-muted rounded-2xl md:col-span-2">
-			<div className="flex flex-col gap-2 h-full max-h-screen">
+			<div className="flex flex-col gap-2 max-h-screen h-full">
 				<div className="flex justify-between items-center">
 					<div>
 						<h3
@@ -100,7 +100,7 @@ export default function FileListPanel() {
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext items={files.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
 						<div
-							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-12 w-full h-full overflow-y-scroll scrollbar-thin touch-pan-y md:min-h-0"
+							className="flex flex-col flex-1 shrink-0 items-center gap-1 pb-2 w-full h-full overflow-y-scroll scrollbar-thin touch-pan-y md:min-h-0 sm:pb-16"
 							style={{ WebkitOverflowScrolling: 'touch' }}
 							{...rootProps}>
 							{files?.map(file => (
@@ -116,9 +116,9 @@ export default function FileListPanel() {
 							{isDragActive && isDragAccept && <FileInsertSkeleton filesLength={currentDragFilesCount} />}
 
 							<MotionBlock
-								className={`relative mx-auto w-[calc(100%-8px)] h-full ${
+								className={`relative flex-1 mx-auto w-[calc(100%-8px)] ${
 									isDragActive ? 'bg-gradient-gray-200' : 'bg-gradient-gray-100'
-								} rounded-2xl outline outline-dashed outline-offset-2 outline-gray-300 transition-colors sm:block `}>
+								} rounded-2xl outline outline-dashed outline-offset-2 outline-gray-300 transition-colors sm:block sm:h-full`}>
 								<Input
 									type="file"
 									id={`file-dropzone-${fileInputId}`}
@@ -126,7 +126,9 @@ export default function FileListPanel() {
 									className="hidden"
 									{...getInputProps()}
 								/>
-								<label htmlFor={`file-dropzone-${fileInputId}`} className="ui-flex-center min-h-64 w-full h-full cursor-pointer ">
+								<label
+									htmlFor={`file-dropzone-${fileInputId}`}
+									className="ui-flex-center min-h-64 w-full h-full cursor-pointer sm:min-h-100">
 									{isDragActive && isDragAccept ? (
 										<AnimateSpinner />
 									) : isDragActive && isDragReject ? (
@@ -148,7 +150,9 @@ export default function FileListPanel() {
 				</DndContext>
 			</div>
 			<div
-				className={`${isMDDown ? 'fixed' : 'absolute'} left-0 bottom-0 px-3 pt-3 pb-6 w-full bg-light rounded-b-xl border-t border-muted md:pb-3`}>
+				className={`${
+					isMDDown ? 'fixed' : 'absolute'
+				} left-0 bottom-0 px-3 pt-3 pb-6 w-full bg-light rounded-xl border-t border-muted md:pb-3`}>
 				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />}
 			</div>
 		</div>
