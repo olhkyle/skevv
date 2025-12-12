@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useTransition } from 'react';
+import React from 'react';
 import { DropEvent, FileRejection, FileWithPath, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 import { type RawFileItem, getCountedPages } from '@/components';
