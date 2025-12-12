@@ -25,8 +25,6 @@ import {
 } from '@/components';
 import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';
-import PdfRenderHost from '../pdf/PdfRenderHost';
-import PdfPreviewPortal from '../pdf/PdfPreviewPortal';
 
 if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
 	pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -103,7 +101,6 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
 
-	const hostRef = React.useRef<HTMLDivElement | null>(null);
 	const isReady = containerWidth > 0;
 	const [rotatedAngle, setRotatedAngle] = React.useState(0);
 
@@ -128,7 +125,7 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 			return angle;
 		});
 
-	const file = files.find(file => page.id.includes(file.id))?.file;
+	const file = files.filter(file => page.id.includes(file.id))[0].file;
 	const pageNumber = +page.id.split('-page-')[1];
 
 	const title = `Page ${page.order} Preview`;
@@ -136,9 +133,6 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 
 	return (
 		<>
-			{file && (
-				<PdfRenderHost file={file} pageNumber={pageNumber} width={containerWidth} rotatedAngle={rotatedAngle} containerRef={hostRef} />
-			)}
 			{isSMDown ? (
 				<Drawer open={isOpen} onOpenChange={toggle}>
 					<DrawerTrigger asChild>
@@ -156,7 +150,11 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 							</div>
 						</DrawerHeader>
 						<div ref={containerRef} className="pb-3 px-3">
-							{isReady && file ? <PdfPreviewPortal hostRef={hostRef} /> : <PdfDocumentErrorMessage />}
+							{isReady && file ? (
+								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+							) : (
+								<PdfDocumentErrorMessage />
+							)}
 						</div>
 					</DrawerContent>
 				</Drawer>
@@ -176,7 +174,13 @@ export default function PagePreviewContext({ page, isOpen, toggle }: PagePreview
 								<RotateButtonList modifyAngle={modifyAngle} />
 							</div>
 						</DialogHeader>
-						<div ref={containerRef}>{isReady && file ? <PdfPreviewPortal hostRef={hostRef} /> : <PdfDocumentErrorMessage />}</div>
+						<div ref={containerRef}>
+							{isReady && file ? (
+								<PagePreview file={file} pageNumber={pageNumber} containerWidth={containerWidth} rotatedAngle={rotatedAngle} />
+							) : (
+								<PdfDocumentErrorMessage />
+							)}
+						</div>
 					</DialogContent>
 				</Dialog>
 			)}
