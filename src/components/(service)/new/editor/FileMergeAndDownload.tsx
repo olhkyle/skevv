@@ -98,8 +98,8 @@ export default function FileMergeAndDownload({ files, step, setStep, onClose }: 
 
 	const reset = () => {
 		onReset();
-		setStep('merge');
 		setMergeResult(null);
+		setStep('merge');
 	};
 
 	return (
