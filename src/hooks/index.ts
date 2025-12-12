@@ -1,6 +1,6 @@
 export { default as useDebouncedEffect } from './useDebouncedEffect';
 export { default as useDropzoneFiles } from './useDropzoneFiles';
-export { default as useFilePages } from './useFilePages';
+export { default as useFileAccordions } from './useFileAccordions';
 export { default as useFileTargetRef } from './useFileTargetRef';
 export { default as useIsMountedRef } from './useIsMountedRef';
 export { default as useKeyboardTrigger } from './useKeyboardTrigger';

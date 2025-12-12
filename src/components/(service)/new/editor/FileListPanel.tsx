@@ -5,7 +5,7 @@ import { BetweenHorizonalEnd, ChevronRight, EllipsisVertical, FileText, Plus } f
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
-import { useDropzoneFiles, useFilePages, useKeyboardTrigger, useMediaQuery } from '@/hooks';
+import { useDropzoneFiles, useFileAccordions, useKeyboardTrigger, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
 
 export default function FileListPanel() {
@@ -21,7 +21,8 @@ export default function FileListPanel() {
 	const [isConfirmContextOpen, setIsConfirmContextOpen] = React.useState(false);
 	const [currentDragFilesCount, setCurrentDragFilesCount] = React.useState(0);
 
-	const { filePages, isSomePageOpen, toggle, toggleAll, closeAll } = useFilePages({ files });
+	const { fileAccordions, isSomeAccordionOpen, toggle, toggleAll, closeAll } = useFileAccordions({ files });
+
 	const sensors = useSensors(
 		useSensor(PointerSensor),
 		useSensor(MouseSensor),
@@ -84,7 +85,7 @@ export default function FileListPanel() {
 							className="flex items-center gap-2 p-1.5 text-md font-bold rounded-md cursor-pointer transition-colors hover:bg-muted"
 							onClick={toggleAll}>
 							<span>Uploaded PDFs</span>
-							<ChevronRight size={18} className={`${isSomePageOpen ? 'rotate-90' : 'rotate-0'}`} />
+							<ChevronRight size={18} className={`${isSomeAccordionOpen ? 'rotate-90' : 'rotate-0'}`} />
 						</h3>
 					</div>
 					<div className="ui-flex-center gap-2">
@@ -106,7 +107,7 @@ export default function FileListPanel() {
 							{files?.map(file => (
 								<SortableFile
 									key={file.id}
-									filePage={filePages.find(filePage => filePage.id === file.id)!}
+									filePage={fileAccordions.find(fileAccordion => fileAccordion.id === file.id)!}
 									file={file}
 									toggleFilePages={toggle}
 									deleteFile={() => setFiles(files.filter(prevFile => prevFile.id !== file.id))}
