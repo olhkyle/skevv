@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import React, { Suspense } from 'react';
-import { ArrowDown, ArrowUp, RotateCcw, RotateCw } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { AnimateSpinner, Button, getTotalPageCount } from '@/components';
 import { useDropzoneFiles, useMediaQuery, useResizableObserver } from '@/hooks';
 import { screenSize } from '@/constant';

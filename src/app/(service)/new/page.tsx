@@ -1,5 +1,4 @@
-import { Suspense } from 'react';
-import { LayoutSpinner, FileManager } from '@/components';
+import { FileManager } from '@/components';
 
 export default function NewFilesMergePage() {
 	return (
