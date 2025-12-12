@@ -95,10 +95,10 @@ function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePre
 
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
 	const { files } = useDropzoneFiles();
-	const isSMDown = useMediaQuery(screenSize.MAX_SM);
+	const [isXSDown, isSMDown] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MAX_SM)];
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: 0,
+		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
 	});
 
 	const [rotatedAngle, setRotatedAngle] = React.useState(0);
