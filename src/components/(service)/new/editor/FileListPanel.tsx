@@ -10,7 +10,7 @@ import { screenSize } from '@/constant';
 
 export default function FileListPanel() {
 	const {
-		dropzone: { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open },
+		dropzone: { getRootProps, getInputProps, isFileDialogActive, isDragActive, isDragAccept, isDragReject, open },
 		files,
 		setFiles,
 	} = useDropzoneFiles();
@@ -129,7 +129,7 @@ export default function FileListPanel() {
 								<label
 									htmlFor={`file-dropzone-${fileInputId}`}
 									className="ui-flex-center min-h-64 w-full h-full cursor-pointer sm:min-h-100">
-									{isDragActive && isDragAccept ? (
+									{(isDragActive || isFileDialogActive) && isDragAccept ? (
 										<AnimateSpinner />
 									) : isDragActive && isDragReject ? (
 										<p className="text-gray-900 font-medium">Only PDF Files accepted</p>
