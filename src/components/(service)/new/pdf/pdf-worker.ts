@@ -21,21 +21,28 @@ interface ProcessedFileItem extends RawFileItem {
 type RawFileList = RawFileItem[];
 type ProcessedFileList = ProcessedFileItem[];
 
+interface MergeFileResult {
+	success: boolean;
+	message: string;
+	downloadUrl?: string;
+	fileName: string;
+}
+
 // TODO: multi-language options
 const ASYNC_PDF_MESSAGE = {
 	LOAD: {
-		ERROR: 'PDF 로드 중 오류가 발생하였습니다.',
+		ERROR: 'Error happen during loading files',
 	},
 	VIRTUALIZE: {
-		ERROR: '가상화 중 오류가 발생하였습니다.',
+		ERROR: 'Error happen during virtualization',
 	},
 	MERGE: {
 		SUCCESS: {
-			SAVE_FILE: '파일이 성공적으로 저장되었습니다.',
+			MERGE_FILE: 'Successfully merged',
 		},
 		ERROR: {
-			CANCEL_FILE_SAVE: '파일 저장이 취소되었습니다.',
-			DURING_SAVE: '파일 저장 중 오류가 발생하였습니다.',
+			CANCEL_FILE_SAVE: 'File Saving is canceled',
+			DURING_SAVE: 'Error happen during saving',
 		},
 	},
 } as const;
@@ -96,7 +103,7 @@ const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: st
 			await writable?.write(newBlob);
 			await writable?.close();
 
-			return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
+			return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.MERGE_FILE };
 		} catch (error) {
 			if (error instanceof DOMException && error.name === 'AbortError') {
 				throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.CANCEL_FILE_SAVE, { cause: error });
@@ -112,14 +119,14 @@ const saveFileOnLocal = async ({ mergedFileName, newBlob }: { mergedFileName: st
 		a.click();
 		URL.revokeObjectURL(url);
 
-		return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.SAVE_FILE };
+		return { success: true, message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.MERGE_FILE };
 	}
 };
 
 // ⚡️ Double try - catch
 // 1. inner : local specific error
 // 2. outer : get inner catch throw [ new Error(message) ] -> unify error message on outer catch
-const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList; mergedFileName: string }) => {
+const createMergedFileBlob = async ({ files }: { files: ProcessedFileList }) => {
 	try {
 		const createdPdf = await PDFDocument.create();
 
@@ -155,7 +162,7 @@ const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList;
 		// as BlotPart doesn't make problem, because UIntArray can be used as BlobPart
 		const newBlob = new Blob([mergedBytes as BlobPart], { type: PDF_HQ.KEY });
 
-		return await saveFileOnLocal({ mergedFileName, newBlob });
+		return newBlob;
 	} catch (error) {
 		if (error instanceof Error) {
 			throw error;
@@ -165,35 +172,68 @@ const mergeFiles = async ({ files, mergedFileName }: { files: ProcessedFileList;
 	}
 };
 
-const getVirtualPages = async ({ file, createdPdf }: { file: ProcessedFileItem; createdPdf: PDFDocument }) => {
+const prepareMergedFile = async ({
+	files,
+	mergedFileName,
+}: {
+	files: ProcessedFileList;
+	mergedFileName: string;
+}): Promise<MergeFileResult> => {
 	try {
-		const arrayBuffer = await file.file.arrayBuffer();
-		const pdf = await PDFDocument.load(arrayBuffer);
+		const blobFile = await createMergedFileBlob({ files });
+		const downloadUrl = URL.createObjectURL(blobFile);
 
-		const virtualPages = await createdPdf.copyPages(pdf, pdf.getPageIndices());
-		virtualPages.forEach(page => createdPdf.addPage(page));
+		return {
+			success: true,
+			message: ASYNC_PDF_MESSAGE.MERGE.SUCCESS.MERGE_FILE,
+			downloadUrl,
+			fileName: `${mergedFileName}.pdf`,
+		};
 	} catch (error) {
 		if (error instanceof Error) {
 			throw error;
 		} else {
-			throw new Error(ASYNC_PDF_MESSAGE.VIRTUALIZE.ERROR);
+			throw new Error(ASYNC_PDF_MESSAGE.MERGE.ERROR.DURING_SAVE);
 		}
 	}
 };
 
-const getVirtualFiles = async (file: ProcessedFileItem) => {
-	try {
-		const createdPdf = await PDFDocument.create();
-
-		await getVirtualPages({ file, createdPdf });
-		const mergedBytes = await createdPdf.save();
-		const newBlobFiles = new Blob([mergedBytes as BlobPart], { type: PDF_HQ.KEY });
-
-		return newBlobFiles;
-	} catch (e) {
-		console.error(e);
+// 다운로드 버튼 클릭 시 호출
+const downloadMergedFile = ({ downloadUrl, fileName }: { downloadUrl?: string; fileName: string }) => {
+	// URL Validation
+	if (!downloadUrl?.startsWith('blob:')) {
+		throw new Error('Invalid download URL: Only blob URLs are allowed');
 	}
+
+	// FileName sanitize
+	const sanitizedFileName = fileName.replace(/[\/\\]/g, '_');
+
+	const a = document.createElement('a');
+	a.href = downloadUrl;
+	a.download = sanitizedFileName;
+
+	// 보안 속성 추가
+	a.rel = 'noopener noreferrer';
+
+	// DOM에 추가하지 않고 클릭 (더 깔끔)
+	a.click();
+
+	// 명시적으로 제거 (메모리 정리)
+	a.remove();
 };
 
-export type { PageItem, RawFileItem, ProcessedFileItem, RawFileList, ProcessedFileList };
-export { ASYNC_PDF_MESSAGE, getTotalPageCount, getCountedPages, mergeFiles, getVirtualFiles };
+// URL 정리 (컴포넌트 unmount 시 호출)
+const cleanupDownloadUrl = (downloadUrl: string) => {
+	URL.revokeObjectURL(downloadUrl);
+};
+
+export type { PageItem, RawFileItem, ProcessedFileItem, RawFileList, ProcessedFileList, MergeFileResult };
+export {
+	ASYNC_PDF_MESSAGE,
+	getTotalPageCount,
+	getCountedPages,
+	createMergedFileBlob,
+	prepareMergedFile,
+	downloadMergedFile,
+	cleanupDownloadUrl,
+};

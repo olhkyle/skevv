@@ -4,7 +4,7 @@ import React from 'react';
 import { BetweenHorizonalEnd, ChevronRight, EllipsisVertical, FileText, Plus } from 'lucide-react';
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Button, MotionBlock, SortableFile, FileMergeConfirmContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
+import { Button, MotionBlock, SortableFile, FileMergeAndDownloadContext, Input, AnimateSpinner, FileInsertSkeleton } from '@/components';
 import { useDropzoneFiles, useFileAccordions, useKeyboardTrigger, useMediaQuery } from '@/hooks';
 import { screenSize } from '@/constant';
 
@@ -153,8 +153,8 @@ export default function FileListPanel() {
 			<div
 				className={`${
 					isMDDown ? 'fixed' : 'absolute'
-				} left-0 bottom-0 px-3 pt-3 pb-6 w-full bg-light rounded-xl border-t border-muted md:pb-3`}>
-				{files.length !== 0 && <FileMergeConfirmContext files={files} isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />}
+				} left-0 bottom-0 px-3 pt-3 pb-6 w-full bg-light rounded-xl border-t border-muted md:pb-3 sm:rounded-t-none`}>
+				{files.length !== 0 && <FileMergeAndDownloadContext files={files} isOpen={isConfirmContextOpen} toggle={setIsConfirmContextOpen} />}
 			</div>
 		</div>
 	);

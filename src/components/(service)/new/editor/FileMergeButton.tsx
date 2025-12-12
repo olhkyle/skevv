@@ -1,8 +1,8 @@
 'use client';
 
+import { FilePlus } from 'lucide-react';
 import { Button } from '@/components';
 import { AnimateLoader } from '@/hooks/useLoading';
-import { Download } from 'lucide-react';
 
 interface MergeButtonProps {
 	isLoading: boolean;
@@ -12,7 +12,7 @@ interface MergeButtonProps {
 export default function FileMergeButton({ isLoading, Loading }: MergeButtonProps) {
 	return (
 		<Button type="submit" size="icon-lg" className="col-span-1 w-full">
-			{isLoading ? Loading : <Download size={18} />}
+			{isLoading ? Loading : <FilePlus size={18} />}
 			Merge
 		</Button>
 	);
