@@ -9,7 +9,7 @@ interface UseResizableObserverProps {
 const SCROLL_BAR_WIDTH = 6;
 const THROTTLE_TIME = 150;
 
-function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectTriggers = [] }: UseResizableObserverProps) {
+function useResizableObserver<T extends HTMLElement>({ initialWidth = 300, effectTriggers = [] }: UseResizableObserverProps) {
 	const [containerWidth, setContainerWidth] = React.useState<number>(initialWidth);
 
 	const containerRef = React.useRef<T>(null);
@@ -45,6 +45,11 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		handleResize();
 	}, THROTTLE_TIME);
 
+	React.useLayoutEffect(() => {
+		if (!containerRef.current) return;
+		handleResize(); // SSR hydration 직후 바로 실제 width로 갱신
+	}, []);
+
 	// browser size effect
 	React.useEffect(() => {
 		if (!containerRef.current) return;
@@ -56,7 +61,7 @@ function useResizableObserver<T extends HTMLElement>({ initialWidth = 0, effectT
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [...effectTriggers, handleResize]);
+	}, [...effectTriggers]);
 
 	// container resizing
 	React.useEffect(() => {

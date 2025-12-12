@@ -95,10 +95,10 @@ function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePre
 
 export default function PagePreviewContext({ page, isOpen, toggle }: PagePreviewContextProps) {
 	const { files } = useDropzoneFiles();
-	const [isXSDown, isSMDown] = [useMediaQuery(screenSize.MAX_XS), useMediaQuery(screenSize.MAX_SM)];
+	const isSMDown = useMediaQuery(screenSize.MAX_SM);
 
 	const { containerRef, containerWidth } = useResizableObserver<HTMLDivElement>({
-		initialWidth: typeof window !== 'undefined' && isXSDown ? 320 : window.innerWidth * 0.5,
+		initialWidth: 300,
 	});
 
 	const isReady = containerWidth > 0;
