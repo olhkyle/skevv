@@ -72,7 +72,7 @@ function PagePreview({ file, pageNumber, containerWidth, rotatedAngle }: PagePre
 			{!isReady ? (
 				<PdfPreviewSkeleton pageCount={1} />
 			) : (
-				<Document file={file} loading={<PdfPreviewSkeleton pageCount={1} />}>
+				<Document file={file}>
 					<Page
 						devicePixelRatio={2.5}
 						loading={
