@@ -62,6 +62,9 @@ export default function useDropzoneFiles() {
 	const dropzone = useDropzone({
 		accept: ACCEPT_TYPE,
 		noClick: true,
+		onDropAccepted: () => {
+			toast.success('Successfully upload your files');
+		},
 		onDrop,
 	});
 
