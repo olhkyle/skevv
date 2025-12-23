@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
 import { ArrowRightIcon, X } from 'lucide-react';
+import skevvSVG from '/public/favicon.svg';
 import { MotionBlock, Button, UserProfile } from '@/components';
 import { route } from '@/constant';
 
@@ -22,8 +24,10 @@ export default function Nav() {
 		<>
 			<nav id="layout-nav" className={`fixed flex justify-center w-full pt-3 px-3 ${isSideNavOpen ? 'bg-white' : ''} z-40 md:hidden`}>
 				<div className="flex justify-between items-center flex-1 w-full px-4 py-3 min-h-[var(--global-layout-nav-height)] border border-muted rounded-full bg-white backdrop-blur-lg">
-					<h1 className="text-xl font-black" onClick={() => setIsSideNavOpen(false)}>
-						<Link href={route.SERVICE.ROOT}>SKEVV</Link>
+					<h1 className="flex justify-center items-center" onClick={() => setIsSideNavOpen(false)}>
+						<Link href={route.SERVICE.ROOT} className="inline-flex justify-center items-center h-8 font-black text-xl">
+							<Image src={skevvSVG} alt={'Skevv'} className="inline-block w-full h-full" priority /> SKEVV
+						</Link>
 					</h1>
 					<Button
 						type="button"
