@@ -25,7 +25,7 @@ export default function Aside() {
 				<div className="flex h-full flex-col justify-between gap-2 lg:gap-4">
 					<header className="flex justify-center items-center lg:justify-between">
 						<h1 className="flex justify-center item-center">
-							<Link href={route.SERVICE.ROOT} className="inline-flex justify-center items-center h-9 font-black text-lg">
+							<Link href={route.SERVICE.ROOT} className="inline-flex justify-center items-center h-8 font-black text-lg">
 								<Image src={skevvSVG} alt={'Skevv'} className="inline-block w-full h-full" priority />
 								<span className="hidden lg:inline">SKEVV</span>
 							</Link>
