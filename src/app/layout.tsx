@@ -3,6 +3,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { Toaster } from '@/components';
 import { SiteConfig } from './config';
+import { GAProvider } from '@/lib/ga4';
 
 const inter = Inter({
 	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -54,6 +55,7 @@ export default function RootLayout({
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1, user-scalable=0" />
 			</head>
 			<body className="font-inter antialiased bg-white">
+				{process.env.NEXT_PUBLIC_GA4_ID ? <GAProvider gaId={process.env.NEXT_PUBLIC_GA4_ID} /> : null}
 				{children}
 				<Toaster />
 			</body>
