@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { FilePlus, LayoutList, Search } from 'lucide-react';
 import skevvSVG from '/public/favicon.svg';
+import { FilePlus, LayoutList, Search } from 'lucide-react';
 import { UserProfile, Button } from '@/components';
 import { route, screenSize } from '@/constant';
 import { useMediaQuery } from '@/hooks';
-import Image from 'next/image';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
@@ -16,7 +16,6 @@ const links = [
 
 export default function Aside() {
 	const segment = useSelectedLayoutSegment();
-	const isLGDown = useMediaQuery(screenSize.MAX_LG);
 
 	return (
 		<div className="relative">
