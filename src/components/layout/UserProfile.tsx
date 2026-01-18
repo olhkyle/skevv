@@ -77,7 +77,7 @@ export default function UserProfile({ inSideNav = false }: UserProfileProps) {
 				<MotionBlock className="ui-flex-center">
 					<Link
 						href={route.AUTH.LOGIN}
-						className="ui-flex-center gap-0 py-3 px-2 w-full font-semibold bg-gray-900 border border-muted text-white text-center rounded-lg cursor-pointer transition-colors hover:bg-primary/90 lg:gap-2">
+						className="ui-flex-center gap-0 py-3 px-3 w-full font-semibold bg-gray-900 border border-muted text-white text-center rounded-lg cursor-pointer transition-colors hover:bg-primary/90 sm:px-2 lg:gap-2">
 						<User size={18} />
 						<span className="hidden lg:inline">Join the service</span>
 					</Link>

@@ -23,9 +23,9 @@ export default function Aside() {
 				<div className="flex flex-col justify-between gap-4 h-full lg:gap-4">
 					<header className="flex justify-center items-center min-h-9 lg:justify-between">
 						<h1 className="flex justify-center item-center">
-							<Link href={route.SERVICE.ROOT} className="inline-flex justify-center items-center gap-1 h-8 font-black text-lg">
-								<Image src={skevvSVG} alt={'Skevv'} width={27} height={27} className="inline-block w-full h-full" priority />
-								<span className="hidden tracking-tighter font-mono lg:inline">SKEVV</span>
+							<Link href={route.SERVICE.ROOT} className="inline-flex justify-center items-center gap-1.5 h-7 font-black text-lg">
+								<Image src={skevvSVG} alt={'Skevv'} width={24} height={24} className="inline-block w-full h-full" priority />
+								<span className="hidden tracking-tight font-mono lg:inline">SKEVV</span>
 							</Link>
 						</h1>
 						<Button type="button" variant="ghost" size="icon-sm" className="hidden lg:inline-flex">
@@ -50,9 +50,7 @@ export default function Aside() {
 					</nav>
 				</div>
 				<div className="flex flex-col gap-1 px-1 md:px-0">
-					<div className="border border-muted rounded-lg">
-						<UserProfile />
-					</div>
+					<UserProfile />
 				</div>
 				<small className="text-default mx-3 mb-2 mt-1 hidden text-[0.5rem] opacity-50 lg:block">
 					© 2025{' '}

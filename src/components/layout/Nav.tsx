@@ -25,8 +25,8 @@ export default function Nav() {
 			<nav id="layout-nav" className={`fixed flex justify-center w-full pt-3 px-3 ${isSideNavOpen ? 'bg-white' : ''} z-40 sm:hidden`}>
 				<div className="flex justify-between items-center gap-4 w-full px-4 py-3 min-h-[var(--global-layout-nav-height)] border border-muted rounded-full bg-white backdrop-blur-lg">
 					<h1 className="inline-flex justify-center items-center" onClick={() => setIsSideNavOpen(false)}>
-						<Link href={route.SERVICE.ROOT} className="inline-flex items-center gap-2 h-8 font-black text-xl shrink-0">
-							<Image src={skevvSVG} alt={'Skevv'} width={27} height={27} priority /> SKEVV
+						<Link href={route.SERVICE.ROOT} className="inline-flex items-center gap-1.5 h-7 font-black text-xl shrink-0">
+							<Image src={skevvSVG} alt={'Skevv'} width={24} height={24} priority /> SKEVV
 						</Link>
 					</h1>
 					<Button
