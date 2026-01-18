@@ -44,7 +44,9 @@ export default function Aside() {
 									{icon}
 									<span className="hidden lg:inline">{title}</span>
 								</div>
-								{to === route.SERVICE.ROOT + segment && <div className="hidden mr-2 w-1.5 h-1.5 rounded-full bg-black lg:inline-block" />}
+								{to === route.SERVICE.ROOT + segment && (
+									<div className="hidden mr-2 w-1.5 h-1.5 rounded-full bg-gradient-blue-200 lg:inline-block" />
+								)}
 							</Link>
 						))}
 					</nav>
