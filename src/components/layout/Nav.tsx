@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { ArrowRightIcon, X } from 'lucide-react';
-import skevvSVG from '/public/favicon.svg';
+import skevvSVG from '@/public/favicon/favicon.svg';
 import { MotionBlock, Button, UserProfile } from '@/components';
 import { route } from '@/constant';
 

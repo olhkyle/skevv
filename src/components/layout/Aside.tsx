@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import skevvSVG from '/public/favicon.svg';
 import { FilePlus, LayoutList, Search } from 'lucide-react';
+import skevvSVG from '@/public/favicon/favicon.svg';
 import { UserProfile, Button } from '@/components';
 import { route } from '@/constant';
 
