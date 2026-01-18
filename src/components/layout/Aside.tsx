@@ -10,7 +10,7 @@ import { route } from '@/constant';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
-	{ title: 'Documents', to: route.SERVICE.DOCUMENTS, icon: <LayoutList size={18} /> },
+	{ title: 'Archives', to: route.SERVICE.ARCHIVES, icon: <LayoutList size={18} className="text-gray-900" /> },
 ] as const;
 
 export default function Aside() {

@@ -2,13 +2,14 @@
 // Config of Visitor Check on GA4
 
 export const SiteConfig = {
-	url: 'https://skevv.vercel.app',
+	url: 'https://skew.run',
+	subUrl: 'https://skevv.vercel.app',
 	pathPrefix: '/',
 	title: {
 		default: 'Skevv',
 		HOME: 'Skevv',
 		NEW: 'Skevv | New Merge',
-		DOCUMENTS: 'Skevv | Documents',
+		ARCHIVES: 'Skevv | Documents',
 	},
 	description: {
 		default: 'Skevv | Lightweight PDF Editor',

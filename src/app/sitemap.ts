@@ -17,7 +17,7 @@ export default function sitemap() {
 			priority: 0.9,
 		},
 		{
-			url: `${BASE_URL}/documents`,
+			url: `${BASE_URL}/archives`,
 			lastModified: new Date(),
 			changeFrequency: 'monthly',
 			priority: 0.8,

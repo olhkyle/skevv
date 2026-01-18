@@ -8,7 +8,7 @@ const route = {
 	SERVICE: {
 		ROOT: '/',
 		WRITE: '/new',
-		DOCUMENTS: '/documents',
+		ARCHIVES: '/archives',
 		SETTINGS: {
 			ROOT: '/settings',
 			MYACCOUNT_PROFILE: '/settings/myaccount/profile',

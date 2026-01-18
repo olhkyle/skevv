@@ -3,13 +3,13 @@ import { Wip } from '@/components';
 import { formatByISOKoreanTime } from '@/lib/date';
 import { Metadata } from 'next';
 import { SiteConfig } from '@/app/config';
-
+import { createClient } from '@/utils/supabase/server';
 
 export const metadata: Metadata = {
-	title: SiteConfig.title.DOCUMENTS,
+	title: SiteConfig.title.ARCHIVES,
 	description: SiteConfig.description.default,
 	openGraph: {
-		title: SiteConfig.title.DOCUMENTS,
+		title: SiteConfig.title.ARCHIVES,
 		description: SiteConfig.description.default,
 		images: [
 			{
@@ -48,9 +48,17 @@ const mockData = [
 	},
 ];
 
-export default async function DocumentsPage() {
+export default async function ArchivesPage() {
+	const supabase = await createClient();
+	const { error } = await supabase.from('documents').select('*');
+
+	if (error) {
+		throw error;
+	}
+
 	return (
 		<section className="p-3 bg-light">
+			<h2 className="mb-4 text-xl font-black sm:text-2xl">Archives</h2>
 			<Wip
 				message={
 					"This page is going to being used as the page where check the temporarily saved ones and show the file works' list who sign up the service"

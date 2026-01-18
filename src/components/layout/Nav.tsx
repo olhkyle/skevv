@@ -55,9 +55,9 @@ export default function Nav() {
 				</MotionBlock>
 				<MotionBlock onClick={toggle} className="rounded-lg">
 					<Link
-						href={route.SERVICE.DOCUMENTS}
+						href={route.SERVICE.ARCHIVES}
 						className="flex justify-between items-center px-3 w-full min-h-[60px] font-medium rounded-lg cursor-pointer active:bg-light">
-						Documents
+						Archives
 						<ArrowRightIcon size={20} />
 					</Link>
 				</MotionBlock>
