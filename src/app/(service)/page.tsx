@@ -4,7 +4,7 @@ import { Button } from '@/components';
 import { route } from '@/constant';
 import { Metadata } from 'next';
 import { SiteConfig } from '../config';
-import { getTimePeriodByTimezone, greetingMap, timezone } from '@/utils/date';
+import { getTimePeriodByTimezone, greetingMap } from '@/utils/date';
 // import { createClient } from '@/utils/supabase/server';
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function HomePage() {
 	// const supabase = await createClient();
 	// const { data } = await supabase.from('documents').select('*');
 	// console.log(data);
-
+	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	return (
 		<div className="flex flex-col justify-items-center min-h-screen gap-3 p-3 pb-20 bg-white">
 			<div className="mx-auto px-4 py-8 w-full h-fit text-center font-black text-xl rounded-lg bg-light md:w-fit md:min-w-120 md:text-3xl">

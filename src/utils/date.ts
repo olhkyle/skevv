@@ -1,7 +1,5 @@
 type TimePeriod = 'Morning' | 'Afternoon' | 'Evening' | 'Late Night';
 
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 const greetingMap: Record<TimePeriod, string> = {
 	Morning: 'Good Morning ☀️',
 	Afternoon: 'Good Afternoon 🙂',
@@ -26,4 +24,4 @@ const getTimePeriodByTimezone = (timeZone: string, now: number = Date.now()): Ti
 	return 'Late Night';
 };
 
-export { timezone, greetingMap, getTimePeriodByTimezone };
+export { greetingMap, getTimePeriodByTimezone };
