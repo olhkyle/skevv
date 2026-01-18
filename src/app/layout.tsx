@@ -48,9 +48,9 @@ export const metadata: Metadata = {
 		images: [`${SiteConfig.url}/og/skevv-og.png`],
 	},
 	icons: {
-		icon: '/apple-touch-icon.png',
-		shortcut: '/apple-touch-icon.png',
-		apple: '/apple-touch-icon.png',
+		icon: '/favicon/apple-touch-icon.png',
+		shortcut: '/favicon/apple-touch-icon.png',
+		apple: '/favicon/apple-touch-icon.png',
 	},
 	robots: {
 		index: true,
@@ -74,20 +74,21 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={`${inter.variable}`}>
+		<html lang="en" className={`${inter.variable} ${geistMono.variable} antialiased`}>
 			<head>
-				<link rel="icon" href="/favicon.ico" sizes="any" />
-				<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-				<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-				<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-				<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-				<link rel="manifest" href="/site.webmanifest" />
+				<link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+				<link rel="shortcut icon" type="image/x-icon" href="/favicon/favicon.ico" />
+				<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+				<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+				<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+				<link rel="manifest" href="/favicon/site.webmanifest" />
 				<meta name="apple-mobile-web-app-title" content="Skevv" />
 				<meta name="msapplication-TileColor" content="ffffff" />
 				<meta name="theme-color" content="#ffffff" />
-				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1, user-scalable=0" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+				<meta name="robots" content="index, follow" />
 			</head>
-			<body className={`${inter.variable} ${geistMono.variable} antialiased`}>
+			<body>
 				{process.env.NEXT_PUBLIC_GA4_ID ? <GAProvider gaId={process.env.NEXT_PUBLIC_GA4_ID} /> : null}
 				{children}
 				<Toaster />
