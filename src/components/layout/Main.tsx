@@ -4,7 +4,7 @@ export default function Main({
 	children: React.ReactNode;
 }>) {
 	return (
-		<main className="grid grid-rows-[1fr] w-full h-screen pt-[calc(var(--global-layout-padding)+var(--global-layout-nav-height))] bg-white md:pt-0">
+		<main className="grid grid-rows-[1fr] w-full h-screen pt-[calc(var(--global-layout-padding)+var(--global-layout-nav-height))] bg-white sm:pt-0">
 			{children}
 		</main>
 	);

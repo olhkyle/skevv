@@ -10,6 +10,9 @@ export const SiteConfig = {
 		NEW: 'Skevv | New Merge',
 		DOCUMENTS: 'Skevv | Documents',
 	},
+	description: {
+		default: 'Skevv | Lightweight PDF Editor',
+	},
 	subtitle: 'This is a lightweight pdf editor app',
 	copyright: 'Skevv © All rights reserved.',
 };

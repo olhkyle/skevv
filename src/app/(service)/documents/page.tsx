@@ -1,6 +1,25 @@
 import { Send } from 'lucide-react';
 import { Wip } from '@/components';
 import { formatByISOKoreanTime } from '@/lib/date';
+import { Metadata } from 'next';
+import { SiteConfig } from '@/app/config';
+
+
+export const metadata: Metadata = {
+	title: SiteConfig.title.DOCUMENTS,
+	description: SiteConfig.description.default,
+	openGraph: {
+		title: SiteConfig.title.DOCUMENTS,
+		description: SiteConfig.description.default,
+		images: [
+			{
+				url: `${SiteConfig.url}/og/skevv-og.png`,
+				width: 1200,
+				height: 630,
+			},
+		],
+	},
+};
 
 const mockData = [
 	{

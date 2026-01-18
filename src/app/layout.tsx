@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Geist_Mono, Inter } from 'next/font/google';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/next';
 import { Toaster } from '@/components';
 import { SiteConfig } from './config';
 import { GAProvider } from '@/lib/ga4';
@@ -11,6 +12,11 @@ const inter = Inter({
 	display: 'swap',
 	variable: '--font-inter',
 	preload: true,
+});
+
+const geistMono = Geist_Mono({
+	variable: '--font-jetbrains-mono',
+	subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
@@ -26,6 +32,33 @@ export const metadata: Metadata = {
 		locale: 'ko_KR',
 		type: 'website',
 		url: SiteConfig.url,
+		images: [
+			{
+				url: `${SiteConfig.url}/og/skevv-og.png`,
+				width: 1200,
+				height: 630,
+				type: 'image/png',
+			},
+		],
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: SiteConfig.title.default,
+		description: SiteConfig.subtitle,
+		images: [`${SiteConfig.url}/og/skevv-og.png`],
+	},
+	icons: {
+		icon: '/apple-touch-icon.png',
+		shortcut: '/apple-touch-icon.png',
+		apple: '/apple-touch-icon.png',
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+		},
 	},
 	// verification: {
 	//   google: process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_ID,
@@ -54,10 +87,11 @@ export default function RootLayout({
 				<meta name="theme-color" content="#ffffff" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1, user-scalable=0" />
 			</head>
-			<body className="font-inter antialiased bg-white">
+			<body className={`${inter.variable} ${geistMono.variable} antialiased`}>
 				{process.env.NEXT_PUBLIC_GA4_ID ? <GAProvider gaId={process.env.NEXT_PUBLIC_GA4_ID} /> : null}
 				{children}
 				<Toaster />
+				<VercelAnalytics />
 			</body>
 		</html>
 	);

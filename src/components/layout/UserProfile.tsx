@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronDown, ChevronUp, LogOut, Settings, Sparkle, User, User2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, LogOut, Settings, Sparkle, User } from 'lucide-react';
 import {
 	MotionBlock,
 	DropdownMenu,
@@ -20,19 +20,19 @@ export default function UserProfile({ inSideNav = false }: UserProfileProps) {
 	const { userState } = useUserStore();
 
 	return (
-		<div className={`mx-1.5 lg:mx-0`}>
+		<>
 			{userState?.user ? (
 				<DropdownMenu>
 					<DropdownMenuTrigger
 						className={`flex ${
 							inSideNav ? 'justify-between' : 'justify-center'
-						} items-center gap-2 py-3 px-2 w-full rounded-lg hover:bg-muted transition-colors cursor-pointer lg:justify-between`}
+						} items-center gap-2 py-2 px-3 w-full rounded-lg hover:bg-muted transition-colors cursor-pointer lg:justify-between`}
 						aria-label="Open Profile Menu">
 						<div className="flex items-center gap-2">
 							<div className="ui-flex-center w-4 h-4 rounded-[9999px] bg-gray-900">
 								{/* <img src="#" alt="not yet" className="block w-full h-full" /> */}
 							</div>
-							<span className={`${inSideNav ? 'inline-block' : 'hidden'} font-bold lg:inline`}>Kyle Kwon</span>
+							<span className={`${inSideNav ? 'inline-block' : 'hidden'} font-bold lg:inline`}>User</span>
 						</div>
 						<span className={`${inSideNav ? 'inline-block' : 'hidden'} lg:inline`}>
 							{inSideNav ? <ChevronDown size={18} className="text-gray-900" /> : <ChevronUp size={18} className="text-gray-900" />}
@@ -77,12 +77,12 @@ export default function UserProfile({ inSideNav = false }: UserProfileProps) {
 				<MotionBlock className="ui-flex-center">
 					<Link
 						href={route.AUTH.LOGIN}
-						className="ui-flex-center gap-0 py-3 px-3 w-full font-semibold bg-gray-900 border border-muted text-white text-center rounded-lg cursor-pointer transition-colors hover:bg-primary/90 lg:gap-2">
-						<User2 size={18} />
+						className="ui-flex-center gap-0 py-3 px-2 w-full font-semibold bg-gray-900 border border-muted text-white text-center rounded-lg cursor-pointer transition-colors hover:bg-primary/90 lg:gap-2">
+						<User size={18} />
 						<span className="hidden lg:inline">Join the service</span>
 					</Link>
 				</MotionBlock>
 			)}
-		</div>
+		</>
 	);
 }
