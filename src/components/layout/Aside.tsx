@@ -6,8 +6,7 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 import skevvSVG from '/public/favicon.svg';
 import { FilePlus, LayoutList, Search } from 'lucide-react';
 import { UserProfile, Button } from '@/components';
-import { route, screenSize } from '@/constant';
-import { useMediaQuery } from '@/hooks';
+import { route } from '@/constant';
 
 const links = [
 	{ title: 'Merge PDF', to: route.SERVICE.WRITE, icon: <FilePlus size={18} className="text-gray-900" /> },
