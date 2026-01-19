@@ -232,6 +232,7 @@ export {
 	ASYNC_PDF_MESSAGE,
 	getTotalPageCount,
 	getCountedPages,
+	saveFileOnLocal,
 	createMergedFileBlob,
 	prepareMergedFile,
 	downloadMergedFile,
