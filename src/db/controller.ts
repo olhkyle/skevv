@@ -35,7 +35,7 @@ const handleSave = async ({ file, pageCount, pages }: { file: FileWithPath; page
 export async function loadTempFile(id: string) {
 	const db = await openDB();
 
-	return new Promise<any>((resolve, reject) => {
+	return new Promise<unknown>((resolve, reject) => {
 		const tx = db.transaction(TEMP_FILE_STORE, 'readonly');
 		const store = tx.objectStore(TEMP_FILE_STORE);
 
