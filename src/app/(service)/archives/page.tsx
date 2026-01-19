@@ -50,8 +50,8 @@ const mockData = [
 
 export default async function ArchivesPage() {
 	const supabase = await createClient();
-	const { error } = await supabase.from('documents').select('*');
-
+	const { data, error } = await supabase.from('documents').select('*');
+	console.log(data);
 	if (error) {
 		throw error;
 	}

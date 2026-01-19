@@ -60,12 +60,9 @@ export const metadata: Metadata = {
 			follow: true,
 		},
 	},
-	// verification: {
-	//   google: process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_ID,
-	//   other: {
-	//     "naver-site-verification": "d40d03ef9270913b96ad108a57d72246fdfc73e8",
-	//   },
-	// },
+	verification: {
+		google: process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_ID,
+	},
 };
 
 export default function RootLayout({
