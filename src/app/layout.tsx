@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 		title: SiteConfig.title.default,
 		description: SiteConfig.subtitle,
 		siteName: 'Skevv',
-		locale: 'ko_KR',
+		locale: 'en_US',
 		type: 'website',
 		url: SiteConfig.url,
 		images: [

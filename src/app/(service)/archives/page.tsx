@@ -1,9 +1,11 @@
-import { Send } from 'lucide-react';
+import { ArrowUpRight, Send } from 'lucide-react';
 import { Wip } from '@/components';
 import { formatByISOKoreanTime } from '@/lib/date';
 import { Metadata } from 'next';
 import { SiteConfig } from '@/app/config';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
+import { TABLE } from '@/lib/supabase';
+import { mapArchiveToView } from '@/types';
 
 export const metadata: Metadata = {
 	title: SiteConfig.title.ARCHIVES,
@@ -50,11 +52,13 @@ const mockData = [
 
 export default async function ArchivesPage() {
 	const supabase = await createClient();
-	const { data, error } = await supabase.from('documents').select('*');
+	const { data, error } = await supabase.from(TABLE.ARCHIVE).select('*');
 	console.log(data);
 	if (error) {
 		throw error;
 	}
+
+	const archives = data.map(mapArchiveToView);
 
 	return (
 		<section className="p-3 bg-light">
@@ -69,14 +73,16 @@ export default async function ArchivesPage() {
 				<div className="row-span-auto sm:col-span-3">
 					<h2 className="font-bold">Recent Works</h2>
 					<ul className="flex flex-col gap-3 mt-3">
-						{mockData.map(item => (
+						{archives.map(item => (
 							<li key={item.id} className="flex justify-between items-center gap-2 p-3 bg-white rounded-lg">
 								<div className="flex items-center gap-2">
-									<span className="inline-block w-2 h-2 rounded-full bg-black" />
-									<p className="py-1.5 px-3 bg-gray-200 font-medium rounded-md">{item.title}</p>
-									<span className="text-bold">{item.pageCount}</span>
+									<span className="inline-block w-2 h-2 rounded-full bg-gradient-blue-200" />
+									<p className="py-1.5 px-3 bg-muted font-bold rounded-md">{item.title}</p>
+									<span className="p-1 bg-light font-medium rounded-md">{item.size} bytes</span>
+									<span className="p-1 bg-light font-medium rounded-md">{item.pageCount} pages</span>
 								</div>
-								<span className="text-sm text-gray-600">{formatByISOKoreanTime(item.created_at)}</span>
+								<span className="p-1 bg-light font-medium rounded-md text-sm text-gray-600">{formatByISOKoreanTime(item.created_at)}</span>
+								<ArrowUpRight size={16} />
 							</li>
 						))}
 					</ul>
